@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block internal/account paths
+Disallow: /api/
+
+Sitemap: https://valavanacademy.com/sitemap.xml
