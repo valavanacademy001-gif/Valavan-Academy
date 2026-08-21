@@ -113,6 +113,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       className={`${inter.variable} ${plusJakarta.variable} font-sans antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap"
+        />
+      </head>
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <CustomCursor />
         <ReducedMotionProvider>
