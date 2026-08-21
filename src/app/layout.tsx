@@ -7,13 +7,21 @@ import ReducedMotionProvider from "@/components/animations/ReducedMotionProvider
 import CustomCursor from "@/components/ui/CustomCursor";
 import { SITE_CONFIG } from "@/data/site.config";
 
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
-// ─── Google Fonts ─────────────────────────────────────────────────────────────
+// ─── Google Fonts (Self-hosted & optimized by Next.js) ────────────────────────
 const inter = Inter({
   subsets:  ["latin"],
-  weight:   ["400", "500", "600", "700", "800"],
+  weight:   ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
+  display:  "swap",
+  preload:  true,
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets:  ["latin"],
+  weight:   ["500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
   display:  "swap",
   preload:  true,
 });
@@ -102,10 +110,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} font-sans antialiased`}
+      className={`${inter.variable} ${plusJakarta.variable} font-sans antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]">
+      <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <CustomCursor />
         <ReducedMotionProvider>
           <SmoothScrollProvider>
@@ -118,5 +126,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </ReducedMotionProvider>
       </body>
     </html>
-  );
+  )
 }
