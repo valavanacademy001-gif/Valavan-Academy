@@ -97,6 +97,7 @@ interface VideoTestimonialCarouselProps {
   titleSuffix?: string;
   subtitle?: string;
   noTopShadow?: boolean;
+  customTitle?: React.ReactNode;
 }
 
 export default function VideoTestimonialCarousel({
@@ -107,6 +108,7 @@ export default function VideoTestimonialCarousel({
   titleSuffix = "",
   subtitle = "Career changers who redefined their future with Valavan Academy — in their own words.",
   noTopShadow = false,
+  customTitle,
 }: VideoTestimonialCarouselProps = {}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -180,16 +182,20 @@ export default function VideoTestimonialCarousel({
         {centered ? (
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
             <FadeUp delay={0.05}>
-              <h2
-                className="font-display font-bold leading-tight tracking-tight"
-                style={{ fontSize: "clamp(30px, 4.2vw, 54px)", color: "#1E2026" }}
-              >
-                {titlePrefix}{" "}
-                <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                  {titleHighlight}
-                </span>{" "}
-                {titleSuffix}
-              </h2>
+              {customTitle ? (
+                customTitle
+              ) : (
+                <h2
+                  className="font-display font-bold leading-tight tracking-tight"
+                  style={{ fontSize: "clamp(30px, 4.2vw, 54px)", color: "#1E2026" }}
+                >
+                  {titlePrefix}{" "}
+                  <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
+                    {titleHighlight}
+                  </span>{" "}
+                  {titleSuffix}
+                </h2>
+              )}
             </FadeUp>
           </div>
         ) : (
