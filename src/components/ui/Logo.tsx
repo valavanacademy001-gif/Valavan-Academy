@@ -28,13 +28,13 @@ export default function Logo({
 }: LogoProps) {
   const src =
     variant === "white"
-      ? "/assets/logo/white-logo.webp"
-      : "/assets/logo/logo.jpeg";
+      ? "/assets/logo/white-logo-normalized.webp"
+      : "/assets/logo/logo-normalized.webp";
 
   const alt = "Valavan Academy";
 
-  // Approximate aspect ratio from the logo image (roughly 2.6:1)
-  const width = Math.round(height * 2.6);
+  // Aspect ratio is 2.916:1 (980 / 336)
+  const width = Math.round(height * 2.92);
 
   const img = (
     <Image

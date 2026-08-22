@@ -231,8 +231,8 @@ export default function Navbar() {
             <div className="shrink-0">
               <Logo
                 variant={isLightNav ? "default" : "white"}
-                height={32}
-                className="h-7 sm:h-7.5 lg:h-8 w-auto"
+                height={38}
+                className="h-6 sm:h-7 lg:h-9.5 w-auto"
                 priority
               />
             </div>
@@ -491,7 +491,7 @@ export default function Navbar() {
             <button
               className={cn(
                 "lg:hidden flex flex-col justify-center items-center",
-                "w-8.5 h-8.5 rounded-lg gap-1",
+                "w-7.5 h-7.5 rounded-lg gap-1",
                 "transition-colors duration-150",
                 isLightNav
                   ? "hover:bg-neutral-100"
@@ -505,19 +505,19 @@ export default function Navbar() {
             >
               <span
                 className={cn(
-                  "block h-[2px] rounded-full transition-all duration-300 w-4.5",
+                  "block h-[1.75px] rounded-full transition-all duration-300 w-3.5",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-[2px] rounded-full transition-all duration-300 w-3.5",
+                  "block h-[1.75px] rounded-full transition-all duration-300 w-2.5",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-[2px] rounded-full transition-all duration-300 w-4.5",
+                  "block h-[1.75px] rounded-full transition-all duration-300 w-3.5",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
