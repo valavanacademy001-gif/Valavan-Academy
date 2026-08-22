@@ -232,7 +232,7 @@ export default function Navbar() {
               <Logo
                 variant={isLightNav ? "default" : "white"}
                 height={38}
-                className="h-6 sm:h-7 lg:h-9.5 w-auto"
+                className="h-5 sm:h-6 lg:h-9.5 w-auto"
                 priority
               />
             </div>
