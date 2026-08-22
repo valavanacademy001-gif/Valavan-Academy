@@ -12,6 +12,7 @@ import {
   FOOTER_LINKS,
   SITE_CONFIG,
 } from "@/data/site.config";
+import { CMSSiteSettings } from "@/lib/cms";
 
 // Social icons as simple SVG paths
 function SocialIcon({ id }: { id: string }) {
@@ -64,8 +65,39 @@ function SocialIcon({ id }: { id: string }) {
   );
 }
 
-export default function Footer() {
+interface FooterProps {
+  settings?: CMSSiteSettings;
+}
+
+export default function Footer({ settings }: FooterProps = {}) {
   const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    {
+      id: "facebook",
+      label: "Facebook",
+      url: settings?.facebook_url || SOCIAL_LINKS.find((s) => s.id === "facebook")?.url || "https://www.facebook.com/ValavanAcademy",
+      icon: "facebook",
+    },
+    {
+      id: "youtube",
+      label: "YouTube",
+      url: settings?.youtube_url || SOCIAL_LINKS.find((s) => s.id === "youtube")?.url || "https://www.youtube.com/@ValavanAcademyofficial",
+      icon: "youtube",
+    },
+    {
+      id: "instagram",
+      label: "Instagram",
+      url: settings?.instagram_url || SOCIAL_LINKS.find((s) => s.id === "instagram")?.url || "https://www.instagram.com/valavanacademy",
+      icon: "instagram",
+    },
+    {
+      id: "linkedin",
+      label: "LinkedIn",
+      url: settings?.linkedin_url || SOCIAL_LINKS.find((s) => s.id === "linkedin")?.url || "https://www.linkedin.com/in/valavan-p-813383337/",
+      icon: "linkedin",
+    },
+  ];
 
   return (
     <footer className="bg-[#0D0F14] text-white relative z-20" aria-label="Site footer">
@@ -86,12 +118,11 @@ export default function Footer() {
               />
             </Link>
             <p className="font-sans text-neutral-400 text-sm leading-relaxed font-normal max-w-xs">
-              Graphic Design · Video Editing · Web Design · UI/UX · AI Tools ·
-              Digital Skills — taught in Tamil, built for careers.
+              {settings?.description || "Graphic Design · Video Editing · Web Design · UI/UX · AI Tools · Digital Skills — taught in Tamil, built for careers."}
             </p>
             {/* Social */}
             <div className="flex gap-3 flex-wrap">
-              {SOCIAL_LINKS.map((social) => (
+              {socialLinks.map((social) => (
                 <a
                   key={social.id}
                   href={social.url}

@@ -93,12 +93,14 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon:        "/assets/logo/logo.jpeg",
-    shortcut:    "/assets/logo/logo.jpeg",
-    apple:       "/assets/logo/logo.jpeg",
+    icon:        "/logo-icon.png",
+    shortcut:    "/logo-icon.png",
+    apple:       "/logo-icon.png",
   },
   manifest:  "/site.webmanifest",
 };
+
+import { getSiteSettings } from "@/lib/cms";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
 interface RootLayoutProps {
@@ -106,7 +108,9 @@ interface RootLayoutProps {
 }
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const settings = await getSiteSettings();
+
   return (
     <html
       lang="en"
@@ -129,10 +133,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <main id="main-content" tabIndex={-1} className="flex-1">
               {children}
             </main>
-            <Footer />
+            <Footer settings={settings} />
           </SmoothScrollProvider>
         </ReducedMotionProvider>
       </body>
     </html>
-  )
+  );
 }

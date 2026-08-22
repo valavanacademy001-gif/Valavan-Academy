@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Container from "@/components/ui/Container";
 import InteractiveGridBackground from "@/components/ui/InteractiveGridBackground";
+import { CMSTestimonial } from "@/lib/cms";
 
 /* ─────────────────── ICONS ─────────────────── */
 const GoogleIcon = () => (
@@ -217,12 +218,34 @@ function ReviewCard({
   );
 }
 
+interface ReviewItem {
+  id: string;
+  name: string;
+  rating: number;
+  platform: string;
+  text: string;
+}
+
+interface StudentReviewsSectionProps {
+  reviews?: CMSTestimonial[];
+}
+
 /* ─────────────────── SECTION ─────────────────── */
-export default function StudentReviewsSection() {
+export default function StudentReviewsSection({ reviews: cmsReviews }: StudentReviewsSectionProps = {}) {
+  const displayReviews: ReviewItem[] = (cmsReviews && cmsReviews.length > 0)
+    ? cmsReviews.map((t, idx) => ({
+        id: t.id || `r-${idx}`,
+        name: t.student_name,
+        rating: t.rating || 5,
+        platform: "google",
+        text: t.testimonial,
+      }))
+    : REVIEWS;
+
   // Split reviews into 3 columns for desktop masonry
-  const col1 = REVIEWS.filter((_, i) => i % 3 === 0);
-  const col2 = REVIEWS.filter((_, i) => i % 3 === 1);
-  const col3 = REVIEWS.filter((_, i) => i % 3 === 2);
+  const col1 = displayReviews.filter((_, i) => i % 3 === 0);
+  const col2 = displayReviews.filter((_, i) => i % 3 === 1);
+  const col3 = displayReviews.filter((_, i) => i % 3 === 2);
 
   return (
     <section className="bg-[#F8FAFF] py-10 sm:py-20 md:py-28 border-t border-[#E8EFFE] relative z-20 overflow-x-clip">

@@ -10,14 +10,18 @@ export const metadata: Metadata = {
     "Explore Valavan Academy programs — 90-Day Graphic Design Mastery, Full Stack Digital Creator Program, and 3 Hours Live Workshops. Tamil-medium, project-based digital skills training.",
 };
 
-export default function ProgramsPage() {
+import { getPublishedPrograms } from "@/lib/cms";
+
+export default async function ProgramsPage() {
+  const programs = await getPublishedPrograms();
+
   return (
     <main className="min-h-screen bg-white pt-10 sm:pt-14">
       {/* ── 01 Live Workshop Section ── */}
       <WorkshopSection />
 
       {/* ── 02 Choose Your Learning Path (Card-Based Program Showcase) ── */}
-      <ProgramsSection />
+      <ProgramsSection programs={programs} />
 
       {/* ── 03 Community Support Strip ── */}
       <section id="community-help" className="py-16 sm:py-20 bg-[#F8FAFF] border-t border-[#E8EFFE] scroll-mt-24">

@@ -57,13 +57,12 @@ export default function ProgramStickyBottomCTA({
                 href={enrollUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
-                className="inline-flex items-center gap-1.5 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-xs px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:scale-105 transition-all duration-200 shadow-md"
+                className="inline-flex items-center gap-1.5 bg-[#092B82] sm:bg-white hover:bg-[#071F60] sm:hover:bg-[#F0F5FF] !text-white sm:!text-[#1748BB] font-sans font-bold text-xs px-4.5 sm:px-6 py-1.5 sm:py-2 rounded-full border border-white/40 sm:border-transparent hover:scale-105 transition-all duration-200 shadow-md"
               >
-                <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold tracking-wider uppercase text-[11px] sm:text-xs">
+                <span className="!text-white sm:!text-[#1748BB] font-bold tracking-wider uppercase text-[11px] sm:text-xs">
                   {buttonText}
                 </span>
-                <ArrowRight size={13} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                <ArrowRight size={13} className="!text-white sm:!text-[#1748BB]" />
               </a>
             </div>
 

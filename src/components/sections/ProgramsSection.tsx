@@ -21,6 +21,8 @@ import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import InteractiveGridBackground from "@/components/ui/InteractiveGridBackground";
 
+import { CMSProgram } from "@/lib/cms";
+
 interface ToolItem {
   name: string;
   image: string;
@@ -43,6 +45,23 @@ interface ProgramItem {
   ctaLabel: string;
 }
 
+const DEFAULT_TOOLS_GD: ToolItem[] = [
+  { name: "Photoshop", image: "/assets/tools/ps.png" },
+  { name: "Illustrator", image: "/assets/tools/illustrator.png" },
+  { name: "Canva", image: "/assets/tools/canva.png" },
+  { name: "CorelDraw", image: "/assets/tools/coreldraw.png" },
+  { name: "InDesign", image: "/assets/tools/indesign.png" },
+];
+
+const DEFAULT_TOOLS_FS: ToolItem[] = [
+  { name: "Premiere Pro", image: "/assets/tools/premiere-pro.png" },
+  { name: "After Effects", image: "/assets/tools/after-effects.png" },
+  { name: "WordPress", image: "/assets/tools/wordpress.png" },
+  { name: "Elementor Pro", image: "/assets/tools/elementor-pro.png" },
+  { name: "ChatGPT", image: "/assets/tools/chatgpt.png" },
+  { name: "Gemini AI", image: "/assets/tools/gemini-ai.png" },
+];
+
 const PROGRAMS: ProgramItem[] = [
   {
     id: "graphic-design",
@@ -58,13 +77,7 @@ const PROGRAMS: ProgramItem[] = [
     level: "Beginner to Intermediate",
     image: "/assets/images/hero/ai-powered-GD.webp",
     href: "/programs/90-days-graphic-design",
-    tools: [
-      { name: "Photoshop", image: "/assets/tools/ps.png" },
-      { name: "Illustrator", image: "/assets/tools/illustrator.png" },
-      { name: "Canva", image: "/assets/tools/canva.png" },
-      { name: "CorelDraw", image: "/assets/tools/coreldraw.png" },
-      { name: "InDesign", image: "/assets/tools/indesign.png" },
-    ],
+    tools: DEFAULT_TOOLS_GD,
     ctaLabel: "View Program",
   },
   {
@@ -81,19 +94,39 @@ const PROGRAMS: ProgramItem[] = [
     level: "Beginner to Advanced",
     image: "/assets/images/hero/full-stack-.jpg-1.webp",
     href: "/programs/full-stack-creator",
-    tools: [
-      { name: "Premiere Pro", image: "/assets/tools/premiere-pro.png" },
-      { name: "After Effects", image: "/assets/tools/after-effects.png" },
-      { name: "WordPress", image: "/assets/tools/wordpress.png" },
-      { name: "Elementor Pro", image: "/assets/tools/elementor-pro.png" },
-      { name: "ChatGPT", image: "/assets/tools/chatgpt.png" },
-      { name: "Gemini AI", image: "/assets/tools/gemini-ai.png" },
-    ],
+    tools: DEFAULT_TOOLS_FS,
     ctaLabel: "View Program",
   },
 ];
 
-export default function ProgramsSection() {
+interface ProgramsSectionProps {
+  programs?: CMSProgram[];
+}
+
+export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSectionProps = {}) {
+  // Merge CMS programs with existing card presentation structure
+  const displayPrograms: ProgramItem[] = (cmsPrograms && cmsPrograms.length > 0)
+    ? cmsPrograms.map((cmsP, idx) => {
+        const isGD = cmsP.slug.includes("graphic-design");
+        const defaultFallback = isGD ? PROGRAMS[0] : (PROGRAMS[1] || PROGRAMS[0]);
+        return {
+          id: cmsP.slug,
+          number: String(idx + 1).padStart(2, "0"),
+          badge: isGD ? "90 Days Program" : "180 Days Program",
+          badgeAccent: isGD ? "Most Popular" : "Flagship Track",
+          title: cmsP.title || defaultFallback.title,
+          subtitle: cmsP.subtitle || defaultFallback.subtitle,
+          description: cmsP.description || defaultFallback.description,
+          duration: cmsP.duration || defaultFallback.duration,
+          language: "Tamil",
+          level: cmsP.level || defaultFallback.level,
+          image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
+          href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
+          tools: isGD ? DEFAULT_TOOLS_GD : DEFAULT_TOOLS_FS,
+          ctaLabel: cmsP.cta_text || "View Program",
+        };
+      })
+    : PROGRAMS;
   return (
     <section
       id="programs"
@@ -141,7 +174,7 @@ export default function ProgramsSection() {
 
         {/* ── 2-Column Minimal Program Showcase Cards ───────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch max-w-5xl mx-auto">
-          {PROGRAMS.map((program, idx) => (
+          {displayPrograms.map((program, idx) => (
             <FadeUp key={program.id} delay={0.12 * idx} className="h-full">
               <div className="group h-full rounded-[28px] sm:rounded-[32px] bg-white border border-neutral-200/90 p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.05)] hover:shadow-[0_24px_55px_rgba(23,72,187,0.12)] hover:border-[#1748BB]/40 transition-all duration-400 flex flex-col justify-between relative overflow-hidden">
                 

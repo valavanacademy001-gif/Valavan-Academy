@@ -43,8 +43,8 @@ export default function Logo({
       width={width}
       height={height}
       priority={priority}
-      className={cn("object-contain", className)}
-      style={{ height: `${height}px`, width: "auto" }}
+      className={cn("object-contain w-auto transition-all duration-200", className || `h-[${height}px]`)}
+      style={{ width: "auto" }}
     />
   );
 

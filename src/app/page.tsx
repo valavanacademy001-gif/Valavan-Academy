@@ -26,7 +26,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+import { getPublishedPrograms, getPublishedLearnerStories, getPublishedTestimonials } from "@/lib/cms";
+
+export default async function HomePage() {
+  const [programs, learnerStories, testimonials] = await Promise.all([
+    getPublishedPrograms(),
+    getPublishedLearnerStories(),
+    getPublishedTestimonials(),
+  ]);
+
   return (
     <>
       {/* 01 — Hero: Full-screen video + headline + CTA */}
@@ -39,7 +47,7 @@ export default function HomePage() {
       <LearnCreateGrowSection />
 
       {/* 04 — Programs (Choose Your Learning Path) */}
-      <ProgramsSection />
+      <ProgramsSection programs={programs} />
 
       {/* 05 — Career Journey (5-Step Milestone Path) */}
       <CareerJourneySection />
@@ -51,13 +59,13 @@ export default function HomePage() {
       <CertificationsSection />
 
       {/* 08 — Real People, Real Transformations (curved video carousel) */}
-      <VideoTestimonialCarousel />
+      <VideoTestimonialCarousel stories={learnerStories} />
 
       {/* 09 — Community (solid blue) */}
       <CommunitySection />
 
       {/* 10 — Student Reviews (masonry testimonials) */}
-      <StudentReviewsSection />
+      <StudentReviewsSection reviews={testimonials} />
 
       {/* 11 — Final CTA */}
       <FinalCTASection />

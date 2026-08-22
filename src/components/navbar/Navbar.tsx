@@ -231,7 +231,8 @@ export default function Navbar() {
             <div className="shrink-0">
               <Logo
                 variant={isLightNav ? "default" : "white"}
-                height={isLightNav ? 36 : 40}
+                height={36}
+                className="h-8 sm:h-8.5 lg:h-9 w-auto"
                 priority
               />
             </div>
@@ -490,7 +491,7 @@ export default function Navbar() {
             <button
               className={cn(
                 "lg:hidden flex flex-col justify-center items-center",
-                "w-10 h-10 rounded-xl gap-1.5",
+                "w-8.5 h-8.5 rounded-lg gap-1",
                 "transition-colors duration-150",
                 isLightNav
                   ? "hover:bg-neutral-100"
@@ -504,20 +505,20 @@ export default function Navbar() {
             >
               <span
                 className={cn(
-                  "block h-0.5 rounded-full transition-all duration-300 w-6",
-                  isLightNav ? "bg-neutral-900" : "bg-white shadow-sm"
+                  "block h-[2px] rounded-full transition-all duration-300 w-4.5",
+                  isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-0.5 rounded-full transition-all duration-300 w-5",
-                  isLightNav ? "bg-neutral-900" : "bg-white shadow-sm"
+                  "block h-[2px] rounded-full transition-all duration-300 w-3.5",
+                  isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-0.5 rounded-full transition-all duration-300 w-6",
-                  isLightNav ? "bg-neutral-900" : "bg-white shadow-sm"
+                  "block h-[2px] rounded-full transition-all duration-300 w-4.5",
+                  isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
             </button>

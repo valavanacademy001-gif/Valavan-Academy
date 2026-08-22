@@ -16,6 +16,7 @@ import { motion, PanInfo } from "framer-motion";
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
+import { CMSLearnerStory } from "@/lib/cms";
 
 const VIDEOS = [
   { id: "BzQ9wNPit5I", name: "Learner Story 1" },
@@ -98,6 +99,7 @@ interface VideoTestimonialCarouselProps {
   subtitle?: string;
   noTopShadow?: boolean;
   customTitle?: React.ReactNode;
+  stories?: CMSLearnerStory[];
 }
 
 export default function VideoTestimonialCarousel({
@@ -109,6 +111,7 @@ export default function VideoTestimonialCarousel({
   subtitle = "Career changers who redefined their future with Valavan Academy — in their own words.",
   noTopShadow = false,
   customTitle,
+  stories,
 }: VideoTestimonialCarouselProps = {}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -117,7 +120,21 @@ export default function VideoTestimonialCarousel({
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const total = VIDEOS.length;
+  const items = (stories && stories.length > 0)
+    ? stories.map((s, idx) => {
+        let videoId = s.youtube_video_id || "";
+        if (!videoId && s.youtube_url) {
+          const match = s.youtube_url.match(/(?:shorts\/|v=|youtu\.be\/)([^?&/]+)/);
+          videoId = match ? match[1] : "";
+        }
+        return {
+          id: videoId || VIDEOS[idx % VIDEOS.length].id,
+          name: s.title || s.student_name || `Learner Story ${idx + 1}`,
+        };
+      })
+    : VIDEOS;
+
+  const total = items.length;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
@@ -155,7 +172,7 @@ export default function VideoTestimonialCarousel({
 
   const handleThumbnailClick = (index: number) => {
     if (index === activeIndex) {
-      setPlayingVideo(VIDEOS[index].id);
+      setPlayingVideo(items[index].id);
       setIsPlaying(false);
     } else {
       setActiveIndex(index);
@@ -238,7 +255,7 @@ export default function VideoTestimonialCarousel({
             transformStyle: "preserve-3d",
           }}
         >
-          {VIDEOS.map((video, idx) => {
+          {items.map((video, idx) => {
             // Compute relative circular distance to activeIndex (Infinite loop without reverse)
             let diff = (idx - activeIndex + total) % total;
             if (diff > total / 2) diff -= total;

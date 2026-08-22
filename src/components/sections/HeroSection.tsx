@@ -18,6 +18,7 @@ import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { EXTERNAL_URLS } from "@/data/site.config";
 import { cn } from "@/lib/utils";
+import { CMSHeroData, DEFAULT_HERO_DATA } from "@/lib/cms";
 
 const SLIDES = [
   {
@@ -60,9 +61,7 @@ const SLIDES = [
     link: "/programs",
     external: false,
   },
-];
-
-export default function HeroSection() {
+];export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -173,13 +172,11 @@ export default function HeroSection() {
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white hover:text-[#1748BB] bg-[#1748BB]/10 hover:bg-white border-2 border-[#1748BB] hover:border-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:scale-105 transition-all duration-200 backdrop-blur-md"
                   >
-                    <span className="transition-colors group-hover:text-[#1748BB]">Join TNCC Community</span>
-                    <span className="transition-all group-hover:text-[#1748BB] group-hover:translate-x-1">→</span>
+                    <span>Join TNCC Community</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </a>
-
                 </div>
               </FadeUp>
-
             </div>
 
             {/* ── Right Column: Compact Horizontal Slider Card ──────────────── */}

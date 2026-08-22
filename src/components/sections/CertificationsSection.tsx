@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { CMSCertification } from "@/lib/cms";
 
 const CERTS = [
   { id: "c1", src: "/assets/certifications/2.webp", alt: "Valavan Academy Certification" },
@@ -26,7 +27,19 @@ const CERTS = [
   { id: "c8", src: "/assets/certifications/9.webp", alt: "AI Tools Certificate" },
 ];
 
-export default function CertificationsSection() {
+interface CertificationsSectionProps {
+  certifications?: CMSCertification[];
+}
+
+export default function CertificationsSection({ certifications }: CertificationsSectionProps = {}) {
+  const items = (certifications && certifications.length > 0)
+    ? certifications.map((c, idx) => ({
+        id: c.id || `c-${idx}`,
+        src: c.image_url || CERTS[idx % CERTS.length].src,
+        alt: c.title || "Valavan Academy Certification",
+      }))
+    : CERTS;
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -34,7 +47,7 @@ export default function CertificationsSection() {
   const [isMobile, setIsMobile] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const total = CERTS.length;
+  const total = items.length;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
@@ -121,7 +134,7 @@ export default function CertificationsSection() {
             transformStyle: "preserve-3d",
           }}
         >
-          {CERTS.map((cert, idx) => {
+          {items.map((cert, idx) => {
             let diff = (idx - activeIndex + total) % total;
             if (diff > total / 2) diff -= total;
 
@@ -260,7 +273,7 @@ export default function CertificationsSection() {
 
           {/* Dots */}
           <div className="flex gap-1.5 sm:gap-2">
-            {CERTS.map((_, i) => (
+            {items.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
@@ -306,8 +319,8 @@ export default function CertificationsSection() {
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={CERTS[lightboxIndex].src}
-                alt={CERTS[lightboxIndex].alt}
+                src={items[lightboxIndex]?.src || CERTS[0].src}
+                alt={items[lightboxIndex]?.alt || "Certificate"}
                 fill
                 className="object-contain"
                 sizes="(max-width: 1024px) 95vw, 900px"

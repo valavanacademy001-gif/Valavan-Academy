@@ -2,28 +2,33 @@
 
 /**
  * Valavan Academy — Mobile Menu
- * Full-screen slide-in menu for mobile devices.
- * Animated with Framer Motion, keyboard accessible.
+ * Compact, modern floating box navigation card for mobile devices.
+ * Styled as a sleek dropdown card with smooth spring animations.
  */
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, ChevronRight } from "lucide-react";
+import { X, ExternalLink, ChevronRight, ChevronDown, Sparkles, BookOpen, Users, Phone, Home } from "lucide-react";
 import Logo from "@/components/ui/Logo";
-import Button from "@/components/ui/Button";
 import { NAV_LINKS, EXTERNAL_URLS, SOCIAL_LINKS } from "@/data/site.config";
 import { cn } from "@/lib/utils";
-import { SOCIAL_ICON_MAP } from "@/components/ui/SocialIcons";
 
 interface MobileMenuProps {
-  isOpen:   boolean;
-  onClose:  () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-
+const PROGRAM_ITEMS = [
+  { label: "90-Day Graphic Design Mastery", href: "/programs/90-days-graphic-design", badge: "90 Days" },
+  { label: "Full Stack Creator Program", href: "/programs/full-stack-creator", badge: "6 Months" },
+  { label: "Live Printing Business Workshop", href: "https://valavanacademy.in/workshop/", external: true, badge: "Live" },
+  { label: "Explore All Programs →", href: "/programs#programs" },
+];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const [programsOpen, setProgramsOpen] = useState(true);
+
   // Close on Escape key
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -33,29 +38,42 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     return () => document.removeEventListener("keydown", handleKey);
   }, [isOpen, onClose]);
 
-  const containerVariants = {
-    hidden:  { x: "100%" },
-    visible: { x: 0 },
-  };
+  // Lock body scroll gently when open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const overlayVariants = {
-    hidden:  { opacity: 0 },
+    hidden: { opacity: 0 },
     visible: { opacity: 1 },
   };
 
-  const itemVariants = {
-    hidden:  { opacity: 0, x: 24 },
-    visible: (i: number) => ({
+  const cardVariants = {
+    hidden: { opacity: 0, y: -12, scale: 0.97 },
+    visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
+      scale: 1,
       transition: {
-        delay: 0.1 + i * 0.06,
-        duration: 0.35,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+        type: "spring" as const,
+        damping: 25,
+        stiffness: 300,
       },
-    }),
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      scale: 0.98,
+      transition: { duration: 0.18 },
+    },
   };
-
 
   return (
     <AnimatePresence>
@@ -68,167 +86,185 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm lg:hidden"
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[75] bg-black/45 backdrop-blur-xs lg:hidden"
             onClick={onClose}
             aria-hidden="true"
           />
 
-          {/* Drawer */}
+          {/* Floating Menu Card Box */}
           <motion.div
-            key="drawer"
+            key="mobile-card"
             id="mobile-menu"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            variants={containerVariants}
+            variants={cardVariants}
             initial="hidden"
             animate="visible"
-            exit="hidden"
-            transition={{ type: "spring", damping: 28, stiffness: 280 }}
+            exit="exit"
             className={cn(
-              "fixed right-0 top-0 bottom-0 z-[80] w-full max-w-sm",
-              "bg-white flex flex-col",
-              "lg:hidden overflow-y-auto"
+              "fixed top-[62px] sm:top-[70px] left-3.5 right-3.5 sm:left-auto sm:right-6 sm:w-[380px] z-[85]",
+              "bg-white rounded-2xl border border-neutral-200/90",
+              "shadow-[0_20px_50px_rgba(0,0,0,0.18)] flex flex-col",
+              "max-h-[calc(100vh-80px)] overflow-hidden lg:hidden"
             )}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-[--color-border]">
-              <Logo height={34} />
+            {/* Card Header */}
+            <div className="flex items-center justify-between px-4.5 py-3 border-b border-neutral-100 bg-neutral-50/70">
+              <div className="flex items-center gap-2">
+                <Logo height={26} className="h-6 w-auto" />
+              </div>
               <button
                 onClick={onClose}
                 aria-label="Close navigation menu"
-                className={cn(
-                  "flex items-center justify-center",
-                  "w-9 h-9 rounded-lg",
-                  "text-[--color-neutral-600]",
-                  "hover:bg-[--color-neutral-100] hover:text-[--color-foreground]",
-                  "transition-colors duration-150",
-                  "focus-visible:outline-2 focus-visible:outline-[--color-brand-primary]"
-                )}
+                className="w-7 h-7 rounded-lg text-neutral-500 hover:text-neutral-900 hover:bg-neutral-200/60 flex items-center justify-center transition-colors"
               >
-                <X size={20} />
+                <X size={17} />
               </button>
             </div>
 
-            {/* Navigation Links */}
-            <nav className="flex-1 px-4 py-6" aria-label="Mobile navigation">
-              <ul className="space-y-1" role="list">
-                {NAV_LINKS.map((link, i) => (
-                  <li key={link.id}>
-                    <motion.div
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
-                      custom={i}
-                    >
-                      <Link
-                        href={link.href}
-                        className={cn(
-                          "flex items-center justify-between",
-                          "px-4 py-3.5 rounded-xl",
-                          "text-[--color-foreground] font-medium text-base",
-                          "hover:bg-[--color-brand-xlight] hover:text-[--color-brand-primary]",
-                          "transition-colors duration-150",
-                          "focus-visible:outline-2 focus-visible:outline-[--color-brand-primary]"
-                        )}
-                        onClick={onClose}
-                      >
-                        {link.label}
-                        <ChevronRight
-                          size={16}
-                          className="text-[--color-neutral-400]"
-                        />
-                      </Link>
+            {/* Scrollable Navigation Body */}
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-1.5 divide-y divide-neutral-100">
+              
+              {/* Main Links */}
+              <div className="space-y-1">
+                {/* Home Link */}
+                <Link
+                  href="/"
+                  onClick={onClose}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Home size={16} className="text-[#1748BB]" />
+                    Home
+                  </span>
+                  <ChevronRight size={14} className="text-neutral-400" />
+                </Link>
 
-                      {/* Sub-links */}
-                      {"children" in link && link.children && (
-                        <ul className="mt-1 ml-4 space-y-1" role="list">
-                          {link.children.map((child) => (
-                            <li key={child.id}>
-                              <Link
-                                href={child.href}
-                                className={cn(
-                                  "block px-4 py-2.5 rounded-lg",
-                                  "text-[--color-muted] text-sm font-medium",
-                                  "hover:text-[--color-brand-primary] hover:bg-[--color-brand-xlight]",
-                                  "transition-colors duration-150"
-                                )}
-                                onClick={onClose}
-                              >
-                                {child.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </motion.div>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* CTAs */}
-            <div className="px-4 py-4 border-t border-[--color-border] space-y-3">
-              <a
-                href={EXTERNAL_URLS.login}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "flex items-center justify-center gap-2",
-                  "w-full px-5 py-3 rounded-xl",
-                  "text-[--color-foreground] text-sm font-semibold",
-                  "border border-[--color-border]",
-                  "hover:border-[--color-brand-primary] hover:text-[--color-brand-primary]",
-                  "transition-colors duration-150"
-                )}
-                onClick={onClose}
-              >
-                Login to Account
-                <ExternalLink size={14} />
-              </a>
-
-              <Button
-                href={EXTERNAL_URLS.signup}
-                external
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={onClose}
-              >
-                Enroll Now →
-              </Button>
-            </div>
-
-            {/* Social Links */}
-            <div className="px-4 py-4 border-t border-[--color-border]">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[--color-muted-light] mb-3">
-                Follow Us
-              </p>
-              <div className="flex items-center gap-3">
-                {SOCIAL_LINKS.map((social) => {
-                  const Icon = SOCIAL_ICON_MAP[social.icon];
-                  return (
-                    <a
-                      key={social.id}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Follow us on ${social.label}`}
+                {/* Programs Accordion */}
+                <div className="rounded-xl overflow-hidden bg-neutral-50/60 border border-neutral-100">
+                  <button
+                    type="button"
+                    onClick={() => setProgramsOpen(!programsOpen)}
+                    className="w-full flex items-center justify-between px-3.5 py-2.5 text-neutral-800 font-semibold text-sm hover:text-[#1748BB] transition-colors"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <BookOpen size={16} className="text-[#1748BB]" />
+                      Programs & Tracks
+                    </span>
+                    <ChevronDown
+                      size={15}
                       className={cn(
-                        "flex items-center justify-center",
-                        "w-9 h-9 rounded-full",
-                        "bg-[--color-neutral-100] text-[--color-neutral-500]",
-                        "hover:bg-[--color-brand-primary] hover:text-white",
-                        "transition-all duration-200"
+                        "text-neutral-400 transition-transform duration-200",
+                        programsOpen ? "rotate-180 text-[#1748BB]" : ""
                       )}
-                    >
-                      {Icon && <Icon size={16} />}
-                    </a>
-                  );
-                })}
+                    />
+                  </button>
+
+                  {programsOpen && (
+                    <div className="px-2 pb-2 space-y-1 pt-0.5">
+                      {PROGRAM_ITEMS.map((prog) => (
+                        prog.external ? (
+                          <a
+                            key={prog.label}
+                            href={prog.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={onClose}
+                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-neutral-600 hover:text-[#1748BB] hover:bg-white transition-colors"
+                          >
+                            <span className="truncate">{prog.label}</span>
+                            {prog.badge && (
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-[#1748BB] shrink-0 ml-2">
+                                {prog.badge}
+                              </span>
+                            )}
+                          </a>
+                        ) : (
+                          <Link
+                            key={prog.label}
+                            href={prog.href}
+                            onClick={onClose}
+                            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-neutral-600 hover:text-[#1748BB] hover:bg-white transition-colors"
+                          >
+                            <span className="truncate">{prog.label}</span>
+                            {prog.badge && (
+                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-[#1748BB] shrink-0 ml-2">
+                                {prog.badge}
+                              </span>
+                            )}
+                          </Link>
+                        )
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* About Link */}
+                <Link
+                  href="/about"
+                  onClick={onClose}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Sparkles size={16} className="text-[#1748BB]" />
+                    About Valavan Academy
+                  </span>
+                  <ChevronRight size={14} className="text-neutral-400" />
+                </Link>
+
+                {/* Community Link */}
+                <Link
+                  href="/community"
+                  onClick={onClose}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Users size={16} className="text-[#1748BB]" />
+                    TNCC Community (40K+)
+                  </span>
+                  <ChevronRight size={14} className="text-neutral-400" />
+                </Link>
+
+                {/* Contact Link */}
+                <Link
+                  href="/contact"
+                  onClick={onClose}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Phone size={16} className="text-[#1748BB]" />
+                    Contact & Helpdesk
+                  </span>
+                  <ChevronRight size={14} className="text-neutral-400" />
+                </Link>
               </div>
+
+              {/* Bottom Action CTAs */}
+              <div className="pt-3 space-y-2">
+                <a
+                  href={EXTERNAL_URLS.login}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-neutral-200 text-neutral-800 font-bold text-xs hover:bg-neutral-50 transition-colors shadow-2xs"
+                >
+                  <span>Login to Account</span>
+                  <ExternalLink size={12} className="opacity-70" />
+                </a>
+
+                <a
+                  href={EXTERNAL_URLS.signup}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#1748BB] hover:bg-[#0E3594] text-white font-bold text-xs shadow-md shadow-blue-600/25 transition-all"
+                >
+                  <span>Enroll Now →</span>
+                </a>
+              </div>
+
             </div>
+
           </motion.div>
         </>
       )}
