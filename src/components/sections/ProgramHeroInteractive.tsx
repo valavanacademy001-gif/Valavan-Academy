@@ -93,7 +93,7 @@ export default function ProgramHeroInteractive({
     <div
       ref={containerRef}
       className={`relative bg-[#1748BB] text-white ${
-        isDesktop ? "h-[140vh]" : "min-h-screen pb-10 pt-24"
+        isDesktop ? "h-[140vh]" : "w-full pb-12 pt-24 sm:pt-28"
       }`}
       style={{
         backgroundImage: `
