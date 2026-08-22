@@ -113,7 +113,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {/* Card Header */}
             <div className="flex items-center justify-between px-4.5 py-3 border-b border-neutral-100 bg-neutral-50/70">
               <div className="flex items-center gap-2">
-                <Logo height={22} className="h-5 w-auto" />
+                <Logo height={20} className="h-[18px] w-auto" />
               </div>
               <button
                 onClick={onClose}

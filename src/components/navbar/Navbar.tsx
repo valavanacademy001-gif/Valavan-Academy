@@ -232,7 +232,7 @@ export default function Navbar() {
               <Logo
                 variant={isLightNav ? "default" : "white"}
                 height={38}
-                className="h-5 sm:h-6 lg:h-9.5 w-auto"
+                className="h-[18px] sm:h-5 md:h-6 lg:h-9.5 w-auto"
                 priority
               />
             </div>
@@ -491,7 +491,7 @@ export default function Navbar() {
             <button
               className={cn(
                 "lg:hidden flex flex-col justify-center items-center",
-                "w-7.5 h-7.5 rounded-lg gap-1",
+                "w-6.5 h-6.5 rounded-md gap-[2.5px]",
                 "transition-colors duration-150",
                 isLightNav
                   ? "hover:bg-neutral-100"
@@ -505,19 +505,19 @@ export default function Navbar() {
             >
               <span
                 className={cn(
-                  "block h-[1.75px] rounded-full transition-all duration-300 w-3.5",
+                  "block h-[1.5px] rounded-full transition-all duration-300 w-3",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-[1.75px] rounded-full transition-all duration-300 w-2.5",
+                  "block h-[1.5px] rounded-full transition-all duration-300 w-2",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
               <span
                 className={cn(
-                  "block h-[1.75px] rounded-full transition-all duration-300 w-3.5",
+                  "block h-[1.5px] rounded-full transition-all duration-300 w-3",
                   isLightNav ? "bg-neutral-800" : "bg-white shadow-sm"
                 )}
               />
