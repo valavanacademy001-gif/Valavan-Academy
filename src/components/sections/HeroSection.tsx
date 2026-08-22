@@ -86,21 +86,35 @@ export default function HeroSection() {
   return (
     <section className="relative w-full min-h-[100dvh] lg:h-screen flex flex-col justify-between overflow-hidden bg-[#07080D] text-white">
       
-      {/* ── Background Video with Cinematic Overlays (Brighter & Clearer) ── */}
+      {/* ── Background Video on Desktop only; Clean cinematic background on Mobile ── */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        {/* Desktop Video (md and above) */}
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-100 brightness-[1.15] contrast-[1.04] scale-[1.08] sm:scale-105"
+          className="hidden md:block absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-100 brightness-[1.15] contrast-[1.04] scale-[1.08] sm:scale-105"
         >
           <source src="/assets/videos/hero-bg.mp4" type="video/mp4" />
         </video>
 
-        {/* Scrims: Soft bottom gradient for text contrast while keeping instructor & scene bright */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#07080D] via-[#07080D]/65 via-[#07080D]/15 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent z-10" />
+        {/* Mobile Fast Dark Background with Subtle Brand Glows */}
+        <div className="block md:hidden absolute inset-0 bg-[#07080D]">
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#1748BB]/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-10 -left-20 w-72 h-72 bg-[#1748BB]/15 rounded-full blur-3xl pointer-events-none" />
+          <div
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(#6392FF 1px, transparent 1px)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+        </div>
+
+        {/* Scrims: Soft bottom gradient for text contrast while keeping instructor & scene bright on desktop */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-[#07080D] via-[#07080D]/65 via-[#07080D]/15 to-transparent z-10" />
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent z-10" />
       </div>
 
       {/* ── Left Edge Vertical Brand Line ─────────────────────────────────── */}

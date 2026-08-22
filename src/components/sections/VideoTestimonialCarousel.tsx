@@ -171,16 +171,12 @@ export default function VideoTestimonialCarousel({
 
   return (
     <section
-      className={`relative z-20 bg-white py-16 sm:py-28 overflow-hidden border-t border-neutral-100 select-none ${
-        noTopShadow
-          ? ""
-          : "rounded-t-[36px] sm:rounded-t-[52px] shadow-[0_-25px_60px_rgba(0,0,0,0.18)]"
-      }`}
+      className="relative z-20 bg-white py-10 sm:py-20 md:py-28 overflow-hidden border-t border-neutral-100 select-none"
     >
       <Container>
         {/* Header */}
         {centered ? (
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-14">
             <FadeUp delay={0.05}>
               {customTitle ? (
                 customTitle

@@ -225,7 +225,7 @@ export default function StudentReviewsSection() {
   const col3 = REVIEWS.filter((_, i) => i % 3 === 2);
 
   return (
-    <section className="bg-[#F8FAFF] py-16 sm:py-28 border-t border-[#E8EFFE] relative z-20 rounded-t-[36px] sm:rounded-t-[56px] shadow-[0_-25px_60px_rgba(0,0,0,0.18)] overflow-x-clip">
+    <section className="bg-[#F8FAFF] py-10 sm:py-20 md:py-28 border-t border-[#E8EFFE] relative z-20 overflow-x-clip">
       {/* Pixel Gradient Pattern Background */}
       <InteractiveGridBackground />
       <Container className="relative z-10">

@@ -32,7 +32,7 @@ export default function FadeUp({
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-40px" }}
+      viewport={{ once: true, margin: "0px" }}
       variants={shouldReduceMotion ? {} : fadeUpVariants}
       custom={delay}
     >

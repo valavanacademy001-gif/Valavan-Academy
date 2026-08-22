@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Container from "@/components/ui/Container";
+import CountUp from "@/components/ui/CountUp";
 import { EXTERNAL_URLS } from "@/data/site.config";
 import { Users, MessageCircle, Award, ArrowUpRight, Sparkles, CheckCircle2 } from "lucide-react";
 
@@ -10,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const STATS = [
-  { value: "40K+", label: "Community Members" },
-  { value: "100+", label: "Workshops Conducted" },
-  { value: "5K+", label: "Students Trained" },
+  { target: 40, suffix: "K+", label: "Community Members" },
+  { target: 100, suffix: "+", label: "Workshops Conducted" },
+  { target: 5, suffix: "K+", label: "Students Trained" },
 ];
 
 const PILLARS = [
@@ -107,7 +108,7 @@ export default function CommunityPage() {
             {STATS.map((stat) => (
               <div key={stat.label} className="space-y-1">
                 <p className="font-display font-extrabold text-4xl sm:text-5xl tracking-tight text-white">
-                  {stat.value}
+                  <CountUp end={stat.target} suffix={stat.suffix} duration={1800} />
                 </p>
                 <p className="font-sans text-sm sm:text-base text-[#BACFFF] font-medium">
                   {stat.label}

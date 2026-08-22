@@ -54,10 +54,10 @@ export default function CareerJourneySection() {
   }, [isHovered]);
 
   return (
-    <section className="bg-white text-[#1E2026] py-16 sm:py-24 relative overflow-hidden border-b border-neutral-100">
+    <section className="bg-white text-[#1E2026] py-10 sm:py-18 md:py-24 relative overflow-hidden border-b border-neutral-100">
       <Container>
         {/* ── Section Header ───────────────────────────────────────── */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
           <FadeUp delay={0}>
             <div className="flex items-center justify-center gap-3 mb-3">
               <div className="w-8 h-[2px] bg-[#1748BB]" />

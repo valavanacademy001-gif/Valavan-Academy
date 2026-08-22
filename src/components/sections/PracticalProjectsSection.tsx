@@ -56,7 +56,7 @@ export default function PracticalProjectsSection({
   projects = DEFAULT_GRAPHIC_DESIGN_PROJECTS,
 }: PracticalProjectsSectionProps) {
   return (
-    <section className="py-20 sm:py-28 bg-white relative overflow-hidden border-b border-neutral-100">
+    <section className="py-10 sm:py-20 md:py-28 bg-white relative overflow-hidden border-b border-neutral-100">
       <Container>
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18">

@@ -81,7 +81,7 @@ export default function CertificationsSection() {
   const farOffset = isMobile ? 320 : 520;
 
   return (
-    <section className="bg-neutral-50 py-16 sm:py-28 overflow-hidden select-none">
+    <section className="bg-neutral-50 py-10 sm:py-20 md:py-28 overflow-hidden select-none">
       <Container>
         {/* Header */}
         <FadeUp delay={0}>
@@ -92,7 +92,7 @@ export default function CertificationsSection() {
             </span>
           </div>
         </FadeUp>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-14 items-start mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-14 items-start mb-6 sm:mb-14">
           <FadeUp delay={0.05}>
             <h2
               className="font-display font-bold text-[#1E2026] leading-[1.18] sm:leading-[1.06] tracking-tight"

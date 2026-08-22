@@ -54,14 +54,14 @@ export default function SmoothScrollProvider({
 
     // Initialize Lenis for desktop
     const lenis = new Lenis({
-      duration:         1.1,
-      easing:           (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation:      "vertical",
+      duration: 1.0,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
       gestureOrientation: "vertical",
-      smoothWheel:      true,
-      wheelMultiplier:  0.85,
-      touchMultiplier:  1.0,
-      infinite:         false,
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.0,
+      infinite: false,
     });
 
     lenisRef.current = lenis;
@@ -69,19 +69,27 @@ export default function SmoothScrollProvider({
     // Connect Lenis scroll events to GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
 
-    // Use GSAP ticker to drive Lenis RAF loop
-    gsap.ticker.add((time) => {
+    // Named ticker handler for exact cleanup
+    const updateTicker = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
+
+    // Use GSAP ticker to drive Lenis RAF loop
+    gsap.ticker.add(updateTicker);
 
     // Disable GSAP's own lag smoothing since Lenis handles it
     gsap.ticker.lagSmoothing(0);
 
+    const handleResize = () => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("resize", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
+      gsap.ticker.remove(updateTicker);
       lenis.destroy();
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
       lenisRef.current = null;
     };
   }, []);

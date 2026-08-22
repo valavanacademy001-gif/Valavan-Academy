@@ -64,17 +64,17 @@ export const SCROLL_TRIGGER_DEFAULTS = {
 
 // ─── Framer Motion Variants ───────────────────────────────────────────────────
 
-// Fade Up — most common reveal
+// Fade Up — most common reveal (optimized for high-fps mobile smoothness)
 export const fadeUpVariants = {
   hidden: {
     opacity: 0,
-    y: 40,
+    y: 24,
   },
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: DURATION.slow,
+      duration: 0.45,
       ease: EASE.fm.strong,
       delay,
     },

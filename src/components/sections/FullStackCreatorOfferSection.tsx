@@ -22,7 +22,7 @@ export default function FullStackCreatorOfferSection({
   ];
 
   return (
-    <section className="py-20 sm:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
+    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
       {/* Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[150px] pointer-events-none"
@@ -31,7 +31,7 @@ export default function FullStackCreatorOfferSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-4xl mx-auto mb-14 sm:mb-18">
+        <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-14">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">

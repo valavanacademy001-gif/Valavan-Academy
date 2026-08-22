@@ -29,7 +29,7 @@ export default function TemplatesWorldBonusSection({
 }: TemplatesWorldBonusSectionProps) {
   return (
     <section
-      className="py-20 sm:py-28 bg-[#1748BB] text-white relative z-20 overflow-hidden select-none border-t border-white/10 text-center"
+      className="py-10 sm:py-20 md:py-28 bg-[#1748BB] text-white relative z-20 overflow-hidden select-none border-t border-white/10 text-center"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
@@ -50,7 +50,7 @@ export default function TemplatesWorldBonusSection({
 
       <Container className="relative z-10 flex flex-col items-center">
         {/* ── 01 Centered Header ── */}
-        <div className="max-w-3xl mx-auto mb-10 sm:mb-14">
+        <div className="max-w-3xl mx-auto mb-6 sm:mb-12">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-white/30 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md shadow-sm">

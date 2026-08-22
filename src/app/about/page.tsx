@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
+import CountUp from "@/components/ui/CountUp";
 import TimelineSection from "@/components/sections/TimelineSection";
 import TeamSection from "@/components/sections/TeamSection";
 import { EXTERNAL_URLS } from "@/data/site.config";
@@ -68,12 +69,12 @@ const TIMELINE_EVENTS = [
   },
 ];
 
-/* ── STATS DATA ── */
+/* ── STATS DATA (with numerical targets for scroll CountUp effect) ── */
 const STATS = [
-  { value: "5K+", label: "Students Trained" },
-  { value: "40K+", label: "TNCC Community Members" },
-  { value: "100+", label: "Workshops Conducted" },
-  { value: "98%", label: "Satisfaction Rate" },
+  { target: 5, suffix: "K+", label: "Students Trained" },
+  { target: 40, suffix: "K+", label: "TNCC Community Members" },
+  { target: 100, suffix: "+", label: "Workshops Conducted" },
+  { target: 98, suffix: "%", label: "Satisfaction Rate" },
 ];
 
 /* ── PILLARS / VALUES DATA ── */
@@ -459,7 +460,7 @@ export default function AboutPage() {
                   className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight"
                   style={{ color: "#FFFFFF" }}
                 >
-                  {stat.value}
+                  <CountUp end={stat.target} suffix={stat.suffix} duration={1800} />
                 </p>
                 <p
                   className="font-sans text-xs sm:text-sm font-semibold"
@@ -474,7 +475,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── 09 Final CTA Section ── */}
-      <section className="py-20 sm:py-28 bg-[#F8FAFF] border-t border-[#E8EFFE] relative">
+      <section className="py-12 sm:py-20 md:py-28 bg-[#F8FAFF] border-t border-[#E8EFFE] relative">
         <Container>
           <div className="rounded-[32px] bg-gradient-to-br from-[#1748BB] to-[#0A3CA8] text-white p-8 sm:p-14 text-center relative overflow-hidden shadow-[0_20px_50px_rgba(23,72,187,0.3)] max-w-4xl mx-auto space-y-6">
             <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/15 text-white text-xs font-sans font-bold tracking-wide uppercase backdrop-blur-sm">
@@ -513,11 +514,13 @@ export default function AboutPage() {
                 href={EXTERNAL_URLS.community}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#FFFFFF" }}
-                className="inline-flex items-center gap-2 border-2 border-white !text-white hover:bg-white hover:!text-[#1748BB] font-sans font-semibold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200"
+                className="group inline-flex items-center gap-2 border-2 border-white text-white hover:bg-white font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-md"
               >
-                <span style={{ color: "#FFFFFF" }} className="!text-white font-semibold">
+                <span className="text-white group-hover:!text-[#1748BB] font-bold transition-colors">
                   Join TNCC Community
+                </span>
+                <span className="text-white group-hover:!text-[#1748BB] transition-all group-hover:translate-x-1">
+                  →
                 </span>
               </a>
             </div>

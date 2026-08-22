@@ -28,7 +28,7 @@ export default function CommunitySection() {
   return (
     <section
       ref={ref}
-      className="bg-[#1748BB] py-16 sm:py-20 lg:py-32 overflow-x-clip relative lg:sticky lg:top-0 z-10 lg:min-h-screen flex items-center justify-center"
+      className="bg-[#1748BB] py-10 sm:py-16 lg:py-24 overflow-x-clip relative z-10 flex items-center justify-center border-t border-[#1748BB]"
     >
       {/* Background pattern */}
       <div
@@ -57,7 +57,7 @@ export default function CommunitySection() {
                 </span>
               </div>
               <h2
-                className="font-display font-bold text-white leading-[1.15] sm:leading-[1.05] tracking-tight"
+                className="font-display font-bold text-white leading-[1.04] sm:leading-[1.0] tracking-tight"
                 style={{ fontSize: "clamp(28px, 4.8vw, 64px)" }}
               >
                 You Don&apos;t Have
@@ -114,7 +114,7 @@ export default function CommunitySection() {
                 return (
                   <div
                     key={stat.label}
-                    className="sticky lg:static mb-8 lg:mb-0"
+                    className="sticky lg:static mb-4 lg:mb-0"
                     style={{
                       top: `${topOffset}px`,
                       zIndex: zIndex,

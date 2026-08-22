@@ -18,7 +18,7 @@ export default function FinalCTASection() {
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
 
   return (
-    <section ref={ref} className="bg-white py-24 sm:py-32 relative z-20 overflow-hidden border-t border-neutral-100">
+    <section ref={ref} className="bg-white py-12 sm:py-24 md:py-32 relative z-20 overflow-hidden border-t border-neutral-100">
       {/* Large background text */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"

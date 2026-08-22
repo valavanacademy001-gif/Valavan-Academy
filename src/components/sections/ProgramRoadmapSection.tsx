@@ -68,7 +68,7 @@ export default function ProgramRoadmapSection({
   phases = DEFAULT_GRAPHIC_DESIGN_ROADMAP,
 }: ProgramRoadmapSectionProps) {
   return (
-    <section className="py-20 sm:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
+    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
       {/* Ambient background glow */}
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
@@ -77,7 +77,7 @@ export default function ProgramRoadmapSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-16">
           <FadeUp delay={0}>
             <h2
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"

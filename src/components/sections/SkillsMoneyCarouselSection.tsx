@@ -145,7 +145,7 @@ export default function SkillsMoneyCarouselSection({
 
   return (
     <section
-      className="sticky top-0 z-10 min-h-screen py-20 sm:py-28 bg-[#1748BB] text-white relative overflow-hidden select-none pb-32 sm:pb-44 flex flex-col justify-center"
+      className="relative z-10 py-10 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none pb-12 sm:pb-24 flex flex-col justify-center border-t border-[#1748BB]"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
@@ -166,7 +166,7 @@ export default function SkillsMoneyCarouselSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-white/25 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm shadow-sm">

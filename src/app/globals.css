@@ -94,13 +94,13 @@
   --text-caption:      0.75rem;   /* 12px */
   --text-label:        0.6875rem; /* 11px */
 
-  /* ── Line Heights ──────────────────────────────────────────────── */
-  --leading-display:  1.05;
-  --leading-tight:    1.2;
-  --leading-snug:     1.35;
-  --leading-normal:   1.5;
-  --leading-relaxed:  1.65;
-  --leading-loose:    1.8;
+  /* ── Line Heights (Tighter, Modern Editorial Proportions) ──── */
+  --leading-display:  1.0;    /* 100% - Hero and massive display titles */
+  --leading-tight:    1.1;    /* 110% - Main section headlines (h1, h2, h3) */
+  --leading-snug:     1.24;   /* 124% - Card headings, medium titles (h4, h5) */
+  --leading-normal:   1.38;   /* 138% - Compact body text & descriptions */
+  --leading-relaxed:  1.46;   /* 146% - Subtext, subtitles & intro paragraphs (reduced from 1.65) */
+  --leading-loose:    1.6;    /* 160% - Long-form prose text */
 
   /* ── Letter Spacing ────────────────────────────────────────────── */
   --tracking-tighter: -0.04em;
@@ -290,17 +290,17 @@ img, video {
   max-width: var(--container-narrow);
 }
 
-/* Section spacing */
+/* Section spacing (compact on mobile, expansive on desktop) */
 .va-section {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding-block: clamp(2.25rem, 5vw, 6rem);
 }
 
 .va-section-sm {
-  padding-block: clamp(2.5rem, 5vw, 4rem);
+  padding-block: clamp(1.5rem, 3.5vw, 3.5rem);
 }
 
 .va-section-lg {
-  padding-block: clamp(5rem, 10vw, 9rem);
+  padding-block: clamp(3rem, 7vw, 7.5rem);
 }
 
 /* Typography utility classes */

@@ -98,7 +98,7 @@ export default function ProgramsSection() {
     <section
       id="programs"
       aria-labelledby="programs-heading"
-      className="bg-[#F8FAFC] py-20 sm:py-28 relative border-t border-b border-neutral-200/70 overflow-hidden scroll-mt-24"
+      className="bg-[#F8FAFC] py-10 sm:py-20 md:py-28 relative border-t border-b border-neutral-200/70 overflow-hidden scroll-mt-24"
     >
       {/* Pixel Gradient Pattern Background */}
       <InteractiveGridBackground />
@@ -109,7 +109,7 @@ export default function ProgramsSection() {
       <Container className="relative z-10">
         
         {/* ── Section Header ───────────────────────────────────────── */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
           <FadeUp delay={0}>
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#1748BB]" />

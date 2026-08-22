@@ -19,7 +19,7 @@ export default function CreatorEconomyBoomSection() {
   const areaPoints = "40,260 130,185 190,205 240,170 340,95 440,55 440,300 40,300";
 
   return (
-    <section className="py-20 sm:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
+    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
       {/* Soft Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
@@ -28,7 +28,7 @@ export default function CreatorEconomyBoomSection() {
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-16">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">

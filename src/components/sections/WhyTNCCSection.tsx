@@ -12,19 +12,20 @@ import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import FadeUp from "@/components/animations/FadeUp";
 import VideoModal from "@/components/ui/VideoModal";
+import CountUp from "@/components/ui/CountUp";
 
 export default function WhyTNCCSection() {
   const [videoOpen, setVideoOpen] = useState(false);
 
   return (
-    <Section surface="white" className="py-20 md:py-28">
+    <Section surface="white" className="py-12 sm:py-20 md:py-28">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
           
           {/* Left Column: Heading, text, and stats */}
           <div className="lg:col-span-6 space-y-6">
             <FadeUp>
-              <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.12] tracking-tight font-display text-[#1E2026]">
+              <h2 className="text-[34px] sm:text-[42px] md:text-[48px] font-bold leading-[1.04] tracking-tight font-display text-[#1E2026]">
                 Why we built <br />
                 <span className="text-[#1748BB]">TNCC?</span>
               </h2>
@@ -32,7 +33,7 @@ export default function WhyTNCCSection() {
 
             <FadeUp delay={0.1}>
               <p className="text-base sm:text-lg text-neutral-600 leading-relaxed">
-                Traditional education focuses heavily on theory without real market skills. We created TNCC (Tamil Nadu Creators Club) & Valavan Academy to provide an end-to-end ecosystem where creators learn practical digital tools, produce high-caliber portfolios, and unlock real career and freelance opportunities.
+                Traditional education focuses heavily on theory without real market skills. We created TNCC (Tamil Nadu Creators Club) &amp; Valavan Academy to provide an end-to-end ecosystem where creators learn practical digital tools, produce high-caliber portfolios, and unlock real career and freelance opportunities.
               </p>
             </FadeUp>
 
@@ -41,7 +42,7 @@ export default function WhyTNCCSection() {
               <div className="grid grid-cols-3 gap-6 pt-6 border-t border-neutral-200">
                 <div>
                   <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1748BB] font-display">
-                    40,000+
+                    <CountUp end={40} suffix="K+" duration={1800} />
                   </div>
                   <div className="text-xs sm:text-sm text-neutral-500 font-medium mt-1">
                     Community Members
@@ -50,7 +51,7 @@ export default function WhyTNCCSection() {
 
                 <div>
                   <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E2026] font-display">
-                    100+
+                    <CountUp end={100} suffix="+" duration={1800} />
                   </div>
                   <div className="text-xs sm:text-sm text-neutral-500 font-medium mt-1">
                     Live Workshops
@@ -59,7 +60,7 @@ export default function WhyTNCCSection() {
 
                 <div>
                   <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#1E2026] font-display">
-                    5,000+
+                    <CountUp end={5} suffix="K+" duration={1800} />
                   </div>
                   <div className="text-xs sm:text-sm text-neutral-500 font-medium mt-1">
                     Students Mentored

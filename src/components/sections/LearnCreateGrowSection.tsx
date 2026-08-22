@@ -125,7 +125,7 @@ export default function LearnCreateGrowSection() {
     >
       <div
         ref={pinContainerRef}
-        className="w-full py-12 sm:py-24 min-h-[80vh] sm:min-h-[85vh] flex flex-col justify-center relative"
+        className="w-full py-8 sm:py-20 min-h-[70vh] sm:min-h-[85vh] flex flex-col justify-center relative"
       >
       {/* Large subtle background watermark text (#EFF4FF) */}
       <div
@@ -210,7 +210,7 @@ export default function LearnCreateGrowSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -18 }}
               transition={{ duration: 0.35, delay: 0.05 }}
-              className="font-display font-bold leading-[1.18] sm:leading-[1.06] tracking-tight text-[#1E2026]"
+              className="font-display font-bold leading-[1.04] sm:leading-[0.98] tracking-tight text-[#1E2026]"
               style={{ fontSize: "clamp(26px, 4.8vw, 62px)" }}
             >
               {(() => {

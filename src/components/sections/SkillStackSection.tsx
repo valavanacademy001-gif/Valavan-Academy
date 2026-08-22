@@ -533,9 +533,9 @@ export default function SkillStackSection() {
       </div>
 
       {/* ── DEDICATED MOBILE VERTICAL STACK EXPERIENCE (Sticky Stacking Deck) ── */}
-      <div className="lg:hidden pb-20 relative z-10 px-4">
+      <div className="lg:hidden pb-10 relative z-10 px-4">
         {/* Mobile Header */}
-        <div className="pt-6 pb-6 text-center">
+        <div className="pt-4 pb-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-2">
             <div className="w-8 h-[2px] bg-[#1748BB]" />
             <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
@@ -544,7 +544,7 @@ export default function SkillStackSection() {
             <div className="w-8 h-[2px] bg-[#1748BB]" />
           </div>
           <h2
-            className="font-display font-bold text-[#1E2026] leading-[1.18] tracking-tight mb-2"
+            className="font-display font-bold text-[#1E2026] leading-[1.06] tracking-tight mb-2"
             style={{ fontSize: "clamp(24px, 4.4vw, 48px)" }}
           >
             One Skill Is Good.{" "}
@@ -566,7 +566,7 @@ export default function SkillStackSection() {
 
           {/* Mobile Final Culmination Card (Topmost Stacking Card) */}
           <div
-            className="mb-8"
+            className="mb-4"
             style={{
               position: "sticky",
               top: "135px",
@@ -577,8 +577,8 @@ export default function SkillStackSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="rounded-[24px] p-6 bg-gradient-to-b from-[#F5F8FF] to-white text-[#1E2026] border-2 border-[#1748BB]/40 shadow-[0_20px_50px_rgba(23,72,187,0.22)] space-y-4"
+              transition={{ duration: 0.4 }}
+              className="rounded-[24px] p-5 sm:p-6 bg-gradient-to-b from-[#F5F8FF] to-white text-[#1E2026] border-2 border-[#1748BB]/40 shadow-[0_16px_40px_rgba(23,72,187,0.18)] space-y-3.5"
             >
               <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <span className="text-xs font-sans font-bold uppercase tracking-wider text-[#1748BB] flex items-center gap-1.5">
@@ -597,12 +597,12 @@ export default function SkillStackSection() {
                 <p className="text-xs font-sans font-bold text-[#1748BB]">
                   Design × Video × Web × AI
                 </p>
-                <p className="text-xs font-sans text-neutral-600 leading-relaxed pt-1.5">
+                <p className="text-xs font-sans text-neutral-600 leading-relaxed pt-1">
                   4 essential digital skills combined into one high-demand creative powerhouse.
                 </p>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-1.5">
                 <Link
                   href="/programs/full-stack-creator"
                   style={{ color: "#FFFFFF" }}
@@ -638,7 +638,7 @@ function MobileSkillCard({
 
   return (
     <div
-      className="mb-14"
+      className="mb-6"
       style={{
         position: "sticky",
         top: `${topOffset}px`,
