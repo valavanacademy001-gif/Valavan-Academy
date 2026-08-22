@@ -45,28 +45,45 @@ const TOOLS = [
   "Adobe Lightroom",
 ];
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
+import { getProgramBySlug } from "@/lib/cms";
 
-const HIGHLIGHTS: HighlightItem[] = [
-  { iconType: "clock", label: "Duration", value: "90 Days" },
-  { iconType: "globe", label: "Language", value: "100% Tamil" },
-  { iconType: "level", label: "Skill Level", value: "Beginner to Pro" },
-  { iconType: "work", label: "Practical Work", value: "10+ Live Projects" },
-];
+export default async function GraphicDesignProgramPage() {
+  const cmsProgram = await getProgramBySlug("90-days-graphic-design");
 
-export default function GraphicDesignProgramPage() {
+  const duration = cmsProgram?.duration || "90 Days";
+  const title = cmsProgram?.title || "90 Days Graphic Design Mastery Program";
+  const description = cmsProgram?.description || "A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil.";
+  const imageSrc = cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
+  const enrollUrl = cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+
+  const highlights: HighlightItem[] = [
+    { iconType: "clock", label: "Duration", value: duration },
+    { iconType: "globe", label: "Language", value: "100% Tamil" },
+    { iconType: "level", label: "Skill Level", value: cmsProgram?.level === "beginner" ? "Beginner to Pro" : "Beginner to Intermediate" },
+    { iconType: "work", label: "Practical Work", value: "10+ Live Projects" },
+  ];
+
+  // Split title if possible into prefix and highlight
+  const titleParts = title.split(" ");
+  const titlePrefix = titleParts.length > 2 ? titleParts.slice(0, -2).join(" ") : titleParts.slice(0, -1).join(" ");
+  const titleHighlight = titleParts.length > 2 ? titleParts.slice(-2).join(" ") : titleParts.slice(-1).join(" ");
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
-        badge="Most Popular · 90 Days · Tamil"
-        titlePrefix="90 Days Graphic Design"
-        titleHighlight="Mastery Program."
-        description="A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil."
-        highlights={HIGHLIGHTS}
-        imageSrc="/assets/images/hero/ai-powered-GD.webp"
-        altText="90-Day Graphic Design Mastery Program"
-        enrollUrl={EXTERNAL_URLS.signup}
+        badge={`Most Popular · ${duration} · Tamil`}
+        titlePrefix={titlePrefix || "90 Days Graphic Design"}
+        titleHighlight={titleHighlight ? `${titleHighlight}.` : "Mastery Program."}
+        description={description}
+        highlights={highlights}
+        imageSrc={imageSrc}
+        altText={title}
+        enrollUrl={enrollUrl}
         communityUrl={EXTERNAL_URLS.community}
       />
 

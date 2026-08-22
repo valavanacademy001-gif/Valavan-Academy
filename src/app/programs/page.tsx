@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     "Explore Valavan Academy programs — 90-Day Graphic Design Mastery, Full Stack Digital Creator Program, and 3 Hours Live Workshops. Tamil-medium, project-based digital skills training.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { getPublishedPrograms } from "@/lib/cms";
 
 export default async function ProgramsPage() {

@@ -84,28 +84,45 @@ const CAREER_PATHS = [
   "YouTube Producer",
 ];
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
+import { getProgramBySlug } from "@/lib/cms";
 
-const HIGHLIGHTS: HighlightItem[] = [
-  { iconType: "clock", label: "Duration", value: "6 Months" },
-  { iconType: "globe", label: "Language", value: "100% Tamil" },
-  { iconType: "level", label: "Skill Level", value: "Beginner to Advanced" },
-  { iconType: "work", label: "Coverage", value: "6 Major Domains" },
-];
+export default async function FullStackCreatorPage() {
+  const cmsProgram = await getProgramBySlug("full-stack-creator");
 
-export default function FullStackCreatorPage() {
+  const duration = cmsProgram?.duration || "6 Months";
+  const title = cmsProgram?.title || "Full Stack Digital Creator Program";
+  const description = cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
+  const imageSrc = cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
+  const enrollUrl = cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+
+  const highlights: HighlightItem[] = [
+    { iconType: "clock", label: "Duration", value: duration },
+    { iconType: "globe", label: "Language", value: "100% Tamil" },
+    { iconType: "level", label: "Skill Level", value: cmsProgram?.level === "beginner" ? "Beginner" : "Beginner to Advanced" },
+    { iconType: "work", label: "Coverage", value: "6 Major Domains" },
+  ];
+
+  // Split title if possible into prefix and highlight
+  const titleParts = title.split(" ");
+  const titlePrefix = titleParts.length > 2 ? titleParts.slice(0, -2).join(" ") : titleParts.slice(0, -1).join(" ");
+  const titleHighlight = titleParts.length > 2 ? titleParts.slice(-2).join(" ") : titleParts.slice(-1).join(" ");
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
-        badge="Flagship Track · 6 Months · Tamil"
-        titlePrefix="Full Stack Digital"
-        titleHighlight="Creator Program."
-        description="A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil."
-        highlights={HIGHLIGHTS}
-        imageSrc="/assets/images/hero/full-stack-.jpg-1.webp"
-        altText="Full Stack Digital Creator Program"
-        enrollUrl={EXTERNAL_URLS.signup}
+        badge={`Flagship Track · ${duration} · Tamil`}
+        titlePrefix={titlePrefix || "Full Stack Digital"}
+        titleHighlight={titleHighlight ? `${titleHighlight}.` : "Creator Program."}
+        description={description}
+        highlights={highlights}
+        imageSrc={imageSrc}
+        altText={title}
+        enrollUrl={enrollUrl}
         communityUrl={EXTERNAL_URLS.community}
       />
 

@@ -26,11 +26,22 @@ export const metadata: Metadata = {
   },
 };
 
-import { getPublishedPrograms, getPublishedLearnerStories, getPublishedTestimonials } from "@/lib/cms";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+import {
+  getHeroData,
+  getPublishedPrograms,
+  getPublishedCertifications,
+  getPublishedLearnerStories,
+  getPublishedTestimonials,
+} from "@/lib/cms";
 
 export default async function HomePage() {
-  const [programs, learnerStories, testimonials] = await Promise.all([
+  const [heroData, programs, certifications, learnerStories, testimonials] = await Promise.all([
+    getHeroData(),
     getPublishedPrograms(),
+    getPublishedCertifications(),
     getPublishedLearnerStories(),
     getPublishedTestimonials(),
   ]);
@@ -38,7 +49,7 @@ export default async function HomePage() {
   return (
     <>
       {/* 01 — Hero: Full-screen video + headline + CTA */}
-      <HeroSection />
+      <HeroSection heroData={heroData} />
 
       {/* 02 — Marquee Ribbon */}
       <MarqueeRibbon />
@@ -56,7 +67,7 @@ export default async function HomePage() {
       <SkillStackSection />
 
       {/* 07 — Certifications (arc gallery + lightbox) */}
-      <CertificationsSection />
+      <CertificationsSection certifications={certifications} />
 
       {/* 08 — Real People, Real Transformations (curved video carousel) */}
       <VideoTestimonialCarousel stories={learnerStories} />

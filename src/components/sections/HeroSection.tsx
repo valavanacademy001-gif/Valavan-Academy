@@ -61,7 +61,22 @@ const SLIDES = [
     link: "/programs",
     external: false,
   },
-];export default function HeroSection() {
+];
+
+interface HeroSectionProps {
+  heroData?: CMSHeroData;
+}
+
+export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectionProps = {}) {
+  const heading1 = heroData?.heading || DEFAULT_HERO_DATA.heading || "Your Career";
+  const heading2 = heroData?.highlightText || DEFAULT_HERO_DATA.highlightText || "Changing Partner";
+  const description = heroData?.description || DEFAULT_HERO_DATA.description || "Learn Graphic Design, Video Editing , Web Design & Advanced AI in Tamil with hands-on mentorship and real-world projects.";
+  const primaryText = heroData?.primaryButtonText || DEFAULT_HERO_DATA.primaryButtonText || "Explore Courses";
+  const primaryUrl = heroData?.primaryButtonUrl || DEFAULT_HERO_DATA.primaryButtonUrl || "/programs";
+  const secondaryText = heroData?.secondaryButtonText || DEFAULT_HERO_DATA.secondaryButtonText || "Join TNCC Community →";
+  const secondaryUrl = heroData?.secondaryButtonUrl || DEFAULT_HERO_DATA.secondaryButtonUrl || EXTERNAL_URLS.community;
+  const videoSrc = heroData?.videoUrl || DEFAULT_HERO_DATA.videoUrl || "/assets/videos/hero-bg.mp4";
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -93,9 +108,10 @@ const SLIDES = [
           loop
           muted
           playsInline
+          key={videoSrc}
           className="hidden md:block absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-100 brightness-[1.15] contrast-[1.04] scale-[1.08] sm:scale-105"
         >
-          <source src="/assets/videos/hero-bg.mp4" type="video/mp4" />
+          <source src={videoSrc} type="video/mp4" />
         </video>
 
         {/* Mobile Fast Dark Background with Subtle Brand Glows */}
@@ -111,7 +127,7 @@ const SLIDES = [
           />
         </div>
 
-        {/* Scrims: Soft bottom gradient for text contrast while keeping instructor & scene bright on desktop */}
+        {/* Video Overlay Vignettes for Ultimate Contrast */}
         <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-[#07080D] via-[#07080D]/65 via-[#07080D]/15 to-transparent z-10" />
         <div className="hidden md:block absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent z-10" />
       </div>
@@ -137,8 +153,8 @@ const SLIDES = [
               {/* Main Headline (Clash Display Bold) */}
               <FadeUp delay={0.1}>
                 <h1 className="text-[38px] sm:text-[48px] md:text-[56px] lg:text-[62px] font-bold leading-[0.98] sm:leading-[1.02] tracking-tight font-display text-white">
-                  <span className="text-white">Your Career</span> <br />
-                  <span className="text-[#6392FF]">Changing Partner</span>
+                  <span className="text-white">{heading1}</span> <br />
+                  <span className="text-[#6392FF]">{heading2}</span>
                 </h1>
               </FadeUp>
 
@@ -148,7 +164,7 @@ const SLIDES = [
                   style={{ color: "#C7CDDB" }}
                   className="text-sm sm:text-base md:text-lg max-w-xl leading-relaxed font-sans font-normal"
                 >
-                  Learn Graphic Design, Video Editing , Web Design &amp; Advanced AI in Tamil with hands-on mentorship and real-world projects.
+                  {description}
                 </p>
               </FadeUp>
 
@@ -157,22 +173,34 @@ const SLIDES = [
                 <div className="flex flex-wrap items-center gap-4 pt-2">
                   
                   {/* Primary Blue Button: Explore Courses with ArrowUpRight icon */}
-                  <Link
-                    href="/programs"
-                    className="inline-flex items-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-full shadow-[0_10px_30px_rgba(23, 72, 187,0.45)] hover:scale-105 transition-all duration-200"
-                  >
-                    <ArrowUpRight size={18} className="text-white" />
-                    <span>Explore Courses</span>
-                  </Link>
+                  {primaryUrl.startsWith("http") ? (
+                    <a
+                      href={primaryUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-full shadow-[0_10px_30px_rgba(23, 72, 187,0.45)] hover:scale-105 transition-all duration-200"
+                    >
+                      <ArrowUpRight size={18} className="text-white" />
+                      <span>{primaryText}</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={primaryUrl}
+                      className="inline-flex items-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-full shadow-[0_10px_30px_rgba(23, 72, 187,0.45)] hover:scale-105 transition-all duration-200"
+                    >
+                      <ArrowUpRight size={18} className="text-white" />
+                      <span>{primaryText}</span>
+                    </Link>
+                  )}
 
                   {/* Secondary Button: Join TNCC Community (Blue Stroke -> White background with Blue text on hover) */}
                   <a
-                    href={EXTERNAL_URLS.community}
+                    href={secondaryUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white hover:text-[#1748BB] bg-[#1748BB]/10 hover:bg-white border-2 border-[#1748BB] hover:border-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:scale-105 transition-all duration-200 backdrop-blur-md"
                   >
-                    <span>Join TNCC Community</span>
+                    <span>{secondaryText.replace("→", "").trim()}</span>
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </a>
                 </div>

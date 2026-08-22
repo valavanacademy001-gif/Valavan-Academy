@@ -515,3 +515,145 @@ export async function getPublishedPageBySlug(slug: string) {
     return null;
   }
 }
+
+/**
+ * Fetch a single program by its slug from Supabase
+ */
+export async function getProgramBySlug(slug: string): Promise<CMSProgram | null> {
+  try {
+    const cleanSlug = slug.replace("/programs/", "").replace(/^\//, "");
+    const { data, error } = await supabase
+      .from("programs")
+      .select("*")
+      .eq("slug", cleanSlug)
+      .single();
+
+    if (error || !data) {
+      // Fallback from default programs
+      const fallback = DEFAULT_PROGRAMS.find((p) => p.slug.includes(cleanSlug));
+      if (fallback) {
+        return {
+          slug: cleanSlug,
+          title: fallback.title,
+          subtitle: fallback.subtitle,
+          description: fallback.description,
+          duration: fallback.duration,
+          level: fallback.level,
+          thumbnail_url: fallback.image,
+          banner_url: fallback.image,
+          cta_text: "Enroll Now",
+          cta_url: EXTERNAL_URLS.signup,
+          skills: [...fallback.skills],
+          status: "published",
+          is_visible: true,
+        };
+      }
+      return null;
+    }
+
+    return data as CMSProgram;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch published certifications from Supabase
+ */
+export async function getPublishedCertifications(): Promise<CMSCertification[]> {
+  try {
+    // 1. Try certifications table
+    const { data: certs } = await supabase
+      .from("certifications")
+      .select("*")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true });
+
+    if (certs && certs.length > 0) {
+      return certs as CMSCertification[];
+    }
+
+    // 2. Try certifications section in field_values
+    const { data: certFields } = await supabase
+      .from("field_values")
+      .select("*, field:fields(name, label)")
+      .not("value_url", "is", null);
+
+    if (certFields && certFields.length > 0) {
+      const mapped = certFields
+        .filter((cf) => cf.field?.name?.startsWith("cert_image_") && cf.value_url)
+        .map((cf, idx) => ({
+          id: cf.id,
+          title: cf.field?.label || `Certificate ${idx + 1}`,
+          image_url: cf.value_url,
+          is_visible: true,
+          sort_order: idx + 1,
+        }));
+      if (mapped.length > 0) return mapped;
+    }
+
+    return [
+      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
+      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
+      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
+      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
+      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
+      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
+      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
+      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
+    ];
+  } catch {
+    return [
+      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
+      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
+      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
+      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
+      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
+      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
+      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
+      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
+    ];
+  }
+}
+
+/**
+ * Fetch Hero Data from Supabase fields or default
+ */
+export async function getHeroData(): Promise<CMSHeroData> {
+  try {
+    const { data: heroSection } = await supabase
+      .from("sections")
+      .select("id")
+      .eq("name", "Hero Section")
+      .single();
+
+    if (!heroSection) return DEFAULT_HERO_DATA;
+
+    const { data: fieldVals } = await supabase
+      .from("field_values")
+      .select("*, field:fields(name)")
+      .eq("section_id", heroSection.id);
+
+    if (!fieldVals || fieldVals.length === 0) return DEFAULT_HERO_DATA;
+
+    const map: Record<string, string> = {};
+    for (const fv of fieldVals) {
+      if (fv.field?.name) {
+        map[fv.field.name] = fv.value_text || fv.value_url || "";
+      }
+    }
+
+    return {
+      heading: map.hero_heading_1 || DEFAULT_HERO_DATA.heading,
+      highlightText: map.hero_heading_2 || DEFAULT_HERO_DATA.highlightText,
+      description: map.hero_description || DEFAULT_HERO_DATA.description,
+      primaryButtonText: map.hero_cta_primary_text || DEFAULT_HERO_DATA.primaryButtonText,
+      primaryButtonUrl: map.hero_cta_primary_url || DEFAULT_HERO_DATA.primaryButtonUrl,
+      secondaryButtonText: map.hero_cta_secondary_text || DEFAULT_HERO_DATA.secondaryButtonText,
+      secondaryButtonUrl: map.hero_cta_secondary_url || DEFAULT_HERO_DATA.secondaryButtonUrl,
+      videoUrl: map.hero_video_bg || DEFAULT_HERO_DATA.videoUrl,
+    };
+  } catch {
+    return DEFAULT_HERO_DATA;
+  }
+}
