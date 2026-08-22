@@ -111,10 +111,10 @@ export default function ProgramRoadmapSection({
               >
                 {/* Phase Title Column (Slides in from left on even, from right on odd) */}
                 <motion.div
-                  initial={{ opacity: 0, x: isEven ? -60 : 60 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "350px 0px 100px 0px", amount: 0 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className={`lg:col-span-5 flex flex-col justify-center ${
                     isEven
                       ? "lg:text-left lg:items-start"
@@ -140,10 +140,10 @@ export default function ProgramRoadmapSection({
 
                 {/* Vibrant Blue Rounded Card (Slides in from right on even, from left on odd) */}
                 <motion.div
-                  initial={{ opacity: 0, x: isEven ? 70 : -70 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "350px 0px 100px 0px", amount: 0 }}
+                  transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
                   className={`lg:col-span-7 ${
                     isEven ? "lg:order-2" : "lg:order-1"
                   }`}

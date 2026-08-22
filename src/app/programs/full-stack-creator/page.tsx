@@ -135,43 +135,40 @@ export default async function FullStackCreatorPage() {
       {/* ── 04 Learn Skills That Actually Make Money (Infinite 3D Floating Carousel) ── */}
       <SkillsMoneyCarouselSection />
 
-      {/* ── All Subsequent Content Wrapped in Solid High Z-Index Layer ── */}
-      <div className="relative z-20 bg-white">
-        {/* ── 05 Student Success Stories Video Carousel (Curtain overlay over sticky blue section) ── */}
-        <VideoTestimonialCarousel
-          centered={true}
-          customTitle={
-            <>
-              Our Students{" "}
-              <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Success
-              </span>{" "}
-              Stories
-            </>
-          }
-        />
+      {/* ── 05 Student Success Stories Video Carousel ── */}
+      <VideoTestimonialCarousel
+        centered={true}
+        customTitle={
+          <>
+            Our Students{" "}
+            <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
+              Success
+            </span>{" "}
+            Stories
+          </>
+        }
+      />
 
-        {/* ── 06 Industry Ready Certification Section ── */}
-        <ProgramCertificationSection />
+      {/* ── 06 Industry Ready Certification Section ── */}
+      <ProgramCertificationSection />
 
-        {/* ── 07 Creator Economy : Why is it Booming ? (Animated Growth Chart & Market Demand) ── */}
-        <CreatorEconomyBoomSection />
+      {/* ── 07 Creator Economy : Why is it Booming ? (Animated Growth Chart & Market Demand) ── */}
+      <CreatorEconomyBoomSection />
 
-        {/* ── 08 Access To Templatesworld (Full-Width Blue Background Centered Bonus Section) ── */}
-        <TemplatesWorldBonusSection />
+      {/* ── 08 Access To Templatesworld (Full-Width Blue Background Centered Bonus Section) ── */}
+      <TemplatesWorldBonusSection />
 
-        {/* ── 09 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
-        <WhoIsThisForSection />
+      {/* ── 09 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
+      <WhoIsThisForSection />
 
-        {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}
-        <GuidanceMentorsSection />
+      {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}
+      <GuidanceMentorsSection />
 
-        {/* ── 11 AI Powered Full Stack Creator System (Offer Box & Join Today) ── */}
-        <FullStackCreatorOfferSection enrollUrl={EXTERNAL_URLS.signup} />
+      {/* ── 11 AI Powered Full Stack Creator System (Offer Box & Join Today) ── */}
+      <FullStackCreatorOfferSection enrollUrl={EXTERNAL_URLS.signup} />
 
-        {/* ── 12 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
-        <ProgramFAQSection />
-      </div>
+      {/* ── 12 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
+      <ProgramFAQSection />
 
       {/* ── 13 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA

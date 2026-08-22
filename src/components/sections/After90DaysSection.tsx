@@ -106,9 +106,6 @@ export default function After90DaysSection({
   enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
   outcomes = DEFAULT_OUTCOMES,
 }: After90DaysSectionProps) {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(gridRef, { once: true, amount: 0.15 });
-
   return (
     <section
       className="relative z-10 py-10 sm:py-20 md:py-24 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB]"
@@ -168,28 +165,9 @@ export default function After90DaysSection({
         </div>
 
         {/* 8 Modern Glass Outcome Cards in Compact Balanced Grid */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 max-w-6xl mx-auto"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 max-w-6xl mx-auto">
           {outcomes.map((item, index) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, scale: 0.55, y: 45 }}
-              animate={
-                isInView
-                  ? { opacity: 1, scale: 1, y: 0 }
-                  : { opacity: 0, scale: 0.55, y: 45 }
-              }
-              transition={{
-                type: "spring",
-                stiffness: 280,
-                damping: 16,
-                mass: 0.7,
-                delay: index * 0.08,
-              }}
-              className="h-full"
-            >
+            <FadeUp key={item.title} delay={index * 0.05} className="h-full">
               <div className="group h-full p-4 sm:p-5 rounded-[22px] bg-white/10 hover:bg-white border border-white/20 hover:border-white transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)] hover:-translate-y-1.5 flex flex-col justify-between gap-4 backdrop-blur-md cursor-default">
                 
                 {/* Top Icon & Tag */}
@@ -217,7 +195,7 @@ export default function After90DaysSection({
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </FadeUp>
           ))}
         </div>
       </Container>

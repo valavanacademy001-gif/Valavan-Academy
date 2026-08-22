@@ -68,13 +68,13 @@ export const SCROLL_TRIGGER_DEFAULTS = {
 export const fadeUpVariants = {
   hidden: {
     opacity: 0,
-    y: 24,
+    y: 12,
   },
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.45,
+      duration: 0.35,
       ease: EASE.fm.strong,
       delay,
     },
