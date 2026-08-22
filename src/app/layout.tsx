@@ -106,6 +106,8 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
+import PwaDisableProvider from "@/components/layout/PwaDisableProvider";
+
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 export default async function RootLayout({ children }: RootLayoutProps) {
   const settings = await getSiteSettings();
@@ -125,6 +127,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
+        <PwaDisableProvider />
         <CustomCursor />
         <ReducedMotionProvider>
           <SmoothScrollProvider>
