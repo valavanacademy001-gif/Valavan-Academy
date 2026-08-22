@@ -189,20 +189,8 @@ export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSecti
                       sizes="(max-width: 1024px) 100vw, 560px"
                     />
 
-                    {/* Gradient vignette */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-
-                    {/* Overlay Badges */}
-                    <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full bg-[#1748BB] text-white text-xs font-sans font-bold shadow-md tracking-wide">
-                        {program.badge}
-                      </span>
-                      <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-sans font-semibold border border-white/20">
-                        {program.badgeAccent}
-                      </span>
-                    </div>
-
-                    <div className="absolute bottom-3.5 left-3.5 font-mono text-[11px] font-bold text-white/90 bg-black/40 backdrop-blur-sm px-2.5 py-0.5 rounded-md border border-white/10">
+                    {/* Subtle program number tag at bottom left */}
+                    <div className="absolute bottom-3 left-3 font-mono text-[11px] font-bold text-white bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-white/20 shadow-sm">
                       PROGRAM {program.number}
                     </div>
                   </div>
