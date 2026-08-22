@@ -231,8 +231,8 @@ export default function Navbar() {
             <div className="shrink-0">
               <Logo
                 variant={isLightNav ? "default" : "white"}
-                height={36}
-                className="h-8 sm:h-8.5 lg:h-9 w-auto"
+                height={32}
+                className="h-7 sm:h-7.5 lg:h-8 w-auto"
                 priority
               />
             </div>
