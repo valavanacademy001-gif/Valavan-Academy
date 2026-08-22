@@ -68,8 +68,14 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectionProps = {}) {
-  const heading1 = heroData?.heading || DEFAULT_HERO_DATA.heading || "Your Career";
+  let heading1 = heroData?.heading || DEFAULT_HERO_DATA.heading || "Your Career";
   const heading2 = heroData?.highlightText || DEFAULT_HERO_DATA.highlightText || "Changing Partner";
+
+  if (heading1.includes(heading2)) {
+    heading1 = heading1.replace(heading2, "").trim();
+  }
+  if (!heading1) heading1 = "Your Career";
+
   const description = heroData?.description || DEFAULT_HERO_DATA.description || "Learn Graphic Design, Video Editing , Web Design & Advanced AI in Tamil with hands-on mentorship and real-world projects.";
   const primaryText = heroData?.primaryButtonText || DEFAULT_HERO_DATA.primaryButtonText || "Explore Courses";
   const primaryUrl = heroData?.primaryButtonUrl || DEFAULT_HERO_DATA.primaryButtonUrl || "/programs";

@@ -123,7 +123,7 @@ export const DEFAULT_SITE_SETTINGS: CMSSiteSettings = {
 
 export const DEFAULT_HERO_DATA: CMSHeroData = {
   eyebrow: "TAMIL NADU'S PREMIER DIGITAL SKILLS HUB",
-  heading: "Your Career Changing Partner",
+  heading: "Your Career",
   highlightText: "Changing Partner",
   description: "Learn Graphic Design, Video Editing , Web Design & Advanced AI in Tamil with hands-on mentorship and real-world projects.",
   primaryButtonText: "Explore Courses",
