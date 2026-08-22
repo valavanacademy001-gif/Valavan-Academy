@@ -97,7 +97,6 @@ export const metadata: Metadata = {
     shortcut:    "/logo-icon.png",
     apple:       "/logo-icon.png",
   },
-  manifest:  "/site.webmanifest",
 };
 
 import { getSiteSettings } from "@/lib/cms";
