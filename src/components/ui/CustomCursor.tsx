@@ -32,12 +32,18 @@ export default function CustomCursor() {
     let ringX = -100;
     let ringY = -100;
     let rafId: number;
+    let visible = false;
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
-      if (!isVisible) setIsVisible(true);
+      if (!visible) {
+        visible = true;
+        setIsVisible(true);
+        ringX = mouseX;
+        ringY = mouseY;
+      }
 
       // Dot follows instantaneously
       dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
@@ -46,14 +52,19 @@ export default function CustomCursor() {
     const onMouseDown = () => setIsClicking(true);
     const onMouseUp = () => setIsClicking(false);
 
-    const onMouseLeave = () => setIsVisible(false);
-    const onMouseEnter = () => setIsVisible(true);
+    const onMouseLeave = () => {
+      visible = false;
+      setIsVisible(false);
+    };
+    const onMouseEnter = () => {
+      visible = true;
+      setIsVisible(true);
+    };
 
-    // Smooth Lerp loop for the trailing ring
+    // Smooth Lerp loop for the trailing ring (pure transform, no CSS transition conflict)
     const render = () => {
-      // Lerp factor (0.16 = smooth luxurious trailing glide)
-      ringX += (mouseX - ringX) * 0.16;
-      ringY += (mouseY - ringY) * 0.16;
+      ringX += (mouseX - ringX) * 0.28;
+      ringY += (mouseY - ringY) * 0.28;
 
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
 
@@ -66,14 +77,6 @@ export default function CustomCursor() {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const isNav = !!target.closest('header, nav, [role="banner"], [role="menu"]');
-      if (isNav) {
-        setIsVisible(false);
-        setIsHovered(false);
-        return;
-      }
-
-      setIsVisible(true);
       const isInteractive = !!target.closest(
         'a, button, input, select, textarea, [role="button"], [data-cursor-hover], .cursor-pointer'
       );
@@ -96,23 +99,19 @@ export default function CustomCursor() {
       document.removeEventListener("mouseover", handleElementHover);
       cancelAnimationFrame(rafId);
     };
-  }, [isVisible]);
+  }, []);
 
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none hidden lg:block"
     >
-      {/* 1. Inner Instant Lead Dot */}
+      {/* 1. Inner Instant Lead Dot (fades smoothly when hovering interactive buttons) */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 rounded-full transition-opacity duration-150 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        } ${
-          isHovered
-            ? "w-2 h-2 bg-[#1748BB] scale-90"
-            : "w-2 h-2 bg-[#1748BB] scale-100"
-        }`}
+        className={`fixed top-0 left-0 rounded-full transition-opacity duration-150 will-change-transform ${
+          isVisible && !isHovered ? "opacity-100" : "opacity-0"
+        } w-2 h-2 bg-[#1748BB]`}
         style={{
           boxShadow: "0 0 6px rgba(23, 72, 187, 0.4)",
         }}
@@ -121,18 +120,18 @@ export default function CustomCursor() {
       {/* 2. Outer Smooth Trailing Circle / Ring */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 rounded-full transition-all duration-200 ease-out ${
+        className={`fixed top-0 left-0 rounded-full transition-[width,height,background-color,border-color,opacity] duration-150 ease-out will-change-transform ${
           isVisible ? "opacity-100" : "opacity-0"
         } ${
           isHovered
-            ? "w-8 h-8 border-[1.5px] border-[#1748BB] bg-[#1748BB]/10 backdrop-blur-[0.5px] scale-110"
+            ? "w-10 h-10 border-[1.5px] border-[#1748BB] bg-[#1748BB]/15 backdrop-blur-[0.5px]"
             : isClicking
-            ? "w-6 h-6 border border-[#1748BB] bg-[#1748BB]/20 scale-90"
-            : "w-7 h-7 border border-[#1748BB]/40 bg-transparent scale-100"
+            ? "w-6 h-6 border border-[#1748BB] bg-[#1748BB]/20"
+            : "w-7 h-7 border border-[#1748BB]/50 bg-transparent"
         }`}
         style={{
           boxShadow: isHovered
-            ? "0 0 10px rgba(23, 72, 187, 0.2)"
+            ? "0 0 12px rgba(23, 72, 187, 0.25)"
             : "none",
         }}
       />

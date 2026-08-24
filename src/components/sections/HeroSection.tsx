@@ -199,17 +199,18 @@ export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectio
                     </Link>
                   )}
 
-                  {/* Secondary Button: Join TNCC Community */}
+                  {/* Secondary Button: Solid White Button with Blue Text */}
                   <a
                     href={secondaryUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white hover:!text-[#1748BB] bg-white/10 hover:bg-white border-2 border-white hover:border-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_30px_rgba(255,255,255,0.35)] hover:scale-105 transition-all duration-200 backdrop-blur-md"
+                    style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
+                    className="group inline-flex items-center gap-2 text-sm sm:text-base font-bold !text-[#1748BB] bg-white hover:bg-white px-7 py-3.5 rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:shadow-[0_15px_40px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-200"
                   >
-                    <span className="text-white group-hover:!text-[#1748BB] font-bold transition-colors">
+                    <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
                       {secondaryText.replace("→", "").trim()}
                     </span>
-                    <span className="text-white group-hover:!text-[#1748BB] group-hover:translate-x-1 transition-all">
+                    <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold group-hover:translate-x-1 transition-transform">
                       →
                     </span>
                   </a>
