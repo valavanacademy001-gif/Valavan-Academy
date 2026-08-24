@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, ChevronRight, ChevronDown, Sparkles, BookOpen, Users, Phone, Home } from "lucide-react";
 import Logo from "@/components/ui/Logo";
@@ -27,6 +28,7 @@ const PROGRAM_ITEMS = [
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const pathname = usePathname();
   const [programsOpen, setProgramsOpen] = useState(true);
 
   // Close on Escape key
@@ -132,8 +134,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {/* Home Link */}
                 <Link
                   href="/"
-                  onClick={onClose}
-                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
+                  onClick={(e) => {
+                    onClose();
+                    if (pathname === "/") {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2.5">
                     <Home size={16} className="text-[#1748BB]" />

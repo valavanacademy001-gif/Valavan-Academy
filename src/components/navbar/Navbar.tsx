@@ -440,9 +440,15 @@ export default function Navbar() {
                   <Link
                     key={link.id}
                     href={link.href}
+                    onClick={(e) => {
+                      if (link.href === "/" && pathname === "/") {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }
+                    }}
                     style={{ color: isLightNav ? "#1E2026" : "#FFFFFF" }}
                     className={cn(
-                      "px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150",
+                      "px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150 cursor-pointer",
                       "focus-visible:outline-2 focus-visible:outline-[#1748BB]",
                       isLightNav
                         ? "hover:text-[#1748BB] hover:bg-neutral-100/80"

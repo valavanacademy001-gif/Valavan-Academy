@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Footer — Phase 8
  * Full footer with brand info, navigation, social links.
@@ -6,6 +8,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   EXTERNAL_URLS,
   SOCIAL_LINKS,
@@ -70,7 +73,15 @@ interface FooterProps {
 }
 
 export default function Footer({ settings }: FooterProps = {}) {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  const handleHomeClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const socialLinks = [
     {
@@ -107,7 +118,12 @@ export default function Footer({ settings }: FooterProps = {}) {
           {/* Brand column */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-2 space-y-5">
             {/* Logo */}
-            <Link href="/" className="inline-flex items-center group">
+            <Link
+              href="/"
+              onClick={handleHomeClick}
+              className="inline-flex items-center group cursor-pointer"
+              aria-label="Valavan Academy — Go to top"
+            >
               <Image
                 src="/assets/logo/white-logo.webp"
                 alt="Valavan Academy"
@@ -153,7 +169,8 @@ export default function Footer({ settings }: FooterProps = {}) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
+                    onClick={link.href === "/" ? handleHomeClick : undefined}
+                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors cursor-pointer"
                   >
                     {link.label}
                   </Link>

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Valavan Academy — Logo Component
  * Renders the Valavan Academy logo with proper alt text and sizing.
@@ -6,6 +8,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -26,6 +29,7 @@ export default function Logo({
   linked   = true,
   priority = false,
 }: LogoProps) {
+  const pathname = usePathname();
   const src =
     variant === "white"
       ? "/assets/logo/white-logo-normalized.webp"
@@ -50,13 +54,22 @@ export default function Logo({
 
   if (!linked) return img;
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <Link
       href="/"
+      onClick={handleLogoClick}
       aria-label="Valavan Academy — Go to homepage"
-      className="inline-flex items-center focus-visible:outline-2 focus-visible:outline-[--color-brand-primary] focus-visible:outline-offset-3 rounded-sm"
+      className="inline-flex items-center focus-visible:outline-2 focus-visible:outline-[--color-brand-primary] focus-visible:outline-offset-3 rounded-sm cursor-pointer"
     >
       {img}
     </Link>
   );
 }
+
