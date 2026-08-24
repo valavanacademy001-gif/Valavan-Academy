@@ -84,8 +84,8 @@ export default function ProgramHeroInteractive({
     smoothProgress,
     [0, 0.65],
     [
-      "0 20px 50px rgba(0,0,0,0.35)",
-      "0 35px 100px rgba(0,0,0,0.65)",
+      "0 20px 45px rgba(0,0,0,0.28)",
+      "0 30px 75px rgba(0,0,0,0.45)",
     ]
   );
 
@@ -232,13 +232,13 @@ export default function ProgramHeroInteractive({
                       }
                     : {}
                 }
-                className="w-full origin-center relative aspect-[16/9] rounded-[22px] sm:rounded-[28px] overflow-hidden border-2 border-white/25 bg-black/40 shadow-[0_25px_60px_rgba(0,0,0,0.35)] z-20 group"
+                className="w-full origin-center relative aspect-[16/9] rounded-[22px] sm:rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.35)] z-20 group"
               >
                 <Image
                   src={imageSrc}
                   alt={altText}
                   fill
-                  className="object-cover"
+                  className="object-cover scale-[1.05] transition-transform duration-300"
                   priority
                   sizes="(max-width: 1024px) 100vw, 1000px"
                 />
