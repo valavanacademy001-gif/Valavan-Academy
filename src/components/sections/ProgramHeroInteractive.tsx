@@ -126,22 +126,22 @@ export default function ProgramHeroInteractive({
         }`}
       >
         <Container className="relative z-10 w-full py-8 lg:py-0">
-          {/* Breadcrumb Link */}
-          <Link
-            href="/programs"
-            style={{ color: "#BACFFF" }}
-            className="inline-flex items-center gap-2 font-sans text-xs font-bold tracking-wider uppercase hover:text-white mb-6 lg:mb-8 transition-colors group"
-          >
-            <ArrowLeft size={14} style={{ color: "#BACFFF" }} className="group-hover:-translate-x-1 transition-transform" />
-            <span>All Programs</span>
-          </Link>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <motion.div
               style={isDesktop ? { opacity: textOpacity, x: textX } : {}}
               className="lg:col-span-7 space-y-6 lg:space-y-7"
             >
+              {/* Breadcrumb Link */}
+              <Link
+                href="/programs"
+                style={{ color: "#BACFFF" }}
+                className="inline-flex items-center gap-2 font-sans text-xs font-bold tracking-wider uppercase hover:text-white mb-2 transition-colors group cursor-pointer"
+              >
+                <ArrowLeft size={14} style={{ color: "#BACFFF" }} className="group-hover:-translate-x-1 transition-transform" />
+                <span>All Programs</span>
+              </Link>
+
               <div>
                 {/* Kicker with Line */}
                 <div className="flex items-center gap-3 mb-4">
