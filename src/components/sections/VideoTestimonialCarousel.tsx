@@ -195,20 +195,22 @@ export default function VideoTestimonialCarousel({
         {centered ? (
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-14">
             <FadeUp delay={0.05}>
-              {customTitle ? (
-                customTitle
-              ) : (
-                <h2
-                  className="font-display font-bold leading-tight tracking-tight"
-                  style={{ fontSize: "clamp(30px, 4.2vw, 54px)", color: "#1E2026" }}
-                >
-                  {titlePrefix}{" "}
-                  <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                    {titleHighlight}
-                  </span>{" "}
-                  {titleSuffix}
-                </h2>
-              )}
+              <h2
+                className="font-display font-bold leading-tight tracking-tight"
+                style={{ fontSize: "clamp(30px, 4.2vw, 54px)", color: "#1E2026" }}
+              >
+                {customTitle ? (
+                  customTitle
+                ) : (
+                  <>
+                    {titlePrefix}{" "}
+                    <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
+                      {titleHighlight}
+                    </span>{" "}
+                    {titleSuffix}
+                  </>
+                )}
+              </h2>
             </FadeUp>
           </div>
         ) : (

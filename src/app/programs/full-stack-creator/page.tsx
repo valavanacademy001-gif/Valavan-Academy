@@ -138,15 +138,9 @@ export default async function FullStackCreatorPage() {
       {/* ── 05 Student Success Stories Video Carousel ── */}
       <VideoTestimonialCarousel
         centered={true}
-        customTitle={
-          <>
-            Our Students{" "}
-            <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-              Success
-            </span>{" "}
-            Stories
-          </>
-        }
+        titlePrefix="Our Students"
+        titleHighlight="Success"
+        titleSuffix="Stories"
       />
 
       {/* ── 06 Industry Ready Certification Section ── */}
