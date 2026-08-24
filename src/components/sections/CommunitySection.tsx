@@ -88,10 +88,15 @@ export default function CommunitySection() {
                 href={EXTERNAL_URLS.community}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white text-[#1748BB] font-sans font-bold text-sm sm:text-base px-7 py-3.5 rounded-full hover:bg-neutral-100 hover:scale-105 transition-all duration-200 shadow-lg"
+                style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
+                className="group inline-flex items-center gap-2 bg-white !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-7 py-3.5 rounded-full hover:bg-[#F0F5FF] hover:scale-105 transition-all duration-200 shadow-lg cursor-pointer"
               >
-                Join the Community
-                <span>→</span>
+                <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
+                  Join the Community
+                </span>
+                <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
               </a>
               <Link
                 href="/programs"
