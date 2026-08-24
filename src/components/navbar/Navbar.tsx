@@ -40,14 +40,14 @@ const MEGA_MENUS: Record<string, MegaMenuConfig> = {
   programs: {
     col1Title: "PROGRAMS & WORKSHOPS",
     col1Links: [
-      { label: "Live Workshop", href: "https://valavanacademy.in/workshop/", external: true },
-      { label: "Graphic Design", href: "/programs/90-days-graphic-design" },
-      { label: "Full Stack Creator", href: "/programs/full-stack-creator" },
-      { label: "View All Programs", href: "/programs#programs" },
+      { label: "3 Hours Live Workshop", href: "/programs/3-hours-live-workshop" },
+      { label: "Graphic Design (90 Days)", href: "/programs/90-days-graphic-design" },
+      { label: "Full Stack Creator (6 Mo)", href: "/programs/full-stack-creator" },
+      { label: "View All Programs", href: "/programs" },
     ],
     col2Title: "TRACKS & TOPICS",
     col2Links: [
-      { label: "Printing Business", href: "https://valavanacademy.in/workshop/", external: true },
+      { label: "Printing Business Workshop", href: "/programs/3-hours-live-workshop" },
       { label: "Design & Branding", href: "/programs/90-days-graphic-design" },
       { label: "Video & Web Creation", href: "/programs/full-stack-creator" },
       { label: "Need Guidance?", href: "/programs#community-help" },

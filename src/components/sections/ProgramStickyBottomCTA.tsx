@@ -11,7 +11,7 @@ interface ProgramStickyBottomCTAProps {
 }
 
 export default function ProgramStickyBottomCTA({
-  enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
+  enrollUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfS0lpB0PwruYS3v83iDIu7AW0M_A7JqxZdPPfqD84m7qi9Tg/viewform",
   text = "Limited Seats Available",
   buttonText = "ENROLL NOW",
 }: ProgramStickyBottomCTAProps) {

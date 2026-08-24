@@ -78,7 +78,7 @@ const PROGRAMS: ProgramItem[] = [
     image: "/assets/images/hero/ai-powered-GD.webp",
     href: "/programs/90-days-graphic-design",
     tools: DEFAULT_TOOLS_GD,
-    ctaLabel: "View Program",
+    ctaLabel: "View Details",
   },
   {
     id: "full-stack",
@@ -95,7 +95,7 @@ const PROGRAMS: ProgramItem[] = [
     image: "/assets/images/hero/full-stack-.jpg-1.webp",
     href: "/programs/full-stack-creator",
     tools: DEFAULT_TOOLS_FS,
-    ctaLabel: "View Program",
+    ctaLabel: "View Details",
   },
 ];
 
@@ -123,7 +123,7 @@ export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSecti
           image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
           href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
           tools: isGD ? DEFAULT_TOOLS_GD : DEFAULT_TOOLS_FS,
-          ctaLabel: cmsP.cta_text || "View Program",
+          ctaLabel: "View Details",
         };
       })
     : PROGRAMS;

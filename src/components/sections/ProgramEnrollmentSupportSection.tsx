@@ -26,7 +26,7 @@ interface ProgramEnrollmentSupportSectionProps {
 }
 
 export default function ProgramEnrollmentSupportSection({
-  enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
+  enrollUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfS0lpB0PwruYS3v83iDIu7AW0M_A7JqxZdPPfqD84m7qi9Tg/viewform",
   duration = "90 Days",
   seatsText = "20 Seats Available",
 }: ProgramEnrollmentSupportSectionProps) {

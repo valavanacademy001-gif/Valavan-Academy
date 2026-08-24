@@ -6,6 +6,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 
+import Link from "next/link";
+
 export default function WorkshopSection() {
   return (
     <section id="workshop" className="pt-16 sm:pt-20 pb-12 sm:pb-16 bg-white relative">
@@ -44,7 +46,11 @@ export default function WorkshopSection() {
             <div className="group rounded-[28px] sm:rounded-[32px] bg-white border border-neutral-200/90 p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.05)] hover:shadow-[0_24px_55px_rgba(23,72,187,0.12)] hover:border-[#1748BB]/40 transition-all duration-400 flex flex-col items-center text-center">
               
               {/* Thumbnail Image */}
-              <div className="relative aspect-[16/10] w-full rounded-[20px] sm:rounded-[22px] overflow-hidden bg-neutral-100 mb-6 shadow-sm">
+              <Link
+                href="/programs/3-hours-live-workshop"
+                className="relative aspect-[16/10] w-full rounded-[20px] sm:rounded-[22px] overflow-hidden bg-neutral-100 mb-6 shadow-sm block cursor-pointer"
+                aria-label="View 3 Hours Live Workshop Details"
+              >
                 <Image
                   src="/assets/workshop/printing-business-workshop.webp"
                   alt="3 Hour Live Workshop on Starting Your Printing Business with Graphic Design Skill"
@@ -61,7 +67,7 @@ export default function WorkshopSection() {
                     Online Workshop
                   </span>
                 </div>
-              </div>
+              </Link>
 
               {/* Title */}
               <h3 className="font-display font-bold text-2xl sm:text-[26px] text-[#1E2026] tracking-tight leading-tight mb-5">
@@ -69,12 +75,10 @@ export default function WorkshopSection() {
               </h3>
 
               {/* CTA Button */}
-              <a
-                href="https://valavanacademy.in/workshop/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#FFFFFF" }}
-                className="inline-flex items-center justify-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] !text-white font-sans font-bold text-sm sm:text-base px-8 py-3.5 rounded-full shadow-[0_8px_24px_rgba(23,72,187,0.32)] hover:scale-105 transition-all group/btn"
+              <Link
+                href="/programs/3-hours-live-workshop"
+                style={{ backgroundColor: "#1748BB", color: "#FFFFFF" }}
+                className="inline-flex items-center justify-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] !text-white font-sans font-bold text-sm sm:text-base px-8 py-3.5 rounded-full shadow-[0_8px_24px_rgba(23,72,187,0.32)] hover:scale-105 transition-all group/btn cursor-pointer"
               >
                 <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">
                   View Details
@@ -84,7 +88,7 @@ export default function WorkshopSection() {
                   style={{ color: "#FFFFFF" }}
                   className="!text-white group-hover/btn:translate-x-1.5 transition-transform"
                 />
-              </a>
+              </Link>
 
             </div>
           </div>

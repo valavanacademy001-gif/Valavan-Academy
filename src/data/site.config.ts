@@ -6,10 +6,12 @@
 
 // ─── External URLs ────────────────────────────────────────────────────────────
 export const EXTERNAL_URLS = {
-  login:     "https://learn.valavanacademy.com/clientapp/login",
-  signup:    "https://learn.valavanacademy.com/clientapp/signup",
-  community: "https://tamilnaducreatorsclub.com/",
-  workshop:  "https://valavanacademy.in/workshop/",
+  login:            "https://learn.valavanacademy.com/clientapp/login",
+  signup:           "https://docs.google.com/forms/d/e/1FAIpQLSfS0lpB0PwruYS3v83iDIu7AW0M_A7JqxZdPPfqD84m7qi9Tg/viewform",
+  enrollForm:       "https://docs.google.com/forms/d/e/1FAIpQLSfS0lpB0PwruYS3v83iDIu7AW0M_A7JqxZdPPfqD84m7qi9Tg/viewform",
+  community:        "https://tamilnaducreatorsclub.com/",
+  workshop:         "https://pages.razorpay.com/pl_T0DWg4PRFeNxMb/view",
+  workshopRazorpay: "https://pages.razorpay.com/pl_T0DWg4PRFeNxMb/view",
 } as const;
 
 // ─── Social Links ─────────────────────────────────────────────────────────────

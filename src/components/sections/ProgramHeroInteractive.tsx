@@ -3,9 +3,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
-import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX } from "lucide-react";
 
 export interface HighlightItem {
   iconType: "clock" | "globe" | "level" | "work";
@@ -23,6 +23,9 @@ interface ProgramHeroInteractiveProps {
   altText: string;
   enrollUrl: string;
   communityUrl: string;
+  buttonText?: string;
+  youtubeId?: string;
+  videoUrl?: string;
 }
 
 function renderIcon(type: "clock" | "globe" | "level" | "work") {
@@ -50,9 +53,22 @@ export default function ProgramHeroInteractive({
   altText,
   enrollUrl,
   communityUrl,
+  buttonText = "Enroll in Program",
+  youtubeId,
+  videoUrl,
 }: ProgramHeroInteractiveProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Extract clean YouTube ID if full URL passed
+  const effectiveYoutubeId = youtubeId
+    ? youtubeId
+    : videoUrl
+    ? videoUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1]
+    : undefined;
 
   useEffect(() => {
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
@@ -72,21 +88,56 @@ export default function ProgramHeroInteractive({
     restDelta: 0.001,
   });
 
+  // Switch to playing video automatically when expanded on scroll
+  useMotionValueEvent(smoothProgress, "change", (latest) => {
+    if (effectiveYoutubeId) {
+      if (latest > 0.22 && !isPlayingVideo) {
+        setIsPlayingVideo(true);
+      } else if (latest <= 0.12 && isPlayingVideo) {
+        setIsPlayingVideo(false);
+      }
+    }
+  });
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!iframeRef.current || !iframeRef.current.contentWindow) return;
+
+    if (isMuted) {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "unMute" }),
+        "*"
+      );
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
+        "*"
+      );
+      setIsMuted(false);
+    } else {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "mute" }),
+        "*"
+      );
+      setIsMuted(true);
+    }
+  };
+
+  // Banner Heading + Arrow opacity (fades in as card expands to center stage)
+  const bannerHeadingOpacity = useTransform(smoothProgress, [0.28, 0.58], [0, 1]);
+  const bannerHeadingY = useTransform(smoothProgress, [0.28, 0.58], [15, 0]);
+
+  // Shift image/video down by 68px as it expands so it sits in the lower center with zero top clipping
+  const imageY = useTransform(smoothProgress, [0, 0.65], [0, 68]);
+
   // Desktop Animation Transforms for seamless Expansion Effect
-  // 1. Text slides and fades smoothly as scroll begins
   const textOpacity = useTransform(smoothProgress, [0, 0.35], [1, 0]);
   const textX = useTransform(smoothProgress, [0, 0.35], [0, -70]);
-
-  // 2. Right Image shifts to horizontal center and scales up to massive full-width banner
   const imageX = useTransform(smoothProgress, [0, 0.65], ["0%", "-66%"]);
   const imageScale = useTransform(smoothProgress, [0, 0.65, 1], [1, 1.88, 1.92]);
   const imageShadow = useTransform(
     smoothProgress,
     [0, 0.65],
-    [
-      "0 20px 45px rgba(0,0,0,0.28)",
-      "0 30px 75px rgba(0,0,0,0.45)",
-    ]
+    ["0 20px 45px rgba(0,0,0,0.28)", "0 30px 75px rgba(0,0,0,0.45)"]
   );
 
   return (
@@ -107,32 +158,28 @@ export default function ProgramHeroInteractive({
         `,
       }}
     >
-      {/* Ambient Gradient Highlights */}
       <div
         className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-white/10 rounded-full blur-[140px] pointer-events-none"
         aria-hidden
       />
       <div
-        className="absolute bottom-1/4 left-10 w-[400px] h-[400px] bg-black/15 rounded-full blur-[120px] pointer-events-none"
+        className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-[#0A2E8A]/50 rounded-full blur-[100px] pointer-events-none"
         aria-hidden
       />
 
-      {/* Sticky Viewport Container */}
       <div
         className={`${
           isDesktop
-            ? "sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden"
+            ? "sticky top-0 h-screen w-full flex flex-col justify-center pt-8 overflow-visible"
             : "relative z-10"
         }`}
       >
         <Container className="relative z-10 w-full py-8 lg:py-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Content */}
             <motion.div
               style={isDesktop ? { opacity: textOpacity, x: textX } : {}}
               className="lg:col-span-7 space-y-6 lg:space-y-7"
             >
-              {/* Breadcrumb Link */}
               <Link
                 href="/programs"
                 style={{ color: "#BACFFF" }}
@@ -143,7 +190,6 @@ export default function ProgramHeroInteractive({
               </Link>
 
               <div>
-                {/* Kicker with Line */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-[2px] bg-white" />
                   <span className="font-sans text-xs tracking-[0.25em] uppercase text-white font-bold">
@@ -151,67 +197,61 @@ export default function ProgramHeroInteractive({
                   </span>
                 </div>
 
-                {/* Main Heading in Solid White */}
                 <h1
-                  className="font-display font-bold text-white leading-[1.04] sm:leading-[1.06] tracking-tight"
-                  style={{ fontSize: "clamp(34px, 4.6vw, 62px)", color: "#FFFFFF" }}
+                  className="font-display font-bold text-white leading-[1.04] tracking-tight uppercase"
+                  style={{ fontSize: "clamp(34px, 4.4vw, 58px)" }}
                 >
-                  {titlePrefix} {titleHighlight}
+                  <span className="text-white block">{titlePrefix}</span>
+                  <span className="text-white block">{titleHighlight}</span>
                 </h1>
               </div>
 
-              {/* Subtext explicitly with color #BACFFF */}
               <p
-                className="font-sans text-base sm:text-lg leading-relaxed font-normal max-w-2xl"
                 style={{ color: "#BACFFF" }}
+                className="font-sans text-sm sm:text-base md:text-lg leading-relaxed max-w-xl font-normal"
               >
                 {description}
               </p>
 
-              {/* Meta Highlights Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-1">
-                {highlights.map((h) => (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                {highlights.map((item, idx) => (
                   <div
-                    key={h.label}
-                    className="p-3.5 sm:p-4 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md"
+                    key={idx}
+                    className="p-3.5 sm:p-4 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex flex-col justify-between shadow-sm hover:bg-white/15 transition-colors"
                   >
-                    {renderIcon(h.iconType)}
-                    <p
-                      className="font-sans text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold"
-                      style={{ color: "#BACFFF" }}
-                    >
-                      {h.label}
-                    </p>
-                    <p className="font-sans text-xs sm:text-sm font-bold text-white mt-0.5" style={{ color: "#FFFFFF" }}>
-                      {h.value}
-                    </p>
+                    <div>
+                      {renderIcon(item.iconType)}
+                      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-bold text-[#BACFFF] block">
+                        {item.label}
+                      </span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-white mt-1 block">
+                      {item.value}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4 pt-3">
-                {/* Primary Button: White Pill with Blue Text */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-4">
                 <a
                   href={enrollUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
-                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.25)] cursor-pointer"
                 >
                   <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
-                    Enroll in Program
+                    {buttonText}
                   </span>
                   <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
                 </a>
 
-                {/* Secondary Button: White Outline Pill */}
                 <a
                   href={communityUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
-                  className="inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105"
+                  className="inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
                 >
                   <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">
                     ↗ Ask in Community
@@ -220,28 +260,145 @@ export default function ProgramHeroInteractive({
               </div>
             </motion.div>
 
-            {/* Right Hero Image Card (Transforms from right position into a massive centered showcase) */}
-            <div className="lg:col-span-5 relative flex items-center justify-center">
+            {/* Right Hero Image/Video Showcase (Transforms into massive centered showcase with Image 2 Frame & Question) */}
+            <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
+              {/* Outer Glowing Border Stroke Frame matching Image 2 */}
               <motion.div
                 style={
                   isDesktop
                     ? {
                         x: imageX,
+                        y: imageY,
                         scale: imageScale,
                         boxShadow: imageShadow,
                       }
                     : {}
                 }
-                className="w-full origin-center relative aspect-[16/9] rounded-[22px] sm:rounded-[30px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.35)] z-20 group"
+                className="w-full origin-center relative p-1.5 sm:p-2 rounded-[24px] sm:rounded-[32px] border border-white/40 bg-white/10 backdrop-blur-md shadow-[0_25px_65px_rgba(0,0,0,0.4)] z-20 group"
               >
-                <Image
-                  src={imageSrc}
-                  alt={altText}
-                  fill
-                  className="object-cover scale-[1.05] transition-transform duration-300"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 1000px"
-                />
+                {/* Top Callout Question (Single tight text with ultra-low line-height + Clean Doodle Downward Arrow) */}
+                <motion.div
+                  style={isDesktop ? { opacity: bannerHeadingOpacity, y: bannerHeadingY } : {}}
+                  className="absolute -top-[52px] sm:-top-[62px] left-0 right-0 hidden sm:flex items-center justify-center pointer-events-none text-center z-30"
+                >
+                  <div className="inline-flex items-center justify-center gap-2">
+                    <p
+                      style={{ color: "#FFFFFF", lineHeight: 0.88 }}
+                      className="font-display font-semibold text-base sm:text-lg md:text-xl text-white tracking-tight text-center drop-shadow-md m-0 p-0"
+                    >
+                      Confused about your next
+                      <br />
+                      <span className="inline-block mt-0.5">career move ?</span>
+                    </p>
+                    {/* Clean Elegant Hand-Drawn White Doodle Arrow SVG */}
+                    <motion.svg
+                      animate={{
+                        y: [0, 4, 0],
+                        rotate: [0, -2, 0],
+                      }}
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="w-8 h-8 sm:w-10 sm:h-9 text-white shrink-0 self-end -mb-1"
+                      viewBox="0 0 60 50"
+                      fill="none"
+                      stroke="#FFFFFF"
+                      strokeWidth="2.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
+                      {/* Smooth hand-drawn curve arcing from text and swooping down to video */}
+                      <path d="M 6 14 C 20 2, 42 4, 48 20 C 51 28, 46 38, 38 44" />
+                      {/* Crisp arrowhead */}
+                      <path d="M 48 36 L 38 44 L 32 34" />
+                    </motion.svg>
+                  </div>
+                </motion.div>
+
+                {/* Inner Video/Image Card */}
+                <div className="relative aspect-[16/9] w-full rounded-[18px] sm:rounded-[26px] overflow-hidden bg-black">
+                  {/* 1. YouTube Video with Normal-Sized Desktop Controls on Hover */}
+                  {effectiveYoutubeId && (
+                    <div
+                      className={`absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-500 ${
+                        isPlayingVideo ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                      }`}
+                    >
+                      <iframe
+                        ref={iframeRef}
+                        src={`https://www.youtube-nocookie.com/embed/${effectiveYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${effectiveYoutubeId}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+                        title={altText}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className={`border-0 ${
+                          isDesktop
+                            ? "w-[190%] h-[190%] scale-[0.526] origin-top-left"
+                            : "w-full h-full"
+                        }`}
+                      />
+                    </div>
+                  )}
+
+                  {/* 2. Thumbnail Poster Image with Centered Interactive Play Button */}
+                  <div
+                    onClick={() => {
+                      if (effectiveYoutubeId) {
+                        setIsPlayingVideo(true);
+                      }
+                    }}
+                    className={`absolute inset-0 w-full h-full transition-opacity duration-500 ${
+                      isPlayingVideo && effectiveYoutubeId
+                        ? "opacity-0 pointer-events-none"
+                        : "opacity-100 pointer-events-auto cursor-pointer group/thumb"
+                    }`}
+                  >
+                    <Image
+                      src={imageSrc}
+                      alt={altText}
+                      fill
+                      className="object-cover scale-[1.05] group-hover/thumb:scale-[1.08] transition-transform duration-500"
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 1000px"
+                    />
+
+                    {/* Centered Glowing Play Button */}
+                    {effectiveYoutubeId && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover/thumb:bg-black/35 transition-colors">
+                        <div className="relative flex items-center justify-center">
+                          <div className="absolute w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-white/30 animate-ping pointer-events-none" />
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white text-[#1748BB] flex items-center justify-center shadow-[0_10px_35px_rgba(0,0,0,0.4)] group-hover/thumb:scale-110 group-hover/thumb:bg-[#1748BB] group-hover/thumb:text-white transition-all duration-300 relative z-10">
+                            <Play size={24} className="fill-current translate-x-0.5" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. Sleek Floating Circular Sound Button placed at Marked Bottom-Right Position */}
+                {effectiveYoutubeId && isPlayingVideo && (
+                  <div className="absolute -bottom-4 right-4 sm:-bottom-5 sm:right-6 z-40 pointer-events-auto">
+                    <button
+                      onClick={toggleMute}
+                      type="button"
+                      aria-label={isMuted ? "Unmute Sound" : "Mute Sound"}
+                      className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-2 transition-all duration-200 hover:scale-110 cursor-pointer backdrop-blur-md ${
+                        isMuted
+                          ? "bg-[#1748BB] text-white border-white hover:bg-[#0A3CA8] animate-pulse"
+                          : "bg-black/85 text-white border-emerald-400 hover:bg-black"
+                      }`}
+                    >
+                      {isMuted ? (
+                        <VolumeX size={18} className="text-white shrink-0" />
+                      ) : (
+                        <Volume2 size={18} className="text-emerald-400 shrink-0" />
+                      )}
+                    </button>
+                  </div>
+                )}
               </motion.div>
             </div>
           </div>
