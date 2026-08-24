@@ -28,7 +28,7 @@ export default function CommunitySection() {
   return (
     <section
       ref={ref}
-      className="bg-[#1748BB] py-10 sm:py-16 lg:py-24 overflow-x-clip relative z-10 flex items-center justify-center border-t border-[#1748BB]"
+      className="relative lg:sticky lg:top-0 z-0 lg:z-10 bg-[#1748BB] py-14 sm:py-20 lg:py-28 overflow-hidden flex items-center justify-center border-t border-[#1748BB] lg:min-h-screen"
     >
       {/* Background pattern */}
       <div

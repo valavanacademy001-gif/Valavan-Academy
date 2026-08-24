@@ -43,7 +43,7 @@ const PERSONAS: WhoIsThisForItem[] = [
 
 export default function WhoIsThisForSection() {
   return (
-    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
+    <section className="py-14 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none lg:shadow-[0_-25px_50px_rgba(0,0,0,0.18)] lg:rounded-t-[48px] lg:-mt-8">
       {/* Soft Ambient Background Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"

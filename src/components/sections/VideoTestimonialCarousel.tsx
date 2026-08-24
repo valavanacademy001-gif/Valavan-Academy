@@ -188,7 +188,7 @@ export default function VideoTestimonialCarousel({
 
   return (
     <section
-      className="relative z-20 bg-white py-10 sm:py-20 md:py-28 overflow-hidden border-t border-neutral-100 select-none"
+      className="relative z-20 bg-white py-14 sm:py-20 md:py-28 overflow-hidden border-t border-neutral-100 select-none lg:shadow-[0_-25px_50px_rgba(0,0,0,0.18)] lg:rounded-t-[48px] lg:-mt-8"
     >
       <Container>
         {/* Header */}

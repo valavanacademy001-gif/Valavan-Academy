@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 
@@ -67,6 +68,89 @@ export default function ProgramRoadmapSection({
   badge = "Curriculum Roadmap",
   phases = DEFAULT_GRAPHIC_DESIGN_ROADMAP,
 }: ProgramRoadmapSectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Desktop only (>= 1024px): left element slides in from left to right, right element slides in from right to left
+      mm.add("(min-width: 1024px)", () => {
+        const rows = containerRef.current?.querySelectorAll(".roadmap-row");
+        rows?.forEach((row) => {
+          const leftEl = row.querySelector(".slide-from-left");
+          const rightEl = row.querySelector(".slide-from-right");
+
+          if (leftEl) {
+            gsap.fromTo(
+              leftEl,
+              { x: -140, opacity: 0 },
+              {
+                x: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: row,
+                  start: "top 78%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          }
+
+          if (rightEl) {
+            gsap.fromTo(
+              rightEl,
+              { x: 140, opacity: 0 },
+              {
+                x: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: row,
+                  start: "top 78%",
+                  toggleActions: "play none none reverse",
+                },
+              }
+            );
+          }
+        });
+      });
+
+      // Mobile only (< 1024px): clean smooth fade up
+      mm.add("(max-width: 1023px)", () => {
+        const rows = containerRef.current?.querySelectorAll(".roadmap-row");
+        rows?.forEach((row) => {
+          const elements = row.querySelectorAll(".roadmap-mobile-fade");
+          elements.forEach((el, idx) => {
+            gsap.fromTo(
+              el,
+              { y: 25, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.5,
+                delay: idx * 0.1,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 88%",
+                  toggleActions: "play none none none",
+                },
+              }
+            );
+          });
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [phases]);
+
   return (
     <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
       {/* Ambient background glow */}
@@ -97,25 +181,26 @@ export default function ProgramRoadmapSection({
           </FadeUp>
         </div>
 
-        {/* ── Alternating Zig-Zag Layout with Directional Scroll Animations ── */}
-        <div className="max-w-5xl mx-auto space-y-14 sm:space-y-20 relative">
+        {/* ── Alternating Zig-Zag Layout with Directional GSAP Scroll Animations ── */}
+        <div ref={containerRef} className="max-w-5xl mx-auto space-y-14 sm:space-y-20 relative">
           {phases.map((item, index) => {
             const isEven = index % 2 === 0;
+
+            // Even: Text on Left (slide-from-left), Card on Right (slide-from-right)
+            // Odd: Card on Left (slide-from-left), Text on Right (slide-from-right)
+            const textSlideClass = isEven ? "slide-from-left" : "slide-from-right";
+            const cardSlideClass = isEven ? "slide-from-right" : "slide-from-left";
 
             return (
               <div
                 key={item.phase}
-                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center ${
+                className={`roadmap-row grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center ${
                   isEven ? "" : "lg:flex-row-reverse"
                 }`}
               >
-                {/* Phase Title Column (Slides in from left on even, from right on odd) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "350px 0px 100px 0px", amount: 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className={`lg:col-span-5 flex flex-col justify-center ${
+                {/* Phase Title Column */}
+                <div
+                  className={`roadmap-mobile-fade ${textSlideClass} lg:col-span-5 flex flex-col justify-center ${
                     isEven
                       ? "lg:text-left lg:items-start"
                       : "lg:order-2 lg:text-left lg:items-start lg:pl-8"
@@ -136,15 +221,11 @@ export default function ProgramRoadmapSection({
                   <p className="font-sans text-base sm:text-lg font-semibold text-neutral-500">
                     {item.duration}
                   </p>
-                </motion.div>
+                </div>
 
-                {/* Vibrant Blue Rounded Card (Slides in from right on even, from left on odd) */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "350px 0px 100px 0px", amount: 0 }}
-                  transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                  className={`lg:col-span-7 ${
+                {/* Vibrant Blue Rounded Card */}
+                <div
+                  className={`roadmap-mobile-fade ${cardSlideClass} lg:col-span-7 ${
                     isEven ? "lg:order-2" : "lg:order-1"
                   }`}
                 >
@@ -163,22 +244,18 @@ export default function ProgramRoadmapSection({
                     }}
                   >
                     <ul className="space-y-3 sm:space-y-3.5 relative z-10">
-                      {item.topics.map((topic, tIdx) => (
-                        <motion.li
+                      {item.topics.map((topic) => (
+                        <li
                           key={topic}
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.4, delay: 0.15 + tIdx * 0.04 }}
                           className="flex items-center gap-3 font-sans text-sm sm:text-base text-white/95 group-hover:text-white transition-colors"
                         >
                           <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] shrink-0" />
                           <span className="font-medium">{topic}</span>
-                        </motion.li>
+                        </li>
                       ))}
                     </ul>
                   </div>
-                </motion.div>
+                </div>
               </div>
             );
           })}

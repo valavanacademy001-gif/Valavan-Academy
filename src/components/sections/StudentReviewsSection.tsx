@@ -248,7 +248,7 @@ export default function StudentReviewsSection({ reviews: cmsReviews }: StudentRe
   const col3 = displayReviews.filter((_, i) => i % 3 === 2);
 
   return (
-    <section className="bg-[#F8FAFF] py-10 sm:py-20 md:py-28 border-t border-[#E8EFFE] relative z-20 overflow-x-clip">
+    <section className="bg-[#F8FAFF] py-14 sm:py-20 md:py-28 border-t border-[#E8EFFE] relative z-20 lg:shadow-[0_-25px_50px_rgba(0,0,0,0.18)] lg:rounded-t-[48px] lg:-mt-8 overflow-x-clip">
       {/* Pixel Gradient Pattern Background */}
       <InteractiveGridBackground />
       <Container className="relative z-10">
