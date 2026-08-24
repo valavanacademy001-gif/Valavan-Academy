@@ -89,17 +89,14 @@ export default function FinalCTASection() {
             href={EXTERNAL_URLS.community}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold px-6 py-3.5 rounded-full border-2 hover:scale-105 transition-all duration-200"
-            style={{
-              color: "#1748BB",
-              backgroundColor: "#ffffff",
-              borderColor: "#1748BB",
-            }}
+            className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold px-7 py-3.5 rounded-full border-2 border-[#1748BB] text-[#1748BB] bg-white hover:bg-[#F0F5FF] hover:border-[#1748BB] hover:scale-105 transition-all duration-200 shadow-sm"
           >
-            <span className="font-semibold" style={{ color: "#1748BB" }}>
+            <span className="font-bold text-[#1748BB] group-hover:text-[#1748BB] transition-colors">
               Join TNCC Community
             </span>
-            <span style={{ color: "#1748BB" }}>→</span>
+            <span className="text-[#1748BB] group-hover:text-[#1748BB] group-hover:translate-x-1 transition-all">
+              →
+            </span>
           </a>
         </motion.div>
       </Container>

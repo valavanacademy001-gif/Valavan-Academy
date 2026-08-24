@@ -95,10 +95,10 @@ export default function CommunitySection() {
               </a>
               <Link
                 href="/programs"
-                className="group inline-flex items-center gap-2 border-2 border-white text-white hover:bg-white hover:text-[#1748BB] font-sans font-semibold text-sm sm:text-base px-7 py-3.5 rounded-full hover:scale-105 transition-all duration-200"
+                className="group inline-flex items-center gap-2 border-2 border-white text-white hover:bg-white hover:!text-[#1748BB] font-sans font-semibold text-sm sm:text-base px-7 py-3.5 rounded-full hover:scale-105 transition-all duration-200"
               >
-                <ArrowUpRight size={18} className="text-white group-hover:text-[#1748BB] transition-colors" />
-                <span className="text-white group-hover:text-[#1748BB] font-semibold transition-colors">
+                <ArrowUpRight size={18} className="text-white group-hover:!text-[#1748BB] transition-colors" />
+                <span className="text-white group-hover:!text-[#1748BB] font-bold transition-colors">
                   Explore Programs
                 </span>
               </Link>

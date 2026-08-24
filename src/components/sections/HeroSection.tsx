@@ -199,15 +199,19 @@ export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectio
                     </Link>
                   )}
 
-                  {/* Secondary Button: Join TNCC Community (Blue Stroke -> White background with Blue text on hover) */}
+                  {/* Secondary Button: Join TNCC Community */}
                   <a
                     href={secondaryUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white hover:text-[#1748BB] bg-[#1748BB]/10 hover:bg-white border-2 border-[#1748BB] hover:border-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:scale-105 transition-all duration-200 backdrop-blur-md"
+                    className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white hover:!text-[#1748BB] bg-white/10 hover:bg-white border-2 border-white hover:border-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-[0_10px_30px_rgba(255,255,255,0.35)] hover:scale-105 transition-all duration-200 backdrop-blur-md"
                   >
-                    <span>{secondaryText.replace("→", "").trim()}</span>
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    <span className="text-white group-hover:!text-[#1748BB] font-bold transition-colors">
+                      {secondaryText.replace("→", "").trim()}
+                    </span>
+                    <span className="text-white group-hover:!text-[#1748BB] group-hover:translate-x-1 transition-all">
+                      →
+                    </span>
                   </a>
                 </div>
               </FadeUp>
