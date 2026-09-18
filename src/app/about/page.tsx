@@ -123,67 +123,77 @@ const WHY_CHOOSE = [
   },
 ];
 
-export default function AboutPage() {
+import { getAboutPageData, getSectionVisibilityMap } from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function AboutPage() {
+  const [aboutData, visibilityMap] = await Promise.all([
+    getAboutPageData(),
+    getSectionVisibilityMap("about"),
+  ]);
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Hero Section ── */}
-      <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">
-        {/* Ambient Brand Blue Glow */}
-        <div
-          className="absolute top-0 right-1/4 w-[550px] h-[550px] bg-[#1748BB]/6 rounded-full blur-3xl pointer-events-none"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 opacity-[0.035] pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(#1748BB 1.2px, transparent 1.2px)",
-            backgroundSize: "28px 28px",
-          }}
-          aria-hidden
-        />
+      {visibilityMap.hero !== false && (
+        <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">
+          {/* Ambient Brand Blue Glow */}
+          <div
+            className="absolute top-0 right-1/4 w-[550px] h-[550px] bg-[#1748BB]/6 rounded-full blur-3xl pointer-events-none"
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0 opacity-[0.035] pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(#1748BB 1.2px, transparent 1.2px)",
+              backgroundSize: "28px 28px",
+            }}
+            aria-hidden
+          />
 
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            {/* Kicker */}
-            <div className="flex items-center justify-center gap-3 mb-5">
-              <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
-              <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                About Valavan Academy
-              </span>
-              <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+          <Container className="relative z-10">
+            <div className="max-w-3xl mx-auto text-center">
+              {/* Kicker */}
+              <div className="flex items-center justify-center gap-3 mb-5">
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+                <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
+                  {aboutData.hero.eyebrow}
+                </span>
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+              </div>
+
+              <h1
+                className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.06] tracking-tight mb-6"
+                style={{ fontSize: "clamp(34px, 5.2vw, 64px)" }}
+              >
+                {aboutData.hero.heading}
+              </h1>
+
+              <p className="font-sans text-neutral-600 text-base sm:text-lg leading-relaxed font-normal max-w-2xl mx-auto mb-8">
+                {aboutData.hero.description}
+              </p>
+
+              {/* Quick Action Badges */}
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
+                  <Sparkles size={13} className="text-[#1748BB] fill-[#1748BB]" />
+                  Tamil-First Creative Hub
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
+                  <CheckCircle2 size={13} className="text-[#1748BB]" />
+                  5,000+ Learners Trained
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
+                  <Users size={13} className="text-[#1748BB]" />
+                  40K+ TNCC Members
+                </span>
+              </div>
             </div>
-
-            <h1
-              className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.06] tracking-tight mb-6"
-              style={{ fontSize: "clamp(34px, 5.2vw, 64px)" }}
-            >
-              Industry Experts,{" "}
-              <span className="text-[#1748BB]">Unwavering Support.</span>
-            </h1>
-
-            <p className="font-sans text-neutral-600 text-base sm:text-lg leading-relaxed font-normal max-w-2xl mx-auto mb-8">
-              Empowering Tamil minds with hands-on, career-focused digital education.
-              Bridging the gap between classroom theory and real-world high-income creative execution.
-            </p>
-
-            {/* Quick Action Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
-                <Sparkles size={13} className="text-[#1748BB] fill-[#1748BB]" />
-                Tamil-First Creative Hub
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
-                <CheckCircle2 size={13} className="text-[#1748BB]" />
-                5,000+ Learners Trained
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-bold shadow-xs">
-                <Users size={13} className="text-[#1748BB]" />
-                40K+ TNCC Members
-              </span>
-            </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      )}
 
       {/* ── 02 Split Story & Team Overview Card ── */}
       <section id="story" className="py-16 sm:py-24 bg-white relative scroll-mt-24">

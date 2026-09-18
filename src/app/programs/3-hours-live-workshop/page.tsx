@@ -105,30 +105,35 @@ const MENTOR_ACCOMPLISHMENTS = [
   "Helping Beginners Build Successful Creative Careers",
 ];
 
-const WORKSHOP_CHECKOUT_URL = "https://pages.razorpay.com/pl_T0DWg4PRFeNxMb/view";
+import { getProgramBySlug } from "@/lib/cms";
 
-export default function ThreeHoursLiveWorkshopPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function ThreeHoursLiveWorkshopPage() {
+  const program = await getProgramBySlug("3-hours-live-workshop");
+
   const highlights: HighlightItem[] = [
-    { iconType: "clock", label: "Duration", value: "3 Hours Live" },
+    { iconType: "clock", label: "Duration", value: program?.duration || "3 Hours Live" },
     { iconType: "globe", label: "Language", value: "100% Tamil" },
-    { iconType: "level", label: "Skill Level", value: "Beginner to Pro" },
+    { iconType: "level", label: "Skill Level", value: program?.level ? (program.level.charAt(0).toUpperCase() + program.level.slice(1)) : "Beginner to Pro" },
     { iconType: "work", label: "Format", value: "Interactive Live" },
   ];
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ── 01 Signature Interactive Expanding Hero Section (Exact Same Format as 90 Days & Full Stack) ── */}
+      {/* ── 01 Signature Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
         badge="Live Workshop · 3 Hours · Tamil"
         titlePrefix="3 Hours Live"
         titleHighlight="Workshop."
-        description="A complete beginner's roadmap to learning Graphic Design and building a profitable printing and freelancing business — taught completely in practical Tamil."
+        description={program?.description || "A complete beginner's roadmap to learning Graphic Design and building a profitable printing and freelancing business — taught completely in practical Tamil."}
         highlights={highlights}
-        imageSrc="/assets/workshop/printing-business-workshop.webp"
+        imageSrc={program?.thumbnail_url || "/assets/workshop/printing-business-workshop.webp"}
         altText="3 Hours Live Workshop on Starting Your Printing Business with Graphic Design Skill"
-        enrollUrl={WORKSHOP_CHECKOUT_URL}
+        enrollUrl={program?.cta_url || EXTERNAL_URLS.workshop}
         communityUrl={EXTERNAL_URLS.community}
-        buttonText="Register Now for ₹99"
+        buttonText={program?.cta_text || "Register Now for ₹99"}
         youtubeId="nWlzU8ol7uY"
       />
 
@@ -509,13 +514,13 @@ export default function ThreeHoursLiveWorkshopPage() {
 
                 <div className="pt-6 relative z-10 space-y-3">
                   <a
-                    href={WORKSHOP_CHECKOUT_URL}
+                    href={program?.cta_url || EXTERNAL_URLS.workshop}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ backgroundColor: "#1748BB", color: "#FFFFFF" }}
                     className="w-full inline-flex items-center justify-center gap-2 bg-[#1748BB] hover:bg-[#0A3CA8] !text-white font-sans font-bold text-base sm:text-lg py-4 rounded-full transition-all duration-200 hover:scale-[1.02] shadow-[0_10px_35px_rgba(23,72,187,0.4)] cursor-pointer"
                   >
-                    <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">Register Now for ₹99</span>
+                    <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">{program?.cta_text || "Register Now for ₹99"}</span>
                     <ArrowRight size={18} style={{ color: "#FFFFFF" }} className="!text-white" />
                   </a>
 
@@ -561,9 +566,9 @@ export default function ThreeHoursLiveWorkshopPage() {
 
       {/* ── 09 Full-Width Sticky Bottom Enrollment Action Bar (Matching 90 Days & Full Stack) ── */}
       <ProgramStickyBottomCTA
-        enrollUrl={WORKSHOP_CHECKOUT_URL}
+        enrollUrl={program?.cta_url || EXTERNAL_URLS.workshop}
         text="3 Hours Live Workshop • Special Price ₹99 (Limited Seats)"
-        buttonText="REGISTER NOW FOR ₹99"
+        buttonText={program?.cta_text?.toUpperCase() || "REGISTER NOW FOR ₹99"}
       />
     </main>
   );

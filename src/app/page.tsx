@@ -31,55 +31,87 @@ export const revalidate = 0;
 
 import {
   getHeroData,
+  getMarqueeRibbonData,
+  getLearnCreateGrowData,
   getPublishedPrograms,
-  getPublishedCertifications,
+  getCareerJourneyData,
+  getSkillStackData,
+  getCertificationsSectionData,
   getPublishedLearnerStories,
+  getCommunitySectionData,
   getPublishedTestimonials,
+  getFinalCTAData,
+  getSectionVisibilityMap,
 } from "@/lib/cms";
 
 export default async function HomePage() {
-  const [heroData, programs, certifications, learnerStories, testimonials] = await Promise.all([
+  const [
+    heroData,
+    marqueeItems,
+    learnCreateGrowData,
+    programs,
+    careerJourneyData,
+    skillStackData,
+    certificationsSection,
+    learnerStories,
+    communityData,
+    testimonials,
+    finalCtaData,
+    visibilityMap,
+  ] = await Promise.all([
     getHeroData(),
+    getMarqueeRibbonData(),
+    getLearnCreateGrowData(),
     getPublishedPrograms(),
-    getPublishedCertifications(),
+    getCareerJourneyData(),
+    getSkillStackData(),
+    getCertificationsSectionData(),
     getPublishedLearnerStories(),
+    getCommunitySectionData(),
     getPublishedTestimonials(),
+    getFinalCTAData(),
+    getSectionVisibilityMap("home"),
   ]);
 
   return (
     <>
       {/* 01 — Hero: Full-screen video + headline + CTA */}
-      <HeroSection heroData={heroData} />
+      {visibilityMap.hero !== false && <HeroSection heroData={heroData} />}
 
       {/* 02 — Marquee Ribbon */}
-      <MarqueeRibbon />
+      {visibilityMap.marquee_ribbon !== false && <MarqueeRibbon items={marqueeItems} />}
 
       {/* 03 — Learn → Practice → Create → Grow (scroll storytelling) */}
-      <LearnCreateGrowSection />
+      {visibilityMap.learn_create_grow !== false && <LearnCreateGrowSection meta={learnCreateGrowData} />}
 
       {/* 04 — Programs (Choose Your Learning Path) */}
-      <ProgramsSection programs={programs} />
+      {visibilityMap.programs !== false && <ProgramsSection programs={programs} />}
 
       {/* 05 — Career Journey (5-Step Milestone Path) */}
-      <CareerJourneySection />
+      {visibilityMap.career_journey !== false && <CareerJourneySection meta={careerJourneyData} />}
 
       {/* 06 — Skill Stack Experience */}
-      <SkillStackSection />
+      {visibilityMap.skill_stack !== false && <SkillStackSection />}
 
       {/* 07 — Certifications (arc gallery + lightbox) */}
-      <CertificationsSection certifications={certifications} />
+      {visibilityMap.certifications !== false && (
+        <CertificationsSection
+          certifications={certificationsSection.certifications}
+          meta={certificationsSection.meta}
+        />
+      )}
 
       {/* 08 — Real People, Real Transformations (curved video carousel) */}
-      <VideoTestimonialCarousel stories={learnerStories} />
+      {visibilityMap.learner_stories !== false && <VideoTestimonialCarousel stories={learnerStories} />}
 
       {/* 09 — Community (solid blue) */}
-      <CommunitySection />
+      {visibilityMap.community !== false && <CommunitySection meta={communityData} />}
 
       {/* 10 — Student Reviews (masonry testimonials) */}
-      <StudentReviewsSection reviews={testimonials} />
+      {visibilityMap.testimonials !== false && <StudentReviewsSection reviews={testimonials} />}
 
       {/* 11 — Final CTA */}
-      <FinalCTASection />
+      {visibilityMap.cta !== false && <FinalCTASection meta={finalCtaData} />}
     </>
   );
 }

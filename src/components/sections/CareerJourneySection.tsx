@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
+import { CMSSectionMeta } from "@/lib/cms";
 
 const TIMELINE_STEPS = [
   {
@@ -40,7 +41,11 @@ const TIMELINE_STEPS = [
   },
 ];
 
-export default function CareerJourneySection() {
+interface CareerJourneySectionProps {
+  meta?: CMSSectionMeta;
+}
+
+export default function CareerJourneySection({ meta }: CareerJourneySectionProps = {}) {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -62,7 +67,7 @@ export default function CareerJourneySection() {
             <div className="flex items-center justify-center gap-3 mb-3">
               <div className="w-8 h-[2px] bg-[#1748BB]" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                Career Journey
+                {meta?.badge || "Career Journey"}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB]" />
             </div>
@@ -73,8 +78,14 @@ export default function CareerJourneySection() {
               className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.08] tracking-tight"
               style={{ fontSize: "clamp(30px, 4.2vw, 54px)" }}
             >
-              Your Path to a{" "}
-              <span className="text-[#1748BB]">Creative Career.</span>
+              {meta?.heading ? (
+                <span>{meta.heading}</span>
+              ) : (
+                <>
+                  Your Path to a{" "}
+                  <span className="text-[#1748BB]">Creative Career.</span>
+                </>
+              )}
             </h2>
           </FadeUp>
         </div>
@@ -120,39 +131,35 @@ export default function CareerJourneySection() {
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1.25 }}
                           exit={{ opacity: 0, scale: 0.8 }}
-                          transition={{ duration: 0.35, ease: "easeOut" }}
-                          className="absolute inset-0 rounded-full bg-[#1748BB]/30 blur-md pointer-events-none"
+                          transition={{ duration: 0.3 }}
+                          className="absolute -inset-2 rounded-full bg-[#1748BB]/20 blur-md pointer-events-none"
                         />
                       )}
 
                       <div
-                        className={`w-14 h-14 rounded-full flex items-center justify-center font-display font-bold text-base transition-all duration-400 relative z-10 ${
+                        className={`w-14 h-14 rounded-full flex items-center justify-center font-mono font-bold text-base transition-all duration-300 relative z-10 ${
                           isActive
-                            ? "bg-[#1748BB] text-white shadow-[0_0_28px_rgba(23,72,187,0.7)] ring-4 ring-[#1748BB]/25 scale-110"
-                            : "bg-white text-[#1748BB] border-2 border-[#1748BB] shadow-sm hover:scale-105"
+                            ? "bg-[#1748BB] text-white ring-4 ring-blue-100 scale-110 shadow-lg shadow-[#1748BB]/30"
+                            : "bg-white text-neutral-400 border-2 border-neutral-200 hover:border-[#1748BB] hover:text-[#1748BB]"
                         }`}
                       >
                         {item.step}
                       </div>
                     </div>
 
-                    {/* Title */}
-                    <h3
-                      className={`font-display font-bold text-base tracking-wide uppercase mt-4 mb-1 transition-colors duration-300 ${
-                        isActive ? "text-[#1748BB]" : "text-[#1E2026]"
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p
-                      className={`font-sans text-xs max-w-[150px] leading-relaxed transition-colors duration-300 ${
-                        isActive ? "text-[#1E2026] font-medium" : "text-neutral-500"
-                      }`}
-                    >
-                      {item.description}
-                    </p>
+                    {/* Step Title & Subtitle */}
+                    <div className="mt-4 space-y-1">
+                      <p
+                        className={`font-display font-bold text-sm tracking-wide transition-colors duration-200 ${
+                          isActive ? "text-[#1748BB]" : "text-[#1E2026]"
+                        }`}
+                      >
+                        {item.title}
+                      </p>
+                      <p className="font-sans text-xs text-neutral-500 max-w-[130px] leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
                 );
               })}

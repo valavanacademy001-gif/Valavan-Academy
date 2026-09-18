@@ -41,3 +41,5 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+tmp/
+.metadata_never_index

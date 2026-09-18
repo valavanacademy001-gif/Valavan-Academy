@@ -12,10 +12,20 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { EXTERNAL_URLS } from "@/data/site.config";
+import { CMSSectionMeta } from "@/lib/cms";
 
-export default function FinalCTASection() {
+interface FinalCTASectionProps {
+  meta?: CMSSectionMeta;
+}
+
+export default function FinalCTASection({ meta }: FinalCTASectionProps = {}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  const primaryText = meta?.primaryButtonText || "Explore Courses";
+  const primaryUrl = meta?.primaryButtonUrl || "/programs";
+  const secondaryText = meta?.secondaryButtonText || "Join TNCC Community →";
+  const secondaryUrl = meta?.secondaryButtonUrl || EXTERNAL_URLS.community;
 
   return (
     <section ref={ref} className="bg-white py-12 sm:py-24 md:py-32 relative z-20 overflow-hidden border-t border-neutral-100">
@@ -51,16 +61,21 @@ export default function FinalCTASection() {
             className="font-display font-bold leading-[1.02] sm:leading-[1.06] tracking-tight mx-auto"
             style={{ fontSize: "clamp(36px, 5.5vw, 76px)", maxWidth: "14ch", color: "#1E2026" }}
           >
-            Your Next Chapter{" "}
-            <span style={{ color: "#1748BB" }}>Starts Here.</span>
+            {meta?.heading ? (
+              meta.heading
+            ) : (
+              <>
+                Your Next Chapter{" "}
+                <span style={{ color: "#1748BB" }}>Starts Here.</span>
+              </>
+            )}
           </h2>
 
           <p
             className="font-sans text-base sm:text-lg leading-relaxed font-normal max-w-2xl mx-auto"
             style={{ color: "#525252" }}
           >
-            Learn practical digital skills. Build real projects. Create your
-            future — in Tamil.
+            {meta?.description || "Learn practical digital skills. Build real projects. Create your future — in Tamil."}
           </p>
         </motion.div>
 
@@ -73,7 +88,7 @@ export default function FinalCTASection() {
         >
           {/* Primary Blue Button */}
           <Link
-            href="/programs"
+            href={primaryUrl}
             className="inline-flex items-center gap-2 text-white font-bold text-sm sm:text-base px-7 py-3.5 rounded-full hover:scale-105 transition-all duration-200"
             style={{
               backgroundColor: "#1748BB",
@@ -81,18 +96,18 @@ export default function FinalCTASection() {
             }}
           >
             <ArrowUpRight size={18} className="text-white" />
-            <span className="text-white font-bold">Explore Courses</span>
+            <span className="text-white font-bold">{primaryText}</span>
           </Link>
 
           {/* Secondary Button */}
           <a
-            href={EXTERNAL_URLS.community}
+            href={secondaryUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 text-sm sm:text-base font-semibold px-7 py-3.5 rounded-full border-2 border-[#1748BB] text-[#1748BB] bg-white hover:bg-[#F0F5FF] hover:border-[#1748BB] hover:scale-105 transition-all duration-200 shadow-sm"
           >
             <span className="font-bold text-[#1748BB] group-hover:text-[#1748BB] transition-colors">
-              Join TNCC Community
+              {secondaryText}
             </span>
             <span className="text-[#1748BB] group-hover:text-[#1748BB] group-hover:translate-x-1 transition-all">
               →

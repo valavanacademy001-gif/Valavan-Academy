@@ -1,16 +1,25 @@
 import type { Metadata } from "next";
 import Container from "@/components/ui/Container";
 import { SOCIAL_LINKS, EXTERNAL_URLS } from "@/data/site.config";
-import { ArrowUpRight, MessageSquare, Mail, Sparkles } from "lucide-react";
+import { ArrowUpRight, MessageSquare, Mail, Sparkles, Phone, MapPin, Clock } from "lucide-react";
 import { SOCIAL_ICON_MAP } from "@/components/ui/SocialIcons";
+import { getContactPageData, getSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Contact Us — Valavan Academy",
   description:
-    "Get in touch with Valavan Academy. Reach us through social media or WhatsApp for program inquiries, admissions, and support.",
+    "Get in touch with Valavan Academy. Reach us through social media, email, phone, or WhatsApp for program inquiries, admissions, and support.",
 };
 
-export default function ContactPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function ContactPage() {
+  const [contactData, siteSettings] = await Promise.all([
+    getContactPageData(),
+    getSiteSettings(),
+  ]);
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Header Section ── */}
@@ -35,7 +44,7 @@ export default function ContactPage() {
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                Get In Touch
+                {contactData.hero.eyebrow}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
             </div>
@@ -44,11 +53,11 @@ export default function ContactPage() {
               className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.06] tracking-tight mb-6"
               style={{ fontSize: "clamp(34px, 5vw, 60px)" }}
             >
-              Contact <span className="text-[#1748BB]">Valavan Academy.</span>
+              {contactData.hero.heading}
             </h1>
 
             <p className="font-sans text-neutral-600 text-base sm:text-lg leading-relaxed font-normal max-w-2xl">
-              Have questions about our programs, curriculum, or enrollment? Reach out to us through our direct channels or social media.
+              {contactData.hero.description}
             </p>
           </div>
         </Container>
@@ -67,7 +76,7 @@ export default function ContactPage() {
                 </h2>
 
                 <a
-                  href={EXTERNAL_URLS.community}
+                  href={siteSettings.community_url || EXTERNAL_URLS.community}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-6 sm:p-7 rounded-[24px] border border-neutral-200/80 bg-[#F8FAFF] hover:bg-white hover:border-[#1748BB]/40 hover:shadow-[0_12px_35px_rgba(23,72,187,0.1)] hover:-translate-y-0.5 transition-all duration-300 group"
@@ -89,6 +98,29 @@ export default function ContactPage() {
                     <ArrowUpRight size={18} />
                   </div>
                 </a>
+              </div>
+
+              {/* Email & Phone Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-6 rounded-2xl border border-neutral-200/80 bg-[#F8FAFF] space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#1748BB] shadow-xs">
+                    <Mail size={18} />
+                  </div>
+                  <div className="text-xs font-semibold uppercase text-neutral-400">Email Us</div>
+                  <a href={`mailto:${contactData.contactInfo.email}`} className="font-display font-bold text-sm text-[#1E2026] hover:text-[#1748BB] transition-colors block break-all">
+                    {contactData.contactInfo.email}
+                  </a>
+                </div>
+
+                <div className="p-6 rounded-2xl border border-neutral-200/80 bg-[#F8FAFF] space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#1748BB] shadow-xs">
+                    <Phone size={18} />
+                  </div>
+                  <div className="text-xs font-semibold uppercase text-neutral-400">Phone Support</div>
+                  <a href={`tel:${contactData.contactInfo.phone}`} className="font-display font-bold text-sm text-[#1E2026] hover:text-[#1748BB] transition-colors block">
+                    {contactData.contactInfo.phone}
+                  </a>
+                </div>
               </div>
 
               {/* Social Channels */}

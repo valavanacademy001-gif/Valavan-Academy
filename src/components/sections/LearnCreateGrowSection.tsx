@@ -13,8 +13,9 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CheckCircle2, Sparkles } from "lucide-react";
 import Container from "@/components/ui/Container";
+import { CMSSectionMeta } from "@/lib/cms";
 
-const STEPS = [
+const DEFAULT_STEPS = [
   {
     id: "learn",
     number: "01",
@@ -61,7 +62,11 @@ const STEPS = [
   },
 ];
 
-export default function LearnCreateGrowSection() {
+interface LearnCreateGrowSectionProps {
+  meta?: CMSSectionMeta;
+}
+
+export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
@@ -98,194 +103,190 @@ export default function LearnCreateGrowSection() {
       scrollTriggerRef.current = st;
     }, sectionRef);
 
-    return () => {
-      if (scrollTriggerRef.current) {
-        scrollTriggerRef.current.kill(true);
-      }
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   const handleTabClick = (index: number) => {
     setActiveIndex(index);
-    const st = scrollTriggerRef.current;
-    if (st && pinContainerRef.current) {
-      const scrollPos = st.start + (index / (STEPS.length - 1)) * (st.end - st.start);
+    if (scrollTriggerRef.current) {
+      const targetProgress = (index + 0.1) / DEFAULT_STEPS.length;
+      const scrollPos =
+        scrollTriggerRef.current.start +
+        targetProgress * (scrollTriggerRef.current.end - scrollTriggerRef.current.start);
       window.scrollTo({ top: scrollPos, behavior: "smooth" });
     }
   };
 
-  const step = STEPS[activeIndex];
+  const step = DEFAULT_STEPS[activeIndex];
 
   return (
     <section
       ref={sectionRef}
-      id="learn-practice-create-grow"
-      className="bg-white text-[#1E2026] relative overflow-x-clip border-t border-neutral-100"
+      className="relative bg-white text-[#1E2026] overflow-hidden"
     >
       <div
         ref={pinContainerRef}
-        className="w-full py-8 sm:py-20 min-h-[70vh] sm:min-h-[85vh] flex flex-col justify-center relative"
+        className="w-full min-h-screen flex flex-col justify-center items-center py-12 sm:py-20 relative overflow-hidden"
       >
-      {/* Large subtle background watermark text (#EFF4FF) */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-        aria-hidden
-      >
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={step.keyword}
-            initial={{ opacity: 0, scale: 0.90 }}
-            animate={{ opacity: 0.50, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.06 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="font-display font-black leading-none tracking-tight select-none"
-            style={{
-              fontSize: "clamp(120px, 25vw, 340px)",
-              color: "#EFF4FF",
-            }}
-          >
-            {step.keyword}
-          </motion.span>
-        </AnimatePresence>
-      </div>
+        {/* Faint watermark background word of current active step */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          aria-hidden
+        >
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={step.keyword}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 0.85, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.06 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="font-display font-black leading-none tracking-tight select-none"
+              style={{
+                fontSize: "clamp(120px, 25vw, 340px)",
+                color: "#EFF4FF",
+              }}
+            >
+              {step.keyword}
+            </motion.span>
+          </AnimatePresence>
+        </div>
 
-      <Container className="relative z-10 w-full">
-        
-        {/* Top Step Navigation Tabs — 4 Tabs fit cleanly on Mobile */}
-        <div className="grid grid-cols-4 gap-1.5 sm:flex sm:items-center sm:justify-center sm:gap-3.5 mb-7 sm:mb-12 max-w-xl mx-auto w-full px-1">
-          {STEPS.map((s, i) => {
-            const isCur = i === activeIndex;
-            return (
-              <button
-                key={s.id}
-                onClick={() => handleTabClick(i)}
-                className={`flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-full font-sans font-bold transition-all duration-300 cursor-pointer ${
-                  isCur
-                    ? "bg-[#1748BB] text-white shadow-[0_4px_16px_rgba(23,72,187,0.35)] scale-102 sm:scale-105"
-                    : "bg-[#F5F8FF] text-neutral-500 hover:text-[#1748BB] hover:bg-[#EBF2FF]"
-                }`}
-              >
-                <span
-                  className={`text-[10px] sm:text-xs font-mono font-bold ${
-                    isCur ? "text-blue-200" : "text-neutral-400"
+        <Container className="relative z-10 w-full">
+          
+          {/* Top Step Navigation Tabs */}
+          <div className="grid grid-cols-4 gap-1.5 sm:flex sm:items-center sm:justify-center sm:gap-3.5 mb-7 sm:mb-12 max-w-xl mx-auto w-full px-1">
+            {DEFAULT_STEPS.map((s, i) => {
+              const isCur = i === activeIndex;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => handleTabClick(i)}
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-1.5 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-full font-sans font-bold transition-all duration-300 cursor-pointer ${
+                    isCur
+                      ? "bg-[#1748BB] text-white shadow-[0_4px_16px_rgba(23,72,187,0.35)] scale-102 sm:scale-105"
+                      : "bg-[#F5F8FF] text-neutral-500 hover:text-[#1748BB] hover:bg-[#EBF2FF]"
                   }`}
                 >
-                  {s.number}
-                </span>
-                <span className="text-[11px] sm:text-xs tracking-tight sm:tracking-wide">
-                  {s.keyword}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  <span
+                    className={`text-[10px] sm:text-xs font-mono font-bold ${
+                      isCur ? "text-blue-200" : "text-neutral-400"
+                    }`}
+                  >
+                    {s.number}
+                  </span>
+                  <span className="text-[11px] sm:text-xs tracking-tight sm:tracking-wide">
+                    {s.keyword}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Content Card Layout — Center Aligned & Prominent */}
-        <div className="max-w-4xl mx-auto text-center space-y-5 sm:space-y-7 px-2">
-          
-          {/* Step Tag */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`label-${activeIndex}`}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -14 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center justify-center gap-2.5 sm:gap-3"
-            >
-              <div className="w-6 sm:w-8 h-[2px] bg-[#1748BB]/40" />
-              <span className="font-sans text-[11px] sm:text-sm tracking-[0.2em] sm:tracking-[0.25em] text-[#1748BB] uppercase font-bold">
-                Step {step.number} — {step.keyword}
+          {/* Content Card Layout */}
+          <div className="max-w-4xl mx-auto text-center space-y-5 sm:space-y-7 px-2">
+            
+            {/* Step Tag */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`label-${activeIndex}`}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center justify-center gap-2.5 sm:gap-3"
+              >
+                <div className="w-6 sm:w-8 h-[2px] bg-[#1748BB]/40" />
+                <span className="font-sans text-[11px] sm:text-sm tracking-[0.2em] sm:tracking-[0.25em] text-[#1748BB] uppercase font-bold">
+                  {meta?.badge || `Step ${step.number} — ${step.keyword}`}
+                </span>
+                <div className="w-6 sm:w-8 h-[2px] bg-[#1748BB]/40" />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Step Headline */}
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={`headline-${activeIndex}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="font-display font-black text-[#1E2026] tracking-tight leading-[1.06] sm:leading-[1.04]"
+                style={{ fontSize: "clamp(26px, 4.2vw, 56px)" }}
+              >
+                {step.headline}
+              </motion.h2>
+            </AnimatePresence>
+
+            {/* Tagline / Subtitle */}
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={`tagline-${activeIndex}`}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3, delay: 0.05 }}
+                className="font-sans text-sm sm:text-base md:text-lg font-semibold text-[#1748BB] max-w-xl mx-auto flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 shrink-0 text-[#1748BB]" />
+                <span>{step.tagline}</span>
+                <Sparkles className="w-4 h-4 shrink-0 text-[#1748BB]" />
+              </motion.p>
+            </AnimatePresence>
+
+            {/* Main Body */}
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={`body-${activeIndex}`}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="font-sans text-sm sm:text-base md:text-lg text-neutral-600 leading-relaxed max-w-2xl mx-auto font-normal"
+              >
+                {step.body}
+              </motion.p>
+            </AnimatePresence>
+
+            {/* Pill Value Chips */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`chips-${activeIndex}`}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3, delay: 0.15 }}
+                className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 sm:pt-4"
+              >
+                {step.chips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#F0F5FF] border border-blue-100 text-[#1748BB] font-sans font-semibold text-xs sm:text-sm shadow-xs"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                    <span>{chip}</span>
+                  </span>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Bottom Progress Bar & Step Counter */}
+            <div className="pt-4 sm:pt-6 flex flex-col items-center gap-2 sm:gap-3">
+              <div className="w-36 sm:w-48 h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-[#1748BB] rounded-full"
+                  initial={false}
+                  animate={{ width: `${((activeIndex + 1) / DEFAULT_STEPS.length) * 100}%` }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                />
+              </div>
+              <span className="font-mono text-[11px] sm:text-xs text-neutral-400 font-medium">
+                0{activeIndex + 1} / 0{DEFAULT_STEPS.length}
               </span>
-              <div className="w-6 sm:w-8 h-[2px] bg-[#1748BB]/40" />
-            </motion.div>
-          </AnimatePresence>
+            </div>
 
-          {/* Main Large Headline */}
-          <AnimatePresence mode="wait">
-            <motion.h2
-              key={`headline-${activeIndex}`}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -18 }}
-              transition={{ duration: 0.35, delay: 0.05 }}
-              className="font-display font-bold leading-[1.04] sm:leading-[0.98] tracking-tight text-[#1E2026]"
-              style={{ fontSize: "clamp(26px, 4.8vw, 62px)" }}
-            >
-              {(() => {
-                const { headline, bluePrefix } = step;
-                if (bluePrefix && headline.includes(bluePrefix)) {
-                  const idx = headline.indexOf(bluePrefix);
-                  const before = headline.slice(0, idx);
-                  const after = headline.slice(idx + bluePrefix.length);
-                  return (
-                    <>
-                      {before && <span className="text-[#1E2026]">{before}</span>}
-                      <span className="text-[#1748BB]">{bluePrefix}</span>
-                      {after && <span className="text-[#1E2026]">{after}</span>}
-                    </>
-                  );
-                }
-                return <span className="text-[#1E2026]">{headline}</span>;
-              })()}
-            </motion.h2>
-          </AnimatePresence>
-
-          {/* Large Body Text */}
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={`body-${activeIndex}`}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -14 }}
-              transition={{ duration: 0.3, delay: 0.08 }}
-              className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-normal"
-            >
-              {step.body}
-            </motion.p>
-          </AnimatePresence>
-
-          {/* Feature Highlights Row */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`chips-${activeIndex}`}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -14 }}
-              transition={{ duration: 0.3, delay: 0.12 }}
-              className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 pt-1"
-            >
-              {step.chips.map((chip) => (
-                <span
-                  key={chip}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#F5F8FF] border border-[#D7E3FF] text-xs sm:text-sm font-semibold text-[#1748BB]"
-                >
-                  <CheckCircle2 size={14} className="text-[#1748BB]" />
-                  {chip}
-                </span>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Tagline Pill */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`tag-${activeIndex}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.25, delay: 0.16 }}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#EFF4FF] border border-[#BFDBFE] text-xs sm:text-sm font-semibold text-[#1748BB]"
-            >
-              <Sparkles size={14} className="text-[#1748BB]" />
-              <span>{step.tagline}</span>
-            </motion.div>
-          </AnimatePresence>
-
-        </div>
-
-      </Container>
+          </div>
+        </Container>
       </div>
     </section>
   );

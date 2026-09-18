@@ -1,6 +1,6 @@
 /**
  * Valavan Academy — Central CMS Data Layer
- * Connects to Supabase to fetch published content for the Main Website.
+ * Connects directly to Supabase to fetch published content for the Main Website.
  * Implements strict fallback defaults to guarantee 100% visual fidelity
  * even if database data is empty or temporarily unreachable.
  */
@@ -76,6 +76,7 @@ export interface CMSSiteSettings {
   description: string;
   email: string;
   phone: string;
+  address?: string;
   facebook_url: string;
   instagram_url: string;
   youtube_url: string;
@@ -98,20 +99,27 @@ export interface CMSHeroData {
   posterImage?: string;
 }
 
-export interface CMSRibbonItem {
-  id: string;
-  text: string;
-  highlight?: boolean;
+export interface CMSSectionMeta {
+  badge?: string;
+  heading?: string;
+  subheading?: string;
+  description?: string;
+  primaryButtonText?: string;
+  primaryButtonUrl?: string;
+  secondaryButtonText?: string;
+  secondaryButtonUrl?: string;
+  [key: string]: string | undefined;
 }
 
-// ─── DEFAULT FALLBACKS (Guarantees zero UI regressions) ──────────────────────
+// ─── DEFAULT FALLBACKS ───────────────────────────────────────────────────────
 
 export const DEFAULT_SITE_SETTINGS: CMSSiteSettings = {
   academy_name: SITE_CONFIG.name,
   tagline: SITE_CONFIG.tagline,
   description: SITE_CONFIG.description,
   email: "valavanacademy001@gmail.com",
-  phone: "",
+  phone: "+91 93452 79541",
+  address: "Valavan Academy, Tirupattur / Vellore District, Tamil Nadu, India",
   facebook_url: SOCIAL_LINKS.find((s) => s.id === "facebook")?.url || "https://www.facebook.com/ValavanAcademy",
   instagram_url: SOCIAL_LINKS.find((s) => s.id === "instagram")?.url || "https://www.instagram.com/valavanacademy",
   youtube_url: SOCIAL_LINKS.find((s) => s.id === "youtube")?.url || "https://www.youtube.com/@ValavanAcademyofficial",
@@ -128,121 +136,38 @@ export const DEFAULT_HERO_DATA: CMSHeroData = {
   description: "Learn Graphic Design, Video Editing , Web Design & Advanced AI in Tamil with hands-on mentorship and real-world projects.",
   primaryButtonText: "Explore Courses",
   primaryButtonUrl: "/programs",
-  secondaryButtonText: "Join TNCC Community",
+  secondaryButtonText: "Join TNCC Community →",
   secondaryButtonUrl: EXTERNAL_URLS.community,
   videoUrl: "/assets/videos/hero-bg.mp4",
   posterImage: "/assets/images/hero/hero-poster.webp",
 };
 
+export const DEFAULT_MARQUEE_ITEMS: string[] = [
+  "Graphic Design",
+  "Video Editing",
+  "Web Design",
+  "UI/UX",
+  "AI Tools",
+  "Creative Skills",
+  "Career Growth",
+  "Tamil-First Learning",
+  "Real Projects",
+  "Build Your Portfolio",
+];
+
 export const DEFAULT_LEARNER_STORIES: CMSLearnerStory[] = [
-  {
-    title: "Student Transformation 01",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://www.youtube.com/shorts/BzQ9wNPit5I",
-    youtube_video_id: "BzQ9wNPit5I",
-    thumbnail_url: "https://img.youtube.com/vi/BzQ9wNPit5I/hqdefault.jpg",
-    duration: "0:45",
-    sort_order: 1,
-  },
-  {
-    title: "Student Transformation 02",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://www.youtube.com/shorts/3oVzfOTkjWE",
-    youtube_video_id: "3oVzfOTkjWE",
-    thumbnail_url: "https://img.youtube.com/vi/3oVzfOTkjWE/hqdefault.jpg",
-    duration: "0:50",
-    sort_order: 2,
-  },
-  {
-    title: "Student Transformation 03",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/N5a_d-R_eJw",
-    youtube_video_id: "N5a_d-R_eJw",
-    thumbnail_url: "https://img.youtube.com/vi/N5a_d-R_eJw/hqdefault.jpg",
-    duration: "0:40",
-    sort_order: 3,
-  },
-  {
-    title: "Student Transformation 04",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/wZ5HiQO8g74",
-    youtube_video_id: "wZ5HiQO8g74",
-    thumbnail_url: "https://img.youtube.com/vi/wZ5HiQO8g74/hqdefault.jpg",
-    duration: "0:55",
-    sort_order: 4,
-  },
-  {
-    title: "Student Transformation 05",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://www.youtube.com/shorts/h3uv9HAC3Ek",
-    youtube_video_id: "h3uv9HAC3Ek",
-    thumbnail_url: "https://img.youtube.com/vi/h3uv9HAC3Ek/hqdefault.jpg",
-    duration: "0:48",
-    sort_order: 5,
-  },
-  {
-    title: "Student Transformation 06",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://www.youtube.com/shorts/tPPE5Jywfsg",
-    youtube_video_id: "tPPE5Jywfsg",
-    thumbnail_url: "https://img.youtube.com/vi/tPPE5Jywfsg/hqdefault.jpg",
-    duration: "0:42",
-    sort_order: 6,
-  },
-  {
-    title: "Student Transformation 07",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://www.youtube.com/shorts/RRn6b8cIgxc",
-    youtube_video_id: "RRn6b8cIgxc",
-    thumbnail_url: "https://img.youtube.com/vi/RRn6b8cIgxc/hqdefault.jpg",
-    duration: "0:52",
-    sort_order: 7,
-  },
-  {
-    title: "Student Transformation 08",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/GNLYaMdWF64",
-    youtube_video_id: "GNLYaMdWF64",
-    thumbnail_url: "https://img.youtube.com/vi/GNLYaMdWF64/hqdefault.jpg",
-    duration: "0:46",
-    sort_order: 8,
-  },
-  {
-    title: "Student Transformation 09",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/R4nXDTTTq4g",
-    youtube_video_id: "R4nXDTTTq4g",
-    thumbnail_url: "https://img.youtube.com/vi/R4nXDTTTq4g/hqdefault.jpg",
-    duration: "0:54",
-    sort_order: 9,
-  },
-  {
-    title: "Student Transformation 10",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/nCQ18VfjKUQ",
-    youtube_video_id: "nCQ18VfjKUQ",
-    thumbnail_url: "https://img.youtube.com/vi/nCQ18VfjKUQ/hqdefault.jpg",
-    duration: "0:49",
-    sort_order: 10,
-  },
-  {
-    title: "Student Transformation 11",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/ezqLPTS8vHk",
-    youtube_video_id: "ezqLPTS8vHk",
-    thumbnail_url: "https://img.youtube.com/vi/ezqLPTS8vHk/hqdefault.jpg",
-    duration: "0:51",
-    sort_order: 11,
-  },
-  {
-    title: "Student Transformation 12",
-    student_name: "Valavan Academy Student",
-    youtube_url: "https://youtube.com/shorts/YOhkWGcyTLw",
-    youtube_video_id: "YOhkWGcyTLw",
-    thumbnail_url: "https://img.youtube.com/vi/YOhkWGcyTLw/hqdefault.jpg",
-    duration: "0:47",
-    sort_order: 12,
-  },
+  { title: "Student Transformation 01", student_name: "Valavan Academy Student", youtube_url: "https://www.youtube.com/shorts/BzQ9wNPit5I", youtube_video_id: "BzQ9wNPit5I", thumbnail_url: "https://img.youtube.com/vi/BzQ9wNPit5I/hqdefault.jpg", duration: "0:45", sort_order: 1 },
+  { title: "Student Transformation 02", student_name: "Valavan Academy Student", youtube_url: "https://www.youtube.com/shorts/3oVzfOTkjWE", youtube_video_id: "3oVzfOTkjWE", thumbnail_url: "https://img.youtube.com/vi/3oVzfOTkjWE/hqdefault.jpg", duration: "0:50", sort_order: 2 },
+  { title: "Student Transformation 03", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/N5a_d-R_eJw", youtube_video_id: "N5a_d-R_eJw", thumbnail_url: "https://img.youtube.com/vi/N5a_d-R_eJw/hqdefault.jpg", duration: "0:40", sort_order: 3 },
+  { title: "Student Transformation 04", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/wZ5HiQO8g74", youtube_video_id: "wZ5HiQO8g74", thumbnail_url: "https://img.youtube.com/vi/wZ5HiQO8g74/hqdefault.jpg", duration: "0:55", sort_order: 4 },
+  { title: "Student Transformation 05", student_name: "Valavan Academy Student", youtube_url: "https://www.youtube.com/shorts/h3uv9HAC3Ek", youtube_video_id: "h3uv9HAC3Ek", thumbnail_url: "https://img.youtube.com/vi/h3uv9HAC3Ek/hqdefault.jpg", duration: "0:48", sort_order: 5 },
+  { title: "Student Transformation 06", student_name: "Valavan Academy Student", youtube_url: "https://www.youtube.com/shorts/tPPE5Jywfsg", youtube_video_id: "tPPE5Jywfsg", thumbnail_url: "https://img.youtube.com/vi/tPPE5Jywfsg/hqdefault.jpg", duration: "0:42", sort_order: 6 },
+  { title: "Student Transformation 07", student_name: "Valavan Academy Student", youtube_url: "https://www.youtube.com/shorts/RRn6b8cIgxc", youtube_video_id: "RRn6b8cIgxc", thumbnail_url: "https://img.youtube.com/vi/RRn6b8cIgxc/hqdefault.jpg", duration: "0:52", sort_order: 7 },
+  { title: "Student Transformation 08", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/GNLYaMdWF64", youtube_video_id: "GNLYaMdWF64", thumbnail_url: "https://img.youtube.com/vi/GNLYaMdWF64/hqdefault.jpg", duration: "0:46", sort_order: 8 },
+  { title: "Student Transformation 09", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/R4nXDTTTq4g", youtube_video_id: "R4nXDTTTq4g", thumbnail_url: "https://img.youtube.com/vi/R4nXDTTTq4g/hqdefault.jpg", duration: "0:54", sort_order: 9 },
+  { title: "Student Transformation 10", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/nCQ18VfjKUQ", youtube_video_id: "nCQ18VfjKUQ", thumbnail_url: "https://img.youtube.com/vi/nCQ18VfjKUQ/hqdefault.jpg", duration: "0:49", sort_order: 10 },
+  { title: "Student Transformation 11", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/ezqLPTS8vHk", youtube_video_id: "ezqLPTS8vHk", thumbnail_url: "https://img.youtube.com/vi/ezqLPTS8vHk/hqdefault.jpg", duration: "0:51", sort_order: 11 },
+  { title: "Student Transformation 12", student_name: "Valavan Academy Student", youtube_url: "https://youtube.com/shorts/YOhkWGcyTLw", youtube_video_id: "YOhkWGcyTLw", thumbnail_url: "https://img.youtube.com/vi/YOhkWGcyTLw/hqdefault.jpg", duration: "0:47", sort_order: 12 },
 ];
 
 export const DEFAULT_TESTIMONIALS: CMSTestimonial[] = [
@@ -346,7 +271,275 @@ export const DEFAULT_TESTIMONIALS: CMSTestimonial[] = [
   },
 ];
 
-// ─── DATA FETCHERS (Server-Side / Client-Side) ───────────────────────────────
+// ─── HELPER FUNCTIONS ────────────────────────────────────────────────────────
+
+/**
+ * Generic helper to fetch all key-value field pairs for a page & section
+ */
+export async function getSectionFieldMap(pageSlug: string, sectionSlug: string): Promise<Record<string, string>> {
+  try {
+    const { data: page } = await supabase
+      .from("pages")
+      .select("id")
+      .eq("slug", pageSlug)
+      .maybeSingle();
+
+    if (!page) return {};
+
+    const { data: section } = await supabase
+      .from("sections")
+      .select("id")
+      .eq("page_id", page.id)
+      .eq("slug", sectionSlug)
+      .maybeSingle();
+
+    if (!section) return {};
+
+    const { data: fieldVals } = await supabase
+      .from("field_values")
+      .select("*, field:fields(name)")
+      .eq("section_id", section.id);
+
+    if (!fieldVals || fieldVals.length === 0) return {};
+
+    const map: Record<string, string> = {};
+    for (const fv of fieldVals) {
+      if (fv.field?.name) {
+        const val = fv.published_value_text || fv.value_text || fv.value_url || (fv.value_json ? JSON.stringify(fv.value_json) : "") || "";
+        map[fv.field.name] = val;
+      }
+    }
+
+    return map;
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Get map of section visibility by section slug for any given page
+ */
+export async function getSectionVisibilityMap(pageSlug: string = "home"): Promise<Record<string, boolean>> {
+  try {
+    const { data: page } = await supabase
+      .from("pages")
+      .select("id")
+      .eq("slug", pageSlug)
+      .maybeSingle();
+
+    if (!page) return {};
+
+    const { data: sections } = await supabase
+      .from("sections")
+      .select("slug, is_visible")
+      .eq("page_id", page.id);
+
+    if (!sections) return {};
+
+    const visibilityMap: Record<string, boolean> = {};
+    sections.forEach((s) => {
+      visibilityMap[s.slug] = s.is_visible !== false;
+    });
+
+    return visibilityMap;
+  } catch {
+    return {};
+  }
+}
+
+// ─── SPECIFIC SECTION DATA FETCHERS ──────────────────────────────────────────
+
+/**
+ * Fetch Hero Data with full alias support
+ */
+export async function getHeroData(): Promise<CMSHeroData> {
+  try {
+    const map = await getSectionFieldMap("home", "hero");
+    if (!map || Object.keys(map).length === 0) return DEFAULT_HERO_DATA;
+
+    return {
+      eyebrow: map.eyebrow || DEFAULT_HERO_DATA.eyebrow,
+      heading: map.headline_prefix || map.heading || map.hero_heading_1 || DEFAULT_HERO_DATA.heading,
+      highlightText: map.headline_highlight || map.subheading || map.hero_heading_2 || DEFAULT_HERO_DATA.highlightText,
+      description: map.description || map.hero_description || DEFAULT_HERO_DATA.description,
+      primaryButtonText: map.primary_button_text || map.hero_cta_primary_text || DEFAULT_HERO_DATA.primaryButtonText,
+      primaryButtonUrl: map.primary_button_url || map.hero_cta_primary_url || DEFAULT_HERO_DATA.primaryButtonUrl,
+      secondaryButtonText: map.secondary_button_text || map.hero_cta_secondary_text || DEFAULT_HERO_DATA.secondaryButtonText,
+      secondaryButtonUrl: map.secondary_button_url || map.hero_cta_secondary_url || DEFAULT_HERO_DATA.secondaryButtonUrl,
+      videoUrl: map.background_video_url || map.hero_video_bg || map.video_url || DEFAULT_HERO_DATA.videoUrl,
+      posterImage: DEFAULT_HERO_DATA.posterImage,
+    };
+  } catch {
+    return DEFAULT_HERO_DATA;
+  }
+}
+
+/**
+ * Fetch Marquee Ribbon Data
+ */
+export async function getMarqueeRibbonData(): Promise<string[]> {
+  try {
+    const map = await getSectionFieldMap("home", "marquee_ribbon");
+    if (map.ribbon_items) {
+      const items = map.ribbon_items.split(",").map((s) => s.trim()).filter(Boolean);
+      if (items.length > 0) return items;
+    }
+    return DEFAULT_MARQUEE_ITEMS;
+  } catch {
+    return DEFAULT_MARQUEE_ITEMS;
+  }
+}
+
+/**
+ * Fetch Learn Create Grow Section Data
+ */
+export async function getLearnCreateGrowData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "learn_create_grow");
+    return {
+      badge: map.badge || "LEARN • PRACTICE • CREATE • GROW",
+      heading: map.heading || "Master Creative Digital Skills In Tamil",
+      description: map.description || "Step-by-step career programs engineered to transform beginners into confident creative professionals.",
+    };
+  } catch {
+    return {
+      badge: "LEARN • PRACTICE • CREATE • GROW",
+      heading: "Master Creative Digital Skills In Tamil",
+      description: "Step-by-step career programs engineered to transform beginners into confident creative professionals.",
+    };
+  }
+}
+
+/**
+ * Fetch Career Journey Section Data
+ */
+export async function getCareerJourneyData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "career_journey");
+    return {
+      badge: map.badge || "CAREER BLUEPRINT",
+      heading: map.heading || "Your Path to a Creative Career.",
+      description: map.description || "A structured 5-step milestone journey from zero experience to a thriving creative career.",
+    };
+  } catch {
+    return {
+      badge: "CAREER BLUEPRINT",
+      heading: "Your Path to a Creative Career.",
+      description: "A structured 5-step milestone journey from zero experience to a thriving creative career.",
+    };
+  }
+}
+
+/**
+ * Fetch Skill Stack Section Data
+ */
+export async function getSkillStackData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "skill_stack");
+    return {
+      badge: map.badge || "TOOL MASTERY",
+      heading: map.heading || "Master the Industry Standard Tools.",
+      description: map.description || "Hands-on practical training with the most demanded creative and AI software.",
+    };
+  } catch {
+    return {
+      badge: "TOOL MASTERY",
+      heading: "Master the Industry Standard Tools.",
+      description: "Hands-on practical training with the most demanded creative and AI software.",
+    };
+  }
+}
+
+/**
+ * Fetch Community Section Data
+ */
+export async function getCommunitySectionData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "community");
+    return {
+      badge: map.badge || "TAMIL NADU CREATORS CLUB",
+      heading: map.heading || "You Don't Have to Learn Alone.",
+      description: map.description || "Join the Tamil Nadu Creators Club — a thriving community of designers, creators, and digital professionals learning, sharing, and growing together.",
+      primaryButtonText: map.cta_button_text || "Join the Community →",
+      primaryButtonUrl: map.cta_button_url || "https://tamilnaducreatorsclub.com/",
+      stat_members: map.stat_members || "40K+ Community Members",
+      stat_workshops: map.stat_workshops || "100+ Workshops Held",
+      stat_students: map.stat_students || "5K+ Students Trained",
+    };
+  } catch {
+    return {
+      badge: "TAMIL NADU CREATORS CLUB",
+      heading: "You Don't Have to Learn Alone.",
+      description: "Join the Tamil Nadu Creators Club — a thriving community of designers, creators, and digital professionals learning, sharing, and growing together.",
+      primaryButtonText: "Join the Community →",
+      primaryButtonUrl: "https://tamilnaducreatorsclub.com/",
+      stat_members: "40K+ Community Members",
+      stat_workshops: "100+ Workshops Held",
+      stat_students: "5K+ Students Trained",
+    };
+  }
+}
+
+/**
+ * Fetch Final CTA Section Data
+ */
+export async function getFinalCTAData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "cta");
+    return {
+      heading: map.heading || "Your Next Chapter Starts Here.",
+      description: map.description || "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
+      primaryButtonText: map.primary_button_text || "Explore Courses",
+      primaryButtonUrl: map.primary_button_url || "/programs",
+      secondaryButtonText: map.secondary_button_text || "Join TNCC Community →",
+      secondaryButtonUrl: map.secondary_button_url || "https://tamilnaducreatorsclub.com/",
+    };
+  } catch {
+    return {
+      heading: "Your Next Chapter Starts Here.",
+      description: "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
+      primaryButtonText: "Explore Courses",
+      primaryButtonUrl: "/programs",
+      secondaryButtonText: "Join TNCC Community →",
+      secondaryButtonUrl: "https://tamilnaducreatorsclub.com/",
+    };
+  }
+}
+
+/**
+ * Fetch Certifications Section Data (headings + image items)
+ */
+export async function getCertificationsSectionData(): Promise<{ meta: CMSSectionMeta; certifications: CMSCertification[] }> {
+  try {
+    const map = await getSectionFieldMap("home", "certifications");
+    const certs = await getPublishedCertifications();
+
+    return {
+      meta: {
+        badge: map.badge || "STUDENT ACHIEVEMENTS",
+        heading: map.heading || "More than a Certificate.",
+        headline_prefix: map.headline_prefix || "More than a",
+        headline_highlight: map.headline_highlight || "Certificate.",
+        subheading: map.subheading || "Skill Verification for High-Income Careers",
+        description: map.description || "Valavan Academy certifications validate real-world portfolio deliverables, tool mastery, and hands-on client projects.",
+      },
+      certifications: certs,
+    };
+  } catch {
+    const certs = await getPublishedCertifications();
+    return {
+      meta: {
+        badge: "STUDENT ACHIEVEMENTS",
+        heading: "More than a Certificate.",
+        headline_prefix: "More than a",
+        headline_highlight: "Certificate.",
+        subheading: "Skill Verification for High-Income Careers",
+        description: "Valavan Academy certifications validate real-world portfolio deliverables, tool mastery, and hands-on client projects.",
+      },
+      certifications: certs,
+    };
+  }
+}
 
 /**
  * Fetch published programs from Supabase (falls back to DEFAULT_PROGRAMS)
@@ -401,6 +594,46 @@ export async function getPublishedPrograms(): Promise<CMSProgram[]> {
 }
 
 /**
+ * Fetch a single program by its slug from Supabase
+ */
+export async function getProgramBySlug(slug: string): Promise<CMSProgram | null> {
+  try {
+    const cleanSlug = slug.replace("/programs/", "").replace(/^\//, "");
+    const { data, error } = await supabase
+      .from("programs")
+      .select("*")
+      .eq("slug", cleanSlug)
+      .maybeSingle();
+
+    if (error || !data) {
+      const fallback = DEFAULT_PROGRAMS.find((p) => p.slug.includes(cleanSlug));
+      if (fallback) {
+        return {
+          slug: cleanSlug,
+          title: fallback.title,
+          subtitle: fallback.subtitle,
+          description: fallback.description,
+          duration: fallback.duration,
+          level: fallback.level,
+          thumbnail_url: fallback.image,
+          banner_url: fallback.image,
+          cta_text: "Enroll Now",
+          cta_url: EXTERNAL_URLS.signup,
+          skills: [...fallback.skills],
+          status: "published",
+          is_visible: true,
+        };
+      }
+      return null;
+    }
+
+    return data as CMSProgram;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Fetch published learner stories from Supabase (falls back to DEFAULT_LEARNER_STORIES)
  */
 export async function getPublishedLearnerStories(): Promise<CMSLearnerStory[]> {
@@ -443,36 +676,68 @@ export async function getPublishedTestimonials(): Promise<CMSTestimonial[]> {
 }
 
 /**
- * Fetch site settings from Supabase (falls back to DEFAULT_SITE_SETTINGS)
+ * Fetch published certifications
+ */
+export async function getPublishedCertifications(): Promise<CMSCertification[]> {
+  try {
+    // 1. Try field_values from section 'certifications'
+    const map = await getSectionFieldMap("home", "certifications");
+    const certFields = Object.entries(map)
+      .filter(([key, val]) => key.startsWith("cert_image_") && val)
+      .map(([key, val], idx) => ({
+        id: `cert-${idx + 1}`,
+        title: `Certificate ${idx + 1}`,
+        image_url: val,
+        is_visible: true,
+        sort_order: idx + 1,
+      }));
+
+    if (certFields.length > 0) return certFields;
+
+    return [
+      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
+      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
+      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
+      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
+      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
+      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
+      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
+      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
+    ];
+  } catch {
+    return [
+      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
+      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
+      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
+      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
+      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
+      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
+      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
+      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
+    ];
+  }
+}
+
+/**
+ * Fetch site settings from Supabase
  */
 export async function getSiteSettings(): Promise<CMSSiteSettings> {
   try {
-    const { data, error } = await supabase
-      .from("site_settings")
-      .select("*");
-
-    if (error || !data || data.length === 0) {
-      return DEFAULT_SITE_SETTINGS;
-    }
-
-    const settingsMap: Record<string, string> = {};
-    for (const item of data) {
-      settingsMap[item.key] = item.value;
-    }
-
+    const contactMap = await getSectionFieldMap("contact", "contact_info");
     return {
-      academy_name: settingsMap.academy_name || DEFAULT_SITE_SETTINGS.academy_name,
-      tagline: settingsMap.tagline || DEFAULT_SITE_SETTINGS.tagline,
-      description: settingsMap.description || DEFAULT_SITE_SETTINGS.description,
-      email: settingsMap.email || DEFAULT_SITE_SETTINGS.email,
-      phone: settingsMap.phone || DEFAULT_SITE_SETTINGS.phone,
-      facebook_url: settingsMap.facebook_url || DEFAULT_SITE_SETTINGS.facebook_url,
-      instagram_url: settingsMap.instagram_url || DEFAULT_SITE_SETTINGS.instagram_url,
-      youtube_url: settingsMap.youtube_url || DEFAULT_SITE_SETTINGS.youtube_url,
-      linkedin_url: settingsMap.linkedin_url || DEFAULT_SITE_SETTINGS.linkedin_url,
-      community_url: settingsMap.community_url || DEFAULT_SITE_SETTINGS.community_url,
-      login_url: settingsMap.login_url || DEFAULT_SITE_SETTINGS.login_url,
-      signup_url: settingsMap.signup_url || DEFAULT_SITE_SETTINGS.signup_url,
+      academy_name: DEFAULT_SITE_SETTINGS.academy_name,
+      tagline: DEFAULT_SITE_SETTINGS.tagline,
+      description: DEFAULT_SITE_SETTINGS.description,
+      email: contactMap.email || DEFAULT_SITE_SETTINGS.email,
+      phone: contactMap.phone || DEFAULT_SITE_SETTINGS.phone,
+      address: contactMap.address || DEFAULT_SITE_SETTINGS.address,
+      facebook_url: DEFAULT_SITE_SETTINGS.facebook_url,
+      instagram_url: DEFAULT_SITE_SETTINGS.instagram_url,
+      youtube_url: DEFAULT_SITE_SETTINGS.youtube_url,
+      linkedin_url: DEFAULT_SITE_SETTINGS.linkedin_url,
+      community_url: DEFAULT_SITE_SETTINGS.community_url,
+      login_url: DEFAULT_SITE_SETTINGS.login_url,
+      signup_url: DEFAULT_SITE_SETTINGS.signup_url,
     };
   } catch {
     return DEFAULT_SITE_SETTINGS;
@@ -480,180 +745,110 @@ export async function getSiteSettings(): Promise<CMSSiteSettings> {
 }
 
 /**
- * Fetch dynamic CMS page by slug
+ * Fetch About Page Data
  */
-export async function getPublishedPageBySlug(slug: string) {
+export async function getAboutPageData() {
   try {
-    const { data: page, error: pageErr } = await supabase
-      .from("pages")
-      .select("*")
-      .eq("slug", slug)
-      .eq("status", "published")
-      .single();
-
-    if (pageErr || !page) return null;
-
-    const { data: sections, error: secErr } = await supabase
-      .from("sections")
-      .select(`
-        *,
-        section_type:section_types(*),
-        fields(
-          *,
-          value:field_values(*)
-        )
-      `)
-      .eq("page_id", page.id)
-      .eq("is_visible", true)
-      .order("sort_order", { ascending: true });
+    const heroMap = await getSectionFieldMap("about", "hero");
+    const storyMap = await getSectionFieldMap("about", "story");
+    const pillarsMap = await getSectionFieldMap("about", "pillars");
 
     return {
-      ...page,
-      sections: secErr || !sections ? [] : sections,
+      hero: {
+        eyebrow: heroMap.eyebrow || "ABOUT VALAVAN ACADEMY",
+        heading: heroMap.heading || "Empowering Tamil Creators with High-Income Skills",
+        description: heroMap.description || "From humble beginnings to Tamil Nadu premier digital skills academy — bridging the gap between passionate learners and high-demand commercial digital careers.",
+      },
+      story: {
+        heading: storyMap.heading || "Built from Passion, Designed for Impact",
+        description: storyMap.description || "Founded by Valavan, our mission is to deliver world-class creative education entirely in Tamil — empowering every ambitious student with real-world skills.",
+      },
+      pillars: {
+        mission_title: pillarsMap.mission_title || "Our Mission",
+        mission_desc: pillarsMap.mission_desc || "To empower Tamil-speaking learners with practical, industry-aligned skills in Graphic Design, Video Editing, UI/UX, and AI Tools that lead to real freelance careers and financial independence.",
+        vision_title: pillarsMap.vision_title || "Our Vision",
+        vision_desc: pillarsMap.vision_desc || "To build the world's largest Tamil creative ecosystem — empowering 100,000+ skilled creators, designers, and entrepreneurs to compete on a global stage.",
+      }
     };
   } catch {
-    return null;
-  }
-}
-
-/**
- * Fetch a single program by its slug from Supabase
- */
-export async function getProgramBySlug(slug: string): Promise<CMSProgram | null> {
-  try {
-    const cleanSlug = slug.replace("/programs/", "").replace(/^\//, "");
-    const { data, error } = await supabase
-      .from("programs")
-      .select("*")
-      .eq("slug", cleanSlug)
-      .single();
-
-    if (error || !data) {
-      // Fallback from default programs
-      const fallback = DEFAULT_PROGRAMS.find((p) => p.slug.includes(cleanSlug));
-      if (fallback) {
-        return {
-          slug: cleanSlug,
-          title: fallback.title,
-          subtitle: fallback.subtitle,
-          description: fallback.description,
-          duration: fallback.duration,
-          level: fallback.level,
-          thumbnail_url: fallback.image,
-          banner_url: fallback.image,
-          cta_text: "Enroll Now",
-          cta_url: EXTERNAL_URLS.signup,
-          skills: [...fallback.skills],
-          status: "published",
-          is_visible: true,
-        };
+    return {
+      hero: {
+        eyebrow: "ABOUT VALAVAN ACADEMY",
+        heading: "Empowering Tamil Creators with High-Income Skills",
+        description: "From humble beginnings to Tamil Nadu premier digital skills academy — bridging the gap between passionate learners and high-demand commercial digital careers.",
+      },
+      story: {
+        heading: "Built from Passion, Designed for Impact",
+        description: "Founded by Valavan, our mission is to deliver world-class creative education entirely in Tamil — empowering every ambitious student with real-world skills.",
+      },
+      pillars: {
+        mission_title: "Our Mission",
+        mission_desc: "To empower Tamil-speaking learners with practical, industry-aligned skills in Graphic Design, Video Editing, UI/UX, and AI Tools that lead to real freelance careers and financial independence.",
+        vision_title: "Our Vision",
+        vision_desc: "To build the world's largest Tamil creative ecosystem — empowering 100,000+ skilled creators, designers, and entrepreneurs to compete on a global stage.",
       }
-      return null;
-    }
-
-    return data as CMSProgram;
-  } catch {
-    return null;
+    };
   }
 }
 
 /**
- * Fetch published certifications from Supabase
+ * Fetch Community Page Data
  */
-export async function getPublishedCertifications(): Promise<CMSCertification[]> {
+export async function getCommunityPageData() {
   try {
-    // 1. Try certifications table
-    const { data: certs } = await supabase
-      .from("certifications")
-      .select("*")
-      .eq("is_visible", true)
-      .order("sort_order", { ascending: true });
-
-    if (certs && certs.length > 0) {
-      return certs as CMSCertification[];
-    }
-
-    // 2. Try certifications section in field_values
-    const { data: certFields } = await supabase
-      .from("field_values")
-      .select("*, field:fields(name, label)")
-      .not("value_url", "is", null);
-
-    if (certFields && certFields.length > 0) {
-      const mapped = certFields
-        .filter((cf) => cf.field?.name?.startsWith("cert_image_") && cf.value_url)
-        .map((cf, idx) => ({
-          id: cf.id,
-          title: cf.field?.label || `Certificate ${idx + 1}`,
-          image_url: cf.value_url,
-          is_visible: true,
-          sort_order: idx + 1,
-        }));
-      if (mapped.length > 0) return mapped;
-    }
-
-    return [
-      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
-      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
-      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
-      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
-      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
-      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
-      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
-      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
-    ];
+    const heroMap = await getSectionFieldMap("community", "hero");
+    return {
+      eyebrow: heroMap.eyebrow || "TAMIL NADU CREATORS CLUB",
+      heading: heroMap.heading || "The Largest Community of Tamil Creators & Designers",
+      description: heroMap.description || "Over 40,000+ passionate creators collaborating, sharing client opportunities, attending offline summits, and mastering modern digital skills together.",
+      cta_text: heroMap.cta_button_text || "Join the Community Now →",
+      cta_url: heroMap.cta_button_url || "https://tamilnaducreatorsclub.com/",
+    };
   } catch {
-    return [
-      { id: "c1", title: "Certificate 1", image_url: "/assets/certifications/2.webp", is_visible: true },
-      { id: "c2", title: "Certificate 2", image_url: "/assets/certifications/3.webp", is_visible: true },
-      { id: "c3", title: "Certificate 3", image_url: "/assets/certifications/4.webp", is_visible: true },
-      { id: "c4", title: "Certificate 4", image_url: "/assets/certifications/5.webp", is_visible: true },
-      { id: "c5", title: "Certificate 5", image_url: "/assets/certifications/6.webp", is_visible: true },
-      { id: "c6", title: "Certificate 6", image_url: "/assets/certifications/7.webp", is_visible: true },
-      { id: "c7", title: "Certificate 7", image_url: "/assets/certifications/8.webp", is_visible: true },
-      { id: "c8", title: "Certificate 8", image_url: "/assets/certifications/9.webp", is_visible: true },
-    ];
+    return {
+      eyebrow: "TAMIL NADU CREATORS CLUB",
+      heading: "The Largest Community of Tamil Creators & Designers",
+      description: "Over 40,000+ passionate creators collaborating, sharing client opportunities, attending offline summits, and mastering modern digital skills together.",
+      cta_text: "Join the Community Now →",
+      cta_url: "https://tamilnaducreatorsclub.com/",
+    };
   }
 }
 
 /**
- * Fetch Hero Data from Supabase fields or default
+ * Fetch Contact Page Data
  */
-export async function getHeroData(): Promise<CMSHeroData> {
+export async function getContactPageData() {
   try {
-    const { data: heroSection } = await supabase
-      .from("sections")
-      .select("id")
-      .eq("name", "Hero Section")
-      .single();
-
-    if (!heroSection) return DEFAULT_HERO_DATA;
-
-    const { data: fieldVals } = await supabase
-      .from("field_values")
-      .select("*, field:fields(name)")
-      .eq("section_id", heroSection.id);
-
-    if (!fieldVals || fieldVals.length === 0) return DEFAULT_HERO_DATA;
-
-    const map: Record<string, string> = {};
-    for (const fv of fieldVals) {
-      if (fv.field?.name) {
-        map[fv.field.name] = fv.value_text || fv.value_url || "";
-      }
-    }
+    const heroMap = await getSectionFieldMap("contact", "hero");
+    const contactMap = await getSectionFieldMap("contact", "contact_info");
 
     return {
-      heading: map.hero_heading_1 || DEFAULT_HERO_DATA.heading,
-      highlightText: map.hero_heading_2 || DEFAULT_HERO_DATA.highlightText,
-      description: map.hero_description || DEFAULT_HERO_DATA.description,
-      primaryButtonText: map.hero_cta_primary_text || DEFAULT_HERO_DATA.primaryButtonText,
-      primaryButtonUrl: map.hero_cta_primary_url || DEFAULT_HERO_DATA.primaryButtonUrl,
-      secondaryButtonText: map.hero_cta_secondary_text || DEFAULT_HERO_DATA.secondaryButtonText,
-      secondaryButtonUrl: map.hero_cta_secondary_url || DEFAULT_HERO_DATA.secondaryButtonUrl,
-      videoUrl: map.hero_video_bg || DEFAULT_HERO_DATA.videoUrl,
+      hero: {
+        eyebrow: heroMap.eyebrow || "GET IN TOUCH",
+        heading: heroMap.heading || "Let's Start a Conversation",
+        description: heroMap.description || "Have questions about our programs, workshop enrollment, corporate training, or TNCC community? We are here to help.",
+      },
+      contactInfo: {
+        email: contactMap.email || "valavanacademy001@gmail.com",
+        phone: contactMap.phone || "+91 93452 79541",
+        address: contactMap.address || "Valavan Academy, Tirupattur / Vellore District, Tamil Nadu, India",
+        workingHours: contactMap.working_hours || "Monday - Saturday: 9:00 AM - 7:00 PM IST",
+      }
     };
   } catch {
-    return DEFAULT_HERO_DATA;
+    return {
+      hero: {
+        eyebrow: "GET IN TOUCH",
+        heading: "Let's Start a Conversation",
+        description: "Have questions about our programs, workshop enrollment, corporate training, or TNCC community? We are here to help.",
+      },
+      contactInfo: {
+        email: "valavanacademy001@gmail.com",
+        phone: "+91 93452 79541",
+        address: "Valavan Academy, Tirupattur / Vellore District, Tamil Nadu, India",
+        workingHours: "Monday - Saturday: 9:00 AM - 7:00 PM IST",
+      }
+    };
   }
 }

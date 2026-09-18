@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { CMSCertification } from "@/lib/cms";
+import { CMSCertification, CMSSectionMeta } from "@/lib/cms";
 
 const CERTS = [
   { id: "c1", src: "/assets/certifications/2.webp", alt: "Valavan Academy Certification" },
@@ -29,9 +29,10 @@ const CERTS = [
 
 interface CertificationsSectionProps {
   certifications?: CMSCertification[];
+  meta?: CMSSectionMeta;
 }
 
-export default function CertificationsSection({ certifications }: CertificationsSectionProps = {}) {
+export default function CertificationsSection({ certifications, meta }: CertificationsSectionProps = {}) {
   const items = (certifications && certifications.length > 0)
     ? certifications.map((c, idx) => ({
         id: c.id || `c-${idx}`,
@@ -82,206 +83,192 @@ export default function CertificationsSection({ certifications }: Certifications
     setIsPlaying(false);
   };
 
-  const lbPrev = () =>
-    setLightboxIndex((i) => (i - 1 + total) % total);
-  const lbNext = () =>
-    setLightboxIndex((i) => (i + 1) % total);
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setIsPlaying(true);
+  };
 
-  // Responsive card dimensions to ensure zero cut-off on small screens
-  const cardW = isMobile ? 260 : 340;
-  const cardH = isMobile ? 180 : 240;
-  const offsetStep = isMobile ? 180 : 280;
-  const farOffset = isMobile ? 320 : 520;
+  // Keyboard navigation
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") {
+        if (lightboxOpen) setLightboxIndex((i) => (i + 1) % total);
+        else next();
+      }
+      if (e.key === "ArrowLeft") {
+        if (lightboxOpen) setLightboxIndex((i) => (i - 1 + total) % total);
+        else prev();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, next, prev, total]);
+
+  // Positional offset logic
+  const getOffset = (idx: number) => {
+    let diff = idx - activeIndex;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  };
 
   return (
-    <section className="bg-neutral-50 py-10 sm:py-20 md:py-28 overflow-hidden select-none">
-      <Container>
-        {/* Header */}
-        <FadeUp delay={0}>
-          <div className="flex items-center gap-3 mb-3 sm:mb-4">
-            <div className="w-8 h-[2px] bg-[#1748BB]" />
-            <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-              Certifications
-            </span>
-          </div>
-        </FadeUp>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-14 items-start mb-6 sm:mb-14">
-          <FadeUp delay={0.05}>
+    <section
+      className="bg-white py-14 sm:py-24 relative overflow-hidden"
+      onMouseEnter={() => setIsPlaying(false)}
+      onMouseLeave={() => !lightboxOpen && setIsPlaying(true)}
+    >
+      {/* Background ambient lighting */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#1748BB]/5 rounded-full blur-[130px] pointer-events-none"
+        aria-hidden
+      />
+
+      <Container className="relative z-10">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
+          <FadeUp delay={0}>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-8 h-[2px] bg-[#1748BB]" />
+              <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
+                {meta?.badge || "STUDENT ACHIEVEMENTS"}
+              </span>
+              <div className="w-8 h-[2px] bg-[#1748BB]" />
+            </div>
+          </FadeUp>
+
+          <FadeUp delay={0.1}>
             <h2
-              className="font-display font-bold text-[#1E2026] leading-[1.18] sm:leading-[1.06] tracking-tight"
-              style={{ fontSize: "clamp(26px, 4vw, 54px)" }}
+              className="font-display font-bold text-[#1E2026] tracking-tight leading-[1.04] sm:leading-[1.06]"
+              style={{ fontSize: "clamp(30px, 4.8vw, 60px)" }}
             >
-              More Than{" "}
-              <span className="text-[#1748BB]">A Certificate.</span>
+              {meta?.headline_prefix ? (
+                <>
+                  {meta.headline_prefix}{" "}
+                  <span className="text-[#1748BB]">{meta.headline_highlight || "Certificate."}</span>
+                </>
+              ) : meta?.heading && /Certificate/i.test(meta.heading) ? (
+                <>
+                  {meta.heading.replace(/Certificate\.?/i, "").trim()}{" "}
+                  <span className="text-[#1748BB]">
+                    {meta.heading.match(/Certificate\.?/i)?.[0] || "Certificate."}
+                  </span>
+                </>
+              ) : (
+                <>
+                  {meta?.heading || "More than a"}{" "}
+                  <span className="text-[#1748BB]">Certificate.</span>
+                </>
+              )}
             </h2>
           </FadeUp>
-          <FadeUp delay={0.1}>
-            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal pt-1">
-              Every learner who completes a Valavan Academy program earns a
-              certificate that represents real skills, real projects, and real
-              growth — not just attendance.
+
+          <FadeUp delay={0.15}>
+            <p className="font-sans text-sm sm:text-base md:text-lg text-neutral-600 mt-3 font-normal max-w-xl mx-auto">
+              {meta?.description || "Skill Verification for High-Income Careers. Every certificate validates a real-world portfolio deliverable."}
             </p>
           </FadeUp>
         </div>
 
-        {/* ── 3D Physical Spatial Gallery ── */}
-        <div
-          className="relative mx-auto flex items-center justify-center"
-          style={{
-            height: cardH + (isMobile ? 50 : 80),
-            maxWidth: "100vw",
-            perspective: 1400,
-            transformStyle: "preserve-3d",
-          }}
-        >
-          {items.map((cert, idx) => {
-            let diff = (idx - activeIndex + total) % total;
-            if (diff > total / 2) diff -= total;
+        {/* 3D Spatial Carousel Stage */}
+        <div className="relative w-full h-[230px] xs:h-[270px] sm:h-[360px] md:h-[440px] flex items-center justify-center select-none perspective-[1200px]">
+          {items.map((item, idx) => {
+            const offset = getOffset(idx);
+            const isCenter = offset === 0;
+            const isVisible = Math.abs(offset) <= 2;
 
-            const isCenter = diff === 0;
+            if (!isVisible) return null;
 
-            let xOffset = 0;
-            let yOffset = 0;
-            let scale = 1;
-            let opacity = 0;
-            let rotateY = 0;
-            let zIndex = 0;
-            let pointerEvents: "auto" | "none" = "none";
-
-            if (diff === 0) {
-              xOffset = 0;
-              yOffset = isMobile ? -8 : -16;
-              scale = isMobile ? 1.04 : 1.12;
-              opacity = 1;
-              rotateY = 0;
-              zIndex = 20;
-              pointerEvents = "auto";
-            } else if (diff === -1) {
-              xOffset = -offsetStep;
-              yOffset = isMobile ? 6 : 12;
-              scale = isMobile ? 0.82 : 0.86;
-              opacity = 0.75;
-              rotateY = 12;
-              zIndex = 8;
-              pointerEvents = "auto";
-            } else if (diff === 1) {
-              xOffset = offsetStep;
-              yOffset = isMobile ? 6 : 12;
-              scale = isMobile ? 0.82 : 0.86;
-              opacity = 0.75;
-              rotateY = -12;
-              zIndex = 8;
-              pointerEvents = "auto";
-            } else if (diff === -2) {
-              xOffset = -farOffset;
-              yOffset = isMobile ? 16 : 28;
-              scale = 0.68;
-              opacity = isMobile ? 0 : 0.45;
-              rotateY = 20;
-              zIndex = 3;
-              pointerEvents = isMobile ? "none" : "auto";
-            } else if (diff === 2) {
-              xOffset = farOffset;
-              yOffset = isMobile ? 16 : 28;
-              scale = 0.68;
-              opacity = isMobile ? 0 : 0.45;
-              rotateY = -20;
-              zIndex = 3;
-              pointerEvents = isMobile ? "none" : "auto";
-            } else if (diff < -2) {
-              xOffset = -760;
-              yOffset = 45;
-              scale = 0.50;
-              opacity = 0;
-              rotateY = 30;
-              zIndex = 0;
-            } else {
-              xOffset = 760;
-              yOffset = 45;
-              scale = 0.50;
-              opacity = 0;
-              rotateY = -30;
-              zIndex = 0;
-            }
+            // Responsive geometry offsets
+            const xShift = isMobile ? offset * 115 : offset * 210;
+            const zShift = -Math.abs(offset) * (isMobile ? 70 : 130);
+            const rotateY = offset * (isMobile ? -14 : -18);
+            const scale = 1 - Math.abs(offset) * (isMobile ? 0.16 : 0.14);
+            const opacity = 1 - Math.abs(offset) * 0.28;
+            const zIndex = 20 - Math.abs(offset);
 
             return (
               <motion.div
-                key={cert.id}
-                className="absolute cursor-pointer select-none"
+                key={item.id}
+                className="absolute cursor-pointer"
+                style={{
+                  zIndex,
+                  transformStyle: "preserve-3d",
+                }}
                 animate={{
-                  x: xOffset,
-                  y: yOffset,
+                  x: xShift,
+                  z: zShift,
+                  rotateY,
                   scale,
                   opacity,
-                  rotateY,
-                  zIndex,
                 }}
                 transition={{
-                  duration: 0.75,
-                  ease: [0.34, 1.35, 0.64, 1], // Smooth pop-up arc easing
-                }}
-                style={{
-                  width: cardW,
-                  transformStyle: "preserve-3d",
-                  pointerEvents,
+                  duration: 0.55,
+                  ease: [0.25, 1, 0.5, 1],
                 }}
                 onClick={() => {
-                  if (isCenter) {
-                    openLightbox(idx);
-                  } else {
-                    setActiveIndex(idx);
-                  }
+                  if (isCenter) openLightbox(idx);
+                  else setActiveIndex(idx);
                 }}
               >
                 <div
-                  className={`relative rounded-2xl overflow-hidden shadow-xl transition-all duration-500 bg-white ${
+                  className={`relative rounded-xl sm:rounded-2xl overflow-hidden shadow-xl transition-all duration-300 ${
                     isCenter
-                      ? "ring-2 ring-[#1748BB] ring-offset-2 sm:ring-offset-4 ring-offset-neutral-50 shadow-[0_15px_45px_rgba(23,72,187,0.25)]"
-                      : "hover:ring-1 hover:ring-neutral-300 opacity-90"
+                      ? "ring-2 sm:ring-4 ring-[#1748BB] shadow-[0_16px_50px_rgba(23,72,187,0.3)]"
+                      : "ring-1 ring-neutral-200 shadow-md hover:ring-[#1748BB]/40"
                   }`}
-                  style={{ width: cardW, height: cardH }}
+                  style={{
+                    width: isMobile ? "200px" : "380px",
+                    maxWidth: isMobile ? "68vw" : "380px",
+                    aspectRatio: "16 / 12",
+                  }}
                 >
                   <Image
-                    src={cert.src}
-                    alt={cert.alt}
+                    src={item.src}
+                    alt={item.alt}
                     fill
+                    sizes="(max-width: 640px) 220px, 380px"
                     className="object-cover"
-                    sizes="(max-width: 640px) 270px, (max-width: 768px) 340px, 450px"
+                    priority={idx === 0}
                   />
-                  {isCenter && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end justify-end p-2.5 sm:p-3">
-                      <span className="bg-black/70 backdrop-blur-sm text-white font-sans text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium shadow-md">
-                        Click to expand
-                      </span>
-                    </div>
-                  )}
+
+                  {/* Glass shimmer overlay */}
+                  <div
+                    className={`absolute inset-0 transition-opacity duration-300 ${
+                      isCenter
+                        ? "bg-gradient-to-t from-black/25 via-transparent to-transparent"
+                        : "bg-black/20 hover:bg-black/5"
+                    }`}
+                  />
                 </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Navigation & Controls */}
-        <div className="flex items-center justify-center gap-5 sm:gap-6 mt-6 sm:mt-8">
+        {/* Carousel Controls */}
+        <div className="flex items-center justify-center gap-4 mt-6 sm:mt-10">
           <button
             onClick={prev}
             aria-label="Previous certificate"
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-neutral-300 bg-white hover:border-[#1748BB] hover:text-[#1748BB] flex items-center justify-center transition-all duration-200 shadow-sm cursor-pointer"
+            className="w-10 h-10 rounded-full border border-neutral-200 bg-white hover:bg-[#1748BB] text-neutral-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-sm hover:scale-105"
           >
-            <ChevronLeft size={17} />
+            <ChevronLeft size={20} />
           </button>
 
-          {/* Dots */}
-          <div className="flex gap-1.5 sm:gap-2">
+          {/* Dots Indicator */}
+          <div className="flex items-center gap-1.5">
             {items.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
-                aria-label={`Certificate ${i + 1}`}
-                className={`rounded-full transition-all duration-300 cursor-pointer ${
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   i === activeIndex
-                    ? "w-5 sm:w-6 h-1.5 sm:h-2 bg-[#1748BB]"
-                    : "w-1.5 sm:w-2 h-1.5 sm:h-2 bg-neutral-300 hover:bg-neutral-400"
+                    ? "w-6 bg-[#1748BB]"
+                    : "w-2 bg-neutral-300 hover:bg-neutral-400"
                 }`}
               />
             ))}
@@ -290,67 +277,47 @@ export default function CertificationsSection({ certifications }: Certifications
           <button
             onClick={next}
             aria-label="Next certificate"
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-neutral-300 bg-white hover:border-[#1748BB] hover:text-[#1748BB] flex items-center justify-center transition-all duration-200 shadow-sm cursor-pointer"
+            className="w-10 h-10 rounded-full border border-neutral-200 bg-white hover:bg-[#1748BB] text-neutral-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer shadow-sm hover:scale-105"
           >
-            <ChevronRight size={17} />
+            <ChevronRight size={20} />
           </button>
         </div>
+
       </Container>
 
-      {/* ── Lightbox Modal ── */}
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
-            onClick={() => {
-              setLightboxOpen(false);
-              setIsPlaying(true);
-            }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={closeLightbox}
           >
+            <button
+              onClick={closeLightbox}
+              aria-label="Close image modal"
+              className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all duration-200 z-50 cursor-pointer"
+            >
+              <X size={24} />
+            </button>
+
             <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.85, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-full max-w-4xl aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl bg-neutral-900"
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative max-w-4xl w-full max-h-[85vh] aspect-[16/12] rounded-2xl overflow-hidden shadow-2xl ring-2 ring-white/20"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={items[lightboxIndex]?.src || CERTS[0].src}
-                alt={items[lightboxIndex]?.alt || "Certificate"}
+                src={items[lightboxIndex].src}
+                alt={items[lightboxIndex].alt}
                 fill
-                className="object-contain"
-                sizes="(max-width: 1024px) 95vw, 900px"
+                sizes="(max-width: 1024px) 90vw, 1000px"
+                className="object-contain bg-black/40"
               />
-              {/* Close */}
-              <button
-                onClick={() => {
-                  setLightboxOpen(false);
-                  setIsPlaying(true);
-                }}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors cursor-pointer"
-                aria-label="Close lightbox"
-              >
-                <X size={20} />
-              </button>
-              {/* Prev/Next in lightbox */}
-              <button
-                onClick={lbPrev}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors cursor-pointer"
-                aria-label="Previous"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                onClick={lbNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-black/90 transition-colors cursor-pointer"
-                aria-label="Next"
-              >
-                <ChevronRight size={20} />
-              </button>
             </motion.div>
           </motion.div>
         )}

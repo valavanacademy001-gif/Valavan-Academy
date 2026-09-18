@@ -56,52 +56,61 @@ const ECOSYSTEM_STEPS = [
   },
 ];
 
-export default function CommunityPage() {
+import { getCommunityPageData, getSectionVisibilityMap } from "@/lib/cms";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function CommunityPage() {
+  const [communityData, visibilityMap] = await Promise.all([
+    getCommunityPageData(),
+    getSectionVisibilityMap("community"),
+  ]);
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Hero Section ── */}
-      <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">
-        {/* Ambient Grid Pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.035] pointer-events-none"
-          style={{
-            backgroundImage: "radial-gradient(#1748BB 1.2px, transparent 1.2px)",
-            backgroundSize: "28px 28px",
-          }}
-          aria-hidden
-        />
-        <div
-          className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#1748BB]/6 rounded-full blur-3xl pointer-events-none"
-          aria-hidden
-        />
+      {visibilityMap.hero !== false && (
+        <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">
+          {/* Ambient Grid Pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.035] pointer-events-none"
+            style={{
+              backgroundImage: "radial-gradient(#1748BB 1.2px, transparent 1.2px)",
+              backgroundSize: "28px 28px",
+            }}
+            aria-hidden
+          />
+          <div
+            className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#1748BB]/6 rounded-full blur-3xl pointer-events-none"
+            aria-hidden
+          />
 
-        <Container className="relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            {/* Kicker */}
-            <div className="flex items-center justify-center gap-3 mb-4 sm:mb-5">
-              <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
-              <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-bold">
-                Ecosystem & Communities
-              </span>
-              <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+          <Container className="relative z-10">
+            <div className="max-w-3xl mx-auto text-center">
+              {/* Kicker */}
+              <div className="flex items-center justify-center gap-3 mb-4 sm:mb-5">
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+                <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-bold">
+                  {communityData.eyebrow}
+                </span>
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+              </div>
+
+              <h1
+                className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.06] tracking-tight mb-5"
+                style={{ fontSize: "clamp(34px, 5vw, 62px)" }}
+              >
+                {communityData.heading}
+              </h1>
+
+              <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal max-w-2xl mx-auto">
+                {communityData.description}
+              </p>
             </div>
-
-            <h1
-              className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.06] tracking-tight mb-5"
-              style={{ fontSize: "clamp(34px, 5vw, 62px)" }}
-            >
-              Connect, Collaborate & <br className="hidden sm:block" />
-              <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Grow Together.
-              </span>
-            </h1>
-
-            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal max-w-2xl mx-auto">
-              Explore our two dedicated platforms — <strong>TNCC</strong> for creative peer learning and <strong>THADAM</strong> for verified professional business networking and client referrals.
-            </p>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      )}
 
       {/* ── 02 Two Master Community Cards (Side-by-Side White Elevated Boxes) ── */}
       <section className="py-12 sm:py-20 bg-[#FBFDFF] relative z-10">

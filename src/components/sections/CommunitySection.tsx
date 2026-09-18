@@ -14,16 +14,24 @@ import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import CountUp from "@/components/ui/CountUp";
 import { EXTERNAL_URLS } from "@/data/site.config";
+import { CMSSectionMeta } from "@/lib/cms";
 
-const COMMUNITY_STATS = [
+const DEFAULT_COMMUNITY_STATS = [
   { target: 40, suffix: "K+", label: "Community Members" },
   { target: 100, suffix: "+", label: "Workshops Held" },
   { target: 5, suffix: "K+", label: "Students Trained" },
 ];
 
-export default function CommunitySection() {
+interface CommunitySectionProps {
+  meta?: CMSSectionMeta;
+}
+
+export default function CommunitySection({ meta }: CommunitySectionProps = {}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  const ctaText = meta?.primaryButtonText || "Join the Community";
+  const ctaUrl = meta?.primaryButtonUrl || EXTERNAL_URLS.community;
 
   return (
     <section
@@ -53,16 +61,22 @@ export default function CommunitySection() {
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
                 <div className="w-8 h-[2px] bg-white/40" />
                 <span className="font-sans text-xs tracking-[0.25em] uppercase text-white/70 font-semibold">
-                  Community
+                  {meta?.badge || "Community"}
                 </span>
               </div>
               <h2
                 className="font-display font-bold text-white leading-[1.04] sm:leading-[1.0] tracking-tight"
                 style={{ fontSize: "clamp(28px, 4.8vw, 64px)" }}
               >
-                You Don&apos;t Have
-                <br />
-                to Learn Alone.
+                {meta?.heading ? (
+                  meta.heading
+                ) : (
+                  <>
+                    You Don&apos;t Have
+                    <br />
+                    to Learn Alone.
+                  </>
+                )}
               </h2>
             </motion.div>
 
@@ -73,9 +87,7 @@ export default function CommunitySection() {
               className="font-sans text-sm sm:text-base md:text-lg leading-relaxed font-normal max-w-xl"
               style={{ color: "#BACFFF" }}
             >
-              Join the Tamil Nadu Creators Club — a thriving community of
-              designers, creators, and digital professionals learning, sharing,
-              and growing together. Connect, collaborate, and create.
+              {meta?.description || "Join the Tamil Nadu Creators Club — a thriving community of designers, creators, and digital professionals learning, sharing, and growing together. Connect, collaborate, and create."}
             </motion.p>
 
             <motion.div
@@ -85,14 +97,14 @@ export default function CommunitySection() {
               className="flex flex-wrap gap-4"
             >
               <a
-                href={EXTERNAL_URLS.community}
+                href={ctaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
                 className="group inline-flex items-center gap-2 bg-white !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-7 py-3.5 rounded-full hover:bg-[#F0F5FF] hover:scale-105 transition-all duration-200 shadow-lg cursor-pointer"
               >
                 <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
-                  Join the Community
+                  {ctaText}
                 </span>
                 <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold group-hover:translate-x-1 transition-transform">
                   →
@@ -110,10 +122,10 @@ export default function CommunitySection() {
             </motion.div>
           </div>
 
-          {/* Right — Stats Cards with Stacking Deck on Mobile & 2-Col Grid on Desktop */}
+          {/* Right — Stats Cards */}
           <div className="lg:col-span-5 pt-4 lg:pt-0">
             <div className="flex flex-col lg:grid lg:grid-cols-1 lg:gap-5 pb-8 lg:pb-0">
-              {COMMUNITY_STATS.map((stat, i) => {
+              {DEFAULT_COMMUNITY_STATS.map((stat, i) => {
                 const topOffset = 85 + i * 14;
                 const zIndex = 10 + i * 10;
                 return (
