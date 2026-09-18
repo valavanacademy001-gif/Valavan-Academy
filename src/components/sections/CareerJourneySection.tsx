@@ -46,6 +46,34 @@ interface CareerJourneySectionProps {
 }
 
 export default function CareerJourneySection({ meta }: CareerJourneySectionProps = {}) {
+  const steps = [
+    {
+      step: meta?.step_1_number || "01",
+      title: meta?.step_1_title || "START",
+      description: meta?.step_1_desc || "Zero experience, big ambition",
+    },
+    {
+      step: meta?.step_2_number || "02",
+      title: meta?.step_2_title || "LEARN",
+      description: meta?.step_2_desc || "Build skills in Tamil",
+    },
+    {
+      step: meta?.step_3_number || "03",
+      title: meta?.step_3_title || "PRACTICE",
+      description: meta?.step_3_desc || "Real briefs, live reviews",
+    },
+    {
+      step: meta?.step_4_number || "04",
+      title: meta?.step_4_title || "PORTFOLIO",
+      description: meta?.step_4_desc || "Showcase your best work",
+    },
+    {
+      step: meta?.step_5_number || "05",
+      title: meta?.step_5_title || "CAREER",
+      description: meta?.step_5_desc || "Freelance, hired, or studio",
+    },
+  ];
+
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -53,10 +81,10 @@ export default function CareerJourneySection({ meta }: CareerJourneySectionProps
   useEffect(() => {
     if (isHovered) return;
     const interval = setInterval(() => {
-      setActiveStepIndex((prev) => (prev + 1) % TIMELINE_STEPS.length);
+      setActiveStepIndex((prev) => (prev + 1) % steps.length);
     }, 1200);
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, steps.length]);
 
   return (
     <section className="bg-white text-[#1E2026] py-10 sm:py-18 md:py-24 relative overflow-hidden border-b border-neutral-100">
@@ -67,7 +95,7 @@ export default function CareerJourneySection({ meta }: CareerJourneySectionProps
             <div className="flex items-center justify-center gap-3 mb-3">
               <div className="w-8 h-[2px] bg-[#1748BB]" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                {meta?.badge || "Career Journey"}
+                {meta?.badge || "CAREER BLUEPRINT"}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB]" />
             </div>
@@ -78,11 +106,21 @@ export default function CareerJourneySection({ meta }: CareerJourneySectionProps
               className="font-display font-bold text-[#1E2026] leading-[1.04] sm:leading-[1.08] tracking-tight"
               style={{ fontSize: "clamp(30px, 4.2vw, 54px)" }}
             >
-              {meta?.heading ? (
-                <span>{meta.heading}</span>
+              {meta?.headline_prefix ? (
+                <>
+                  {meta.headline_prefix}{" "}
+                  <span className="text-[#1748BB]">{meta.headline_highlight || "Creative Career."}</span>
+                </>
+              ) : meta?.heading && /Creative Career/i.test(meta.heading) ? (
+                <>
+                  {meta.heading.replace(/Creative Career\.?/i, "").trim()}{" "}
+                  <span className="text-[#1748BB]">
+                    {meta.heading.match(/Creative Career\.?/i)?.[0] || "Creative Career."}
+                  </span>
+                </>
               ) : (
                 <>
-                  Your Path to a{" "}
+                  {meta?.heading || "Your Path to a"}{" "}
                   <span className="text-[#1748BB]">Creative Career.</span>
                 </>
               )}
@@ -107,13 +145,13 @@ export default function CareerJourneySection({ meta }: CareerJourneySectionProps
             <motion.div
               className="hidden md:block absolute top-[28px] left-[5%] h-[2.5px] bg-[#1748BB] shadow-[0_0_10px_rgba(23,72,187,0.8)] z-0 transition-all duration-500"
               style={{
-                width: `${(activeStepIndex / (TIMELINE_STEPS.length - 1)) * 90}%`,
+                width: `${(activeStepIndex / (steps.length - 1)) * 90}%`,
               }}
               aria-hidden
             />
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4 relative z-10">
-              {TIMELINE_STEPS.map((item, idx) => {
+              {steps.map((item, idx) => {
                 const isActive = idx === activeStepIndex;
 
                 return (

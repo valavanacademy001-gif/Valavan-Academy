@@ -21,7 +21,7 @@ import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import InteractiveGridBackground from "@/components/ui/InteractiveGridBackground";
 
-import { CMSProgram } from "@/lib/cms";
+import { CMSProgram, CMSSectionMeta } from "@/lib/cms";
 
 interface ToolItem {
   name: string;
@@ -101,19 +101,23 @@ const PROGRAMS: ProgramItem[] = [
 
 interface ProgramsSectionProps {
   programs?: CMSProgram[];
+  meta?: CMSSectionMeta;
 }
 
-export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSectionProps = {}) {
+export default function ProgramsSection({ programs: cmsPrograms, meta }: ProgramsSectionProps = {}) {
   // Merge CMS programs with existing card presentation structure
   const displayPrograms: ProgramItem[] = (cmsPrograms && cmsPrograms.length > 0)
     ? cmsPrograms.map((cmsP, idx) => {
         const isGD = cmsP.slug.includes("graphic-design");
         const defaultFallback = isGD ? PROGRAMS[0] : (PROGRAMS[1] || PROGRAMS[0]);
+        const customBadge = isGD ? meta?.program_1_badge : meta?.program_2_badge;
+        const customAccent = isGD ? meta?.program_1_accent : meta?.program_2_accent;
+
         return {
           id: cmsP.slug,
           number: String(idx + 1).padStart(2, "0"),
-          badge: isGD ? "90 Days Program" : "180 Days Program",
-          badgeAccent: isGD ? "Most Popular" : "Flagship Track",
+          badge: customBadge || (isGD ? "90 Days Program" : "180 Days Program"),
+          badgeAccent: customAccent || (isGD ? "Most Popular" : "Flagship Track"),
           title: cmsP.title || defaultFallback.title,
           subtitle: cmsP.subtitle || defaultFallback.subtitle,
           description: cmsP.description || defaultFallback.description,
@@ -123,7 +127,7 @@ export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSecti
           image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
           href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
           tools: isGD ? DEFAULT_TOOLS_GD : DEFAULT_TOOLS_FS,
-          ctaLabel: "View Details",
+          ctaLabel: cmsP.cta_text || "View Details",
         };
       })
     : PROGRAMS;
@@ -147,7 +151,7 @@ export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSecti
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#1748BB]" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                Our Programs
+                {meta?.badge || "Our Programs"}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB]" />
             </div>
@@ -159,15 +163,30 @@ export default function ProgramsSection({ programs: cmsPrograms }: ProgramsSecti
               className="font-display font-bold text-[#1E2026] leading-[1.02] sm:leading-[1.06] tracking-tight mb-3.5"
               style={{ fontSize: "clamp(32px, 4.5vw, 54px)" }}
             >
-              Choose Your{" "}
-              <span className="text-[#1748BB]">Learning Path.</span>
+              {meta?.headline_prefix ? (
+                <>
+                  {meta.headline_prefix}{" "}
+                  <span className="text-[#1748BB]">{meta.headline_highlight || "Learning Path."}</span>
+                </>
+              ) : meta?.heading && /Learning Path/i.test(meta.heading) ? (
+                <>
+                  {meta.heading.replace(/Learning Path\.?/i, "").trim()}{" "}
+                  <span className="text-[#1748BB]">
+                    {meta.heading.match(/Learning Path\.?/i)?.[0] || "Learning Path."}
+                  </span>
+                </>
+              ) : (
+                <>
+                  {meta?.heading || "Choose Your"}{" "}
+                  <span className="text-[#1748BB]">Learning Path.</span>
+                </>
+              )}
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.1}>
             <p className="font-sans text-neutral-600 text-base sm:text-lg leading-relaxed font-normal">
-              Two programs. One goal — to give you the creative digital skills
-              that open doors to careers, freelancing, and your own brand.
+              {meta?.description || "Two programs. One goal — to give you the creative digital skills that open doors to careers, freelancing, and your own brand."}
             </p>
           </FadeUp>
         </div>

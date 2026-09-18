@@ -398,14 +398,76 @@ export async function getLearnCreateGrowData(): Promise<CMSSectionMeta> {
     const map = await getSectionFieldMap("home", "learn_create_grow");
     return {
       badge: map.badge || "LEARN • PRACTICE • CREATE • GROW",
+      headline_prefix: map.headline_prefix || "Master Creative",
+      headline_highlight: map.headline_highlight || "Digital Skills In Tamil",
       heading: map.heading || "Master Creative Digital Skills In Tamil",
       description: map.description || "Step-by-step career programs engineered to transform beginners into confident creative professionals.",
+      step_1_keyword: map.step_1_keyword || "LEARN",
+      step_1_title: map.step_1_title || "Acquire Skills That Matter",
+      step_1_body: map.step_1_body || "Start from zero. Our Tamil-language curriculum breaks down Graphic Design, Video Editing, Web Design, UI/UX, and AI tools into clear, practical lessons — no jargon, no fluff.",
+      step_2_keyword: map.step_2_keyword || "PRACTICE",
+      step_2_title: map.step_2_title || "Build With Real Briefs",
+      step_2_body: map.step_2_body || "Learning only clicks when you create. Every module comes with real-world project briefs, commercial design challenges, and hands-on exercises guided by experienced mentors.",
+      step_3_keyword: map.step_3_keyword || "CREATE",
+      step_3_title: map.step_3_title || "Build Your Portfolio",
+      step_3_body: map.step_3_body || "Walk away with a professional portfolio of projects. Show potential clients and employers actual work — not theory. Your skills become visible, tangible, and high-converting.",
+      step_4_keyword: map.step_4_keyword || "GROW",
+      step_4_title: map.step_4_title || "Launch Your Career or Business",
+      step_4_body: map.step_4_body || "Freelance, get hired, or build your own brand. With in-demand digital skills, a portfolio, and community support, you have everything you need to grow on your own terms.",
+      ...map,
     };
   } catch {
     return {
       badge: "LEARN • PRACTICE • CREATE • GROW",
+      headline_prefix: "Master Creative",
+      headline_highlight: "Digital Skills In Tamil",
       heading: "Master Creative Digital Skills In Tamil",
       description: "Step-by-step career programs engineered to transform beginners into confident creative professionals.",
+      step_1_keyword: "LEARN",
+      step_1_title: "Acquire Skills That Matter",
+      step_1_body: "Start from zero. Our Tamil-language curriculum breaks down Graphic Design, Video Editing, Web Design, UI/UX, and AI tools into clear, practical lessons — no jargon, no fluff.",
+      step_2_keyword: "PRACTICE",
+      step_2_title: "Build With Real Briefs",
+      step_2_body: "Learning only clicks when you create. Every module comes with real-world project briefs, commercial design challenges, and hands-on exercises guided by experienced mentors.",
+      step_3_keyword: "CREATE",
+      step_3_title: "Build Your Portfolio",
+      step_3_body: "Walk away with a professional portfolio of projects. Show potential clients and employers actual work — not theory. Your skills become visible, tangible, and high-converting.",
+      step_4_keyword: "GROW",
+      step_4_title: "Launch Your Career or Business",
+      step_4_body: "Freelance, get hired, or build your own brand. With in-demand digital skills, a portfolio, and community support, you have everything you need to grow on your own terms.",
+    };
+  }
+}
+
+/**
+ * Fetch Programs Section Header Meta Data
+ */
+export async function getProgramsSectionData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "programs");
+    return {
+      badge: map.badge || "OUR PROGRAMS",
+      headline_prefix: map.headline_prefix || "Choose Your",
+      headline_highlight: map.headline_highlight || "Learning Path.",
+      heading: map.heading || "Choose Your Learning Path.",
+      description: map.description || "Two programs. One goal — to give you the creative digital skills that open doors to careers, freelancing, and your own brand.",
+      program_1_badge: map.program_1_badge || "90 Days Program",
+      program_1_accent: map.program_1_accent || "Most Popular",
+      program_2_badge: map.program_2_badge || "180 Days Program",
+      program_2_accent: map.program_2_accent || "Flagship Track",
+      ...map,
+    };
+  } catch {
+    return {
+      badge: "OUR PROGRAMS",
+      headline_prefix: "Choose Your",
+      headline_highlight: "Learning Path.",
+      heading: "Choose Your Learning Path.",
+      description: "Two programs. One goal — to give you the creative digital skills that open doors to careers, freelancing, and your own brand.",
+      program_1_badge: "90 Days Program",
+      program_1_accent: "Most Popular",
+      program_2_badge: "180 Days Program",
+      program_2_accent: "Flagship Track",
     };
   }
 }
@@ -418,14 +480,49 @@ export async function getCareerJourneyData(): Promise<CMSSectionMeta> {
     const map = await getSectionFieldMap("home", "career_journey");
     return {
       badge: map.badge || "CAREER BLUEPRINT",
+      headline_prefix: map.headline_prefix || "Your Path to a",
+      headline_highlight: map.headline_highlight || "Creative Career.",
       heading: map.heading || "Your Path to a Creative Career.",
       description: map.description || "A structured 5-step milestone journey from zero experience to a thriving creative career.",
+      step_1_number: map.step_1_number || "01",
+      step_1_title: map.step_1_title || "START",
+      step_1_desc: map.step_1_desc || "Zero experience, big ambition",
+      step_2_number: map.step_2_number || "02",
+      step_2_title: map.step_2_title || "LEARN",
+      step_2_desc: map.step_2_desc || "Build skills in Tamil",
+      step_3_number: map.step_3_number || "03",
+      step_3_title: map.step_3_title || "PRACTICE",
+      step_3_desc: map.step_3_desc || "Real briefs, live reviews",
+      step_4_number: map.step_4_number || "04",
+      step_4_title: map.step_4_title || "PORTFOLIO",
+      step_4_desc: map.step_4_desc || "Showcase your best work",
+      step_5_number: map.step_5_number || "05",
+      step_5_title: map.step_5_title || "CAREER",
+      step_5_desc: map.step_5_desc || "Freelance, hired, or studio",
+      ...map,
     };
   } catch {
     return {
       badge: "CAREER BLUEPRINT",
+      headline_prefix: "Your Path to a",
+      headline_highlight: "Creative Career.",
       heading: "Your Path to a Creative Career.",
       description: "A structured 5-step milestone journey from zero experience to a thriving creative career.",
+      step_1_number: "01",
+      step_1_title: "START",
+      step_1_desc: "Zero experience, big ambition",
+      step_2_number: "02",
+      step_2_title: "LEARN",
+      step_2_desc: "Build skills in Tamil",
+      step_3_number: "03",
+      step_3_title: "PRACTICE",
+      step_3_desc: "Real briefs, live reviews",
+      step_4_number: "04",
+      step_4_title: "PORTFOLIO",
+      step_4_desc: "Showcase your best work",
+      step_5_number: "05",
+      step_5_title: "CAREER",
+      step_5_desc: "Freelance, hired, or studio",
     };
   }
 }
@@ -437,15 +534,20 @@ export async function getSkillStackData(): Promise<CMSSectionMeta> {
   try {
     const map = await getSectionFieldMap("home", "skill_stack");
     return {
-      badge: map.badge || "TOOL MASTERY",
-      heading: map.heading || "Master the Industry Standard Tools.",
-      description: map.description || "Hands-on practical training with the most demanded creative and AI software.",
+      badge: map.badge || "Power of Stacking",
+      headline_prefix: map.headline_prefix || "One Skill Is Good.",
+      headline_highlight: map.headline_highlight || "A Skill Stack Is Powerful.",
+      heading: map.heading || "One Skill Is Good. A Skill Stack Is Powerful.",
+      description: map.description || "Scroll down to watch how combining Design, Video, Web, and AI gradually stacks together into one complete, high-demand Creator.",
+      ...map,
     };
   } catch {
     return {
-      badge: "TOOL MASTERY",
-      heading: "Master the Industry Standard Tools.",
-      description: "Hands-on practical training with the most demanded creative and AI software.",
+      badge: "Power of Stacking",
+      headline_prefix: "One Skill Is Good.",
+      headline_highlight: "A Skill Stack Is Powerful.",
+      heading: "One Skill Is Good. A Skill Stack Is Powerful.",
+      description: "Scroll down to watch how combining Design, Video, Web, and AI gradually stacks together into one complete, high-demand Creator.",
     };
   }
 }
@@ -458,6 +560,8 @@ export async function getCommunitySectionData(): Promise<CMSSectionMeta> {
     const map = await getSectionFieldMap("home", "community");
     return {
       badge: map.badge || "TAMIL NADU CREATORS CLUB",
+      headline_prefix: map.headline_prefix || "You Don't Have to",
+      headline_highlight: map.headline_highlight || "Learn Alone.",
       heading: map.heading || "You Don't Have to Learn Alone.",
       description: map.description || "Join the Tamil Nadu Creators Club — a thriving community of designers, creators, and digital professionals learning, sharing, and growing together.",
       primaryButtonText: map.cta_button_text || "Join the Community →",
@@ -465,10 +569,13 @@ export async function getCommunitySectionData(): Promise<CMSSectionMeta> {
       stat_members: map.stat_members || "40K+ Community Members",
       stat_workshops: map.stat_workshops || "100+ Workshops Held",
       stat_students: map.stat_students || "5K+ Students Trained",
+      ...map,
     };
   } catch {
     return {
       badge: "TAMIL NADU CREATORS CLUB",
+      headline_prefix: "You Don't Have to",
+      headline_highlight: "Learn Alone.",
       heading: "You Don't Have to Learn Alone.",
       description: "Join the Tamil Nadu Creators Club — a thriving community of designers, creators, and digital professionals learning, sharing, and growing together.",
       primaryButtonText: "Join the Community →",
@@ -487,15 +594,18 @@ export async function getFinalCTAData(): Promise<CMSSectionMeta> {
   try {
     const map = await getSectionFieldMap("home", "cta");
     return {
+      badge: map.badge || "Get Started",
       heading: map.heading || "Your Next Chapter Starts Here.",
       description: map.description || "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
       primaryButtonText: map.primary_button_text || "Explore Courses",
       primaryButtonUrl: map.primary_button_url || "/programs",
       secondaryButtonText: map.secondary_button_text || "Join TNCC Community →",
       secondaryButtonUrl: map.secondary_button_url || "https://tamilnaducreatorsclub.com/",
+      ...map,
     };
   } catch {
     return {
+      badge: "Get Started",
       heading: "Your Next Chapter Starts Here.",
       description: "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
       primaryButtonText: "Explore Courses",

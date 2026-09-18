@@ -72,6 +72,49 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const steps = [
+    {
+      id: "learn",
+      number: "01",
+      keyword: meta?.step_1_keyword || DEFAULT_STEPS[0].keyword,
+      headline: meta?.step_1_title || DEFAULT_STEPS[0].headline,
+      bluePrefix: "Acquire Skills",
+      body: meta?.step_1_body || DEFAULT_STEPS[0].body,
+      tagline: DEFAULT_STEPS[0].tagline,
+      chips: DEFAULT_STEPS[0].chips,
+    },
+    {
+      id: "practice",
+      number: "02",
+      keyword: meta?.step_2_keyword || DEFAULT_STEPS[1].keyword,
+      headline: meta?.step_2_title || DEFAULT_STEPS[1].headline,
+      bluePrefix: "Real Briefs",
+      body: meta?.step_2_body || DEFAULT_STEPS[1].body,
+      tagline: DEFAULT_STEPS[1].tagline,
+      chips: DEFAULT_STEPS[1].chips,
+    },
+    {
+      id: "create",
+      number: "03",
+      keyword: meta?.step_3_keyword || DEFAULT_STEPS[2].keyword,
+      headline: meta?.step_3_title || DEFAULT_STEPS[2].headline,
+      bluePrefix: "Portfolio",
+      body: meta?.step_3_body || DEFAULT_STEPS[2].body,
+      tagline: DEFAULT_STEPS[2].tagline,
+      chips: DEFAULT_STEPS[2].chips,
+    },
+    {
+      id: "grow",
+      number: "04",
+      keyword: meta?.step_4_keyword || DEFAULT_STEPS[3].keyword,
+      headline: meta?.step_4_title || DEFAULT_STEPS[3].headline,
+      bluePrefix: "Launch Your",
+      body: meta?.step_4_body || DEFAULT_STEPS[3].body,
+      tagline: DEFAULT_STEPS[3].tagline,
+      chips: DEFAULT_STEPS[3].chips,
+    },
+  ];
+
   // GSAP ScrollTrigger Desktop & Mobile Pinning with Step Sync
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -109,7 +152,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
   const handleTabClick = (index: number) => {
     setActiveIndex(index);
     if (scrollTriggerRef.current) {
-      const targetProgress = (index + 0.1) / DEFAULT_STEPS.length;
+      const targetProgress = (index + 0.1) / steps.length;
       const scrollPos =
         scrollTriggerRef.current.start +
         targetProgress * (scrollTriggerRef.current.end - scrollTriggerRef.current.start);
@@ -117,7 +160,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
     }
   };
 
-  const step = DEFAULT_STEPS[activeIndex];
+  const step = steps[activeIndex] || steps[0];
 
   return (
     <section
@@ -138,9 +181,9 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
               key={step.keyword}
               initial={{ opacity: 0, scale: 0.94 }}
               animate={{ opacity: 0.85, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.06 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="font-display font-black leading-none tracking-tight select-none"
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.4 }}
+              className="font-display font-black tracking-tighter uppercase select-none opacity-70"
               style={{
                 fontSize: "clamp(120px, 25vw, 340px)",
                 color: "#EFF4FF",
@@ -155,7 +198,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
           
           {/* Top Step Navigation Tabs */}
           <div className="grid grid-cols-4 gap-1.5 sm:flex sm:items-center sm:justify-center sm:gap-3.5 mb-7 sm:mb-12 max-w-xl mx-auto w-full px-1">
-            {DEFAULT_STEPS.map((s, i) => {
+            {steps.map((s, i) => {
               const isCur = i === activeIndex;
               return (
                 <button

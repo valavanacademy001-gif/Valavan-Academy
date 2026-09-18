@@ -33,6 +33,7 @@ import {
   getHeroData,
   getMarqueeRibbonData,
   getLearnCreateGrowData,
+  getProgramsSectionData,
   getPublishedPrograms,
   getCareerJourneyData,
   getSkillStackData,
@@ -49,6 +50,7 @@ export default async function HomePage() {
     heroData,
     marqueeItems,
     learnCreateGrowData,
+    programsData,
     programs,
     careerJourneyData,
     skillStackData,
@@ -62,6 +64,7 @@ export default async function HomePage() {
     getHeroData(),
     getMarqueeRibbonData(),
     getLearnCreateGrowData(),
+    getProgramsSectionData(),
     getPublishedPrograms(),
     getCareerJourneyData(),
     getSkillStackData(),
@@ -85,13 +88,13 @@ export default async function HomePage() {
       {visibilityMap.learn_create_grow !== false && <LearnCreateGrowSection meta={learnCreateGrowData} />}
 
       {/* 04 — Programs (Choose Your Learning Path) */}
-      {visibilityMap.programs !== false && <ProgramsSection programs={programs} />}
+      {visibilityMap.programs !== false && <ProgramsSection programs={programs} meta={programsData} />}
 
       {/* 05 — Career Journey (5-Step Milestone Path) */}
       {visibilityMap.career_journey !== false && <CareerJourneySection meta={careerJourneyData} />}
 
       {/* 06 — Skill Stack Experience */}
-      {visibilityMap.skill_stack !== false && <SkillStackSection />}
+      {visibilityMap.skill_stack !== false && <SkillStackSection meta={skillStackData} />}
 
       {/* 07 — Certifications (arc gallery + lightbox) */}
       {visibilityMap.certifications !== false && (

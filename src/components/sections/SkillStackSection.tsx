@@ -31,6 +31,7 @@ import {
 import Container from "@/components/ui/Container";
 import InteractiveGridBackground from "@/components/ui/InteractiveGridBackground";
 import { initGSAP, gsap, ScrollTrigger } from "@/lib/gsap";
+import { CMSSectionMeta } from "@/lib/cms";
 
 interface ToolItem {
   name: string;
@@ -116,7 +117,11 @@ const SKILLS: SkillData[] = [
   },
 ];
 
-export default function SkillStackSection() {
+interface SkillStackSectionProps {
+  meta?: CMSSectionMeta;
+}
+
+export default function SkillStackSection({ meta }: SkillStackSectionProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
@@ -184,7 +189,7 @@ export default function SkillStackSection() {
               <div className="flex items-center justify-center gap-3 mb-2">
                 <div className="w-8 h-[2px] bg-[#1748BB]" />
                 <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                  Power of Stacking
+                  {meta?.badge || "Power of Stacking"}
                 </span>
                 <div className="w-8 h-[2px] bg-[#1748BB]" />
               </div>
@@ -192,12 +197,27 @@ export default function SkillStackSection() {
                 className="font-display font-bold text-[#1E2026] leading-[1.06] tracking-tight mb-2"
                 style={{ fontSize: "clamp(28px, 3.6vw, 48px)" }}
               >
-                One Skill Is Good.{" "}
-                <span className="text-[#1748BB]">A Skill Stack Is Powerful.</span>
+                {meta?.headline_prefix ? (
+                  <>
+                    {meta.headline_prefix}{" "}
+                    <span className="text-[#1748BB]">{meta.headline_highlight || "A Skill Stack Is Powerful."}</span>
+                  </>
+                ) : meta?.heading && /Skill Stack Is Powerful/i.test(meta.heading) ? (
+                  <>
+                    {meta.heading.replace(/A Skill Stack Is Powerful\.?/i, "").trim()}{" "}
+                    <span className="text-[#1748BB]">
+                      {meta.heading.match(/A Skill Stack Is Powerful\.?/i)?.[0] || "A Skill Stack Is Powerful."}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {meta?.heading || "One Skill Is Good."}{" "}
+                    <span className="text-[#1748BB]">A Skill Stack Is Powerful.</span>
+                  </>
+                )}
               </h2>
               <p className="font-sans text-neutral-600 text-sm max-w-2xl mx-auto leading-relaxed font-normal">
-                Scroll down to watch how combining Design, Video, Web, and AI
-                gradually stacks together into one complete, high-demand Creator.
+                {meta?.description || "Scroll down to watch how combining Design, Video, Web, and AI gradually stacks together into one complete, high-demand Creator."}
               </p>
             </div>
           </Container>
@@ -539,7 +559,7 @@ export default function SkillStackSection() {
           <div className="flex items-center justify-center gap-3 mb-2">
             <div className="w-8 h-[2px] bg-[#1748BB]" />
             <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-              Power of Stacking
+              {meta?.badge || "Power of Stacking"}
             </span>
             <div className="w-8 h-[2px] bg-[#1748BB]" />
           </div>
@@ -547,12 +567,27 @@ export default function SkillStackSection() {
             className="font-display font-bold text-[#1E2026] leading-[1.06] tracking-tight mb-2"
             style={{ fontSize: "clamp(24px, 4.4vw, 48px)" }}
           >
-            One Skill Is Good.{" "}
-            <span className="text-[#1748BB]">A Skill Stack Is Powerful.</span>
+            {meta?.headline_prefix ? (
+              <>
+                {meta.headline_prefix}{" "}
+                <span className="text-[#1748BB]">{meta.headline_highlight || "A Skill Stack Is Powerful."}</span>
+              </>
+            ) : meta?.heading && /Skill Stack Is Powerful/i.test(meta.heading) ? (
+              <>
+                {meta.heading.replace(/A Skill Stack Is Powerful\.?/i, "").trim()}{" "}
+                <span className="text-[#1748BB]">
+                  {meta.heading.match(/A Skill Stack Is Powerful\.?/i)?.[0] || "A Skill Stack Is Powerful."}
+                </span>
+              </>
+            ) : (
+              <>
+                {meta?.heading || "One Skill Is Good."}{" "}
+                <span className="text-[#1748BB]">A Skill Stack Is Powerful.</span>
+              </>
+            )}
           </h2>
           <p className="font-sans text-neutral-600 text-xs sm:text-sm max-w-md mx-auto leading-relaxed font-normal">
-            Scroll down to watch how combining Design, Video, Web, and AI
-            gradually stacks together into one complete, high-demand Creator.
+            {meta?.description || "Scroll down to watch how combining Design, Video, Web, and AI gradually stacks together into one complete, high-demand Creator."}
           </p>
         </div>
 
