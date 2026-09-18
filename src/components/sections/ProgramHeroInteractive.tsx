@@ -81,7 +81,13 @@ export default function ProgramHeroInteractive({
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Extract clean YouTube ID if full URL passed
+  // Extract clean YouTube ID and optional start seconds if full URL passed
+  let startSeconds = 0;
+  if (videoUrl) {
+    const startMatch = videoUrl.match(/[?&]start=(\d+)/);
+    if (startMatch) startSeconds = parseInt(startMatch[1], 10);
+  }
+
   const effectiveYoutubeId = youtubeId
     ? youtubeId
     : videoUrl
@@ -352,7 +358,7 @@ export default function ProgramHeroInteractive({
                     >
                       <iframe
                         ref={iframeRef}
-                        src={`https://www.youtube-nocookie.com/embed/${effectiveYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${effectiveYoutubeId}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+                        src={`https://www.youtube-nocookie.com/embed/${effectiveYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${effectiveYoutubeId}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1${startSeconds ? `&start=${startSeconds}` : ""}`}
                         title={altText}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen

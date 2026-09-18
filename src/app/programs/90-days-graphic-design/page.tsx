@@ -80,7 +80,7 @@ export default async function GraphicDesignProgramPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* ── 01 Interactive Expanding Hero Section ── */}
+      {/* ── 01 Interactive Expanding Hero Section with Video Playback ── */}
       <ProgramHeroInteractive
         badge={heroMap.badge || `Most Popular · ${duration} · Tamil`}
         titlePrefix={titlePrefix}
@@ -93,6 +93,8 @@ export default async function GraphicDesignProgramPage() {
         buttonText={buttonText}
         secondaryButtonText={secondaryButtonText}
         secondaryButtonUrl={secondaryButtonUrl}
+        youtubeId={heroMap.youtube_video_id || heroMap.youtube_id || heroMap.video_id || "BYSgZWZMgMU"}
+        videoUrl={heroMap.video_url || "https://www.youtube.com/embed/BYSgZWZMgMU?si=TeHULtawXhx5PWig&start=2"}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
