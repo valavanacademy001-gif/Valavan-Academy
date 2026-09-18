@@ -195,7 +195,7 @@ export default function VideoTestimonialCarousel({
 
   return (
     <section
-      className={`py-14 sm:py-20 md:py-28 relative bg-white overflow-hidden ${
+      className={`py-14 sm:py-20 md:py-28 relative z-20 bg-white overflow-hidden lg:shadow-[0_-30px_60px_rgba(0,0,0,0.22)] lg:rounded-t-[48px] lg:-mt-8 ${
         noTopShadow ? "" : "border-t border-neutral-100"
       }`}
     >

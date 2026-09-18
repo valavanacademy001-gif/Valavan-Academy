@@ -51,7 +51,7 @@ export default function ProgramDesignJourneyCTASection({
   const effectiveFooterSubtext = supportMap?.footer_subtext || footerSubtext;
 
   return (
-    <section className="py-12 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
+    <section className="py-12 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-b border-neutral-100">
       {/* Soft Ambient Radial Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#1748BB]/6 rounded-full blur-[140px] pointer-events-none"

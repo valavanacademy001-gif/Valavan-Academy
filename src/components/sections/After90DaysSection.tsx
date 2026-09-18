@@ -149,7 +149,7 @@ export default function After90DaysSection({
 
   return (
     <section
-      className="relative py-16 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB]"
+      className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-14 sm:py-20 md:py-24 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB] lg:min-h-screen"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
