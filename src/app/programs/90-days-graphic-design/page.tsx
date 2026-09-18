@@ -10,6 +10,7 @@ import ProgramRoadmapSection from "@/components/sections/ProgramRoadmapSection";
 import PracticalProjectsSection from "@/components/sections/PracticalProjectsSection";
 import After90DaysSection from "@/components/sections/After90DaysSection";
 import VideoTestimonialCarousel from "@/components/sections/VideoTestimonialCarousel";
+import ProgramEnrollmentSupportSection from "@/components/sections/ProgramEnrollmentSupportSection";
 import ProgramDesignJourneyCTASection from "@/components/sections/ProgramDesignJourneyCTASection";
 import ProgramFAQSection from "@/components/sections/ProgramFAQSection";
 import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA";
@@ -139,7 +140,14 @@ export default async function GraphicDesignProgramPage() {
         meta={testimonialsMap}
       />
 
-      {/* ── 07 Pre-FAQ Call to Action (Your Design Journey Starts Today - Editable in CMS) ── */}
+      {/* ── 07 Complete Support & Credit Card EMI Bento Section ── */}
+      <ProgramEnrollmentSupportSection
+        enrollUrl={supportMap.enroll_url || enrollUrl}
+        duration={supportMap.duration_text || duration}
+        seatsText={supportMap.seats_text || "20 Seats Available"}
+      />
+
+      {/* ── 08 Pre-FAQ Call to Action (Your Design Journey Starts Today - Editable in CMS) ── */}
       <ProgramDesignJourneyCTASection
         badge={supportMap.badge || "START YOUR JOURNEY"}
         titlePrefix={supportMap.title_prefix || "Your Design Journey"}
