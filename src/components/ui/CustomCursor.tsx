@@ -3,15 +3,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 /**
- * CustomCursor — Luxury Creative Agency Trailing Cursor
+ * CustomCursor — Fluid Trailing Magnetic Blue Ring
  *
- * Consists of:
- * 1. An inner solid Brand Dot (follows mouse instantly)
- * 2. An outer Trailing Ring/Circle (follows with smooth lerp physics)
- * 3. Expands and reacts smoothly on hovering links, buttons, and cards
+ * Keeps the normal system pointer 100% natural and visible, while rendering
+ * a silky smooth trailing blue ring that floats & drags with inertia behind the mouse.
  */
 export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -23,9 +20,8 @@ export default function CustomCursor() {
       return;
     }
 
-    const dot = dotRef.current;
     const ring = ringRef.current;
-    if (!dot || !ring) return;
+    if (!ring) return;
 
     let mouseX = -100;
     let mouseY = -100;
@@ -44,9 +40,6 @@ export default function CustomCursor() {
         ringX = mouseX;
         ringY = mouseY;
       }
-
-      // Dot follows instantaneously
-      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
     };
 
     const onMouseDown = () => setIsClicking(true);
@@ -61,10 +54,13 @@ export default function CustomCursor() {
       setIsVisible(true);
     };
 
-    // Smooth Lerp loop for the trailing ring (pure transform, no CSS transition conflict)
+    // Silky smooth trailing Lerp loop (0.13 for gentle fluid trailing drag)
     const render = () => {
-      ringX += (mouseX - ringX) * 0.28;
-      ringY += (mouseY - ringY) * 0.28;
+      const deltaX = mouseX - ringX;
+      const deltaY = mouseY - ringY;
+
+      ringX += deltaX * 0.13;
+      ringY += deltaY * 0.13;
 
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
 
@@ -106,34 +102,18 @@ export default function CustomCursor() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none hidden lg:block"
     >
-      {/* 1. Inner Instant Lead Dot (fades smoothly when hovering interactive buttons) */}
-      <div
-        ref={dotRef}
-        className={`fixed top-0 left-0 rounded-full transition-opacity duration-150 will-change-transform ${
-          isVisible && !isHovered ? "opacity-100" : "opacity-0"
-        } w-2 h-2 bg-[#1748BB]`}
-        style={{
-          boxShadow: "0 0 6px rgba(23, 72, 187, 0.4)",
-        }}
-      />
-
-      {/* 2. Outer Smooth Trailing Circle / Ring */}
+      {/* Silky Smooth Trailing Ring (floats behind mouse with fluid drag inertia) */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 rounded-full transition-[width,height,background-color,border-color,opacity] duration-150 ease-out will-change-transform ${
+        className={`fixed top-0 left-0 rounded-full will-change-transform pointer-events-none transition-all duration-200 ease-out ${
           isVisible ? "opacity-100" : "opacity-0"
         } ${
           isHovered
-            ? "w-10 h-10 border-[1.5px] border-[#1748BB] bg-[#1748BB]/15 backdrop-blur-[0.5px]"
+            ? "w-11 h-11 border-[1.5px] border-[#1748BB] bg-[#1748BB]/12 backdrop-blur-[0.5px] shadow-[0_0_16px_rgba(23,72,187,0.3)]"
             : isClicking
-            ? "w-6 h-6 border border-[#1748BB] bg-[#1748BB]/20"
-            : "w-7 h-7 border border-[#1748BB]/50 bg-transparent"
+            ? "w-6 h-6 border-[2px] border-[#1748BB] bg-[#1748BB]/25 shadow-[0_0_10px_rgba(23,72,187,0.4)]"
+            : "w-8 h-8 border-[1.5px] border-[#1748BB]/60 bg-[#1748BB]/5 shadow-[0_0_8px_rgba(23,72,187,0.15)]"
         }`}
-        style={{
-          boxShadow: isHovered
-            ? "0 0 12px rgba(23, 72, 187, 0.25)"
-            : "none",
-        }}
       />
     </div>
   );

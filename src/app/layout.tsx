@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/layout/Footer";
 import SmoothScrollProvider from "@/components/layout/SmoothScrollProvider";
 import ReducedMotionProvider from "@/components/animations/ReducedMotionProvider";
+import CustomCursor from "@/components/ui/CustomCursor";
 import { SITE_CONFIG } from "@/data/site.config";
 
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
@@ -127,6 +128,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <PwaDisableProvider />
+        <CustomCursor />
         <ReducedMotionProvider>
           <SmoothScrollProvider>
             <Navbar />
