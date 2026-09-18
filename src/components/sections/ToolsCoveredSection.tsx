@@ -14,6 +14,8 @@ export interface ToolItem {
 
 interface ToolsCoveredSectionProps {
   title?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
   subtitle?: string;
   badge?: string;
   tools?: ToolItem[];
@@ -31,7 +33,9 @@ const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
 ];
 
 export default function ToolsCoveredSection({
-  title = "Master Industry Standard Creative Tools",
+  title,
+  titlePrefix = "Master Industry Standard",
+  titleHighlight = "Creative Tools",
   subtitle = "Learn the tools used by professional designers, agencies, freelancers and creative businesses worldwide.",
   badge = "How It Works",
   tools = DEFAULT_GRAPHIC_DESIGN_TOOLS,
@@ -49,12 +53,13 @@ export default function ToolsCoveredSection({
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"
               style={{ fontSize: "clamp(28px, 3.8vw, 48px)" }}
             >
-              Master Industry Standard{" "}
+              {titlePrefix}{" "}
               <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Creative Tools
+                {titleHighlight}
               </span>
             </h2>
           </FadeUp>
+
 
           {/* Badge */}
           <FadeUp delay={0.05}>

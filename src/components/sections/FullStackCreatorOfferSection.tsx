@@ -8,10 +8,18 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 
 interface FullStackCreatorOfferSectionProps {
   enrollUrl?: string;
+  durationText?: string;
+  badge?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
 }
 
 export default function FullStackCreatorOfferSection({
   enrollUrl = EXTERNAL_URLS.signup,
+  durationText = "6 Months",
+  badge = "Make Your Next Move Count",
+  titlePrefix = "Your Career",
+  titleHighlight = "Transformation",
 }: FullStackCreatorOfferSectionProps) {
   const features = [
     "Beginner Friendly Structure",

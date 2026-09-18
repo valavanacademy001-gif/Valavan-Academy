@@ -49,73 +49,97 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
-import { getProgramBySlug } from "@/lib/cms";
+import { getProgramBySlug, getGraphicDesignProgramData } from "@/lib/cms";
 
 export default async function GraphicDesignProgramPage() {
-  const cmsProgram = await getProgramBySlug("90-days-graphic-design");
+  const [cmsProgram, cmsData] = await Promise.all([
+    getProgramBySlug("90-days-graphic-design"),
+    getGraphicDesignProgramData(),
+  ]);
 
-  const duration = cmsProgram?.duration || "90 Days";
+  const heroMap = cmsData.hero || {};
+  const toolsMap = cmsData.tools || {};
+  const roadmapMap = cmsData.roadmap || {};
+  const projectsMap = cmsData.projects || {};
+  const outcomesMap = cmsData.outcomes || {};
+  const testimonialsMap = cmsData.testimonials || {};
+  const supportMap = cmsData.support || {};
+  const faqMap = cmsData.faq || {};
+  const stickyMap = cmsData.sticky || {};
+
+  const duration = heroMap.highlight_duration || cmsProgram?.duration || "90 Days";
   const title = cmsProgram?.title || "90 Days Graphic Design Mastery Program";
-  const description = cmsProgram?.description || "A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil.";
-  const imageSrc = cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
-  const enrollUrl = cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const description = heroMap.description || cmsProgram?.description || "A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil.";
+  const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
+  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const communityUrl = heroMap.community_url || EXTERNAL_URLS.community;
 
   const highlights: HighlightItem[] = [
     { iconType: "clock", label: "Duration", value: duration },
-    { iconType: "globe", label: "Language", value: "100% Tamil" },
-    { iconType: "level", label: "Skill Level", value: cmsProgram?.level === "beginner" ? "Beginner to Pro" : "Beginner to Intermediate" },
-    { iconType: "work", label: "Practical Work", value: "10+ Live Projects" },
+    { iconType: "globe", label: "Language", value: heroMap.highlight_language || "100% Tamil" },
+    { iconType: "level", label: "Skill Level", value: heroMap.highlight_level || (cmsProgram?.level === "beginner" ? "Beginner to Pro" : "Beginner to Intermediate") },
+    { iconType: "work", label: "Practical Work", value: heroMap.highlight_projects || "10+ Live Projects" },
   ];
 
-  // Split title if possible into prefix and highlight
-  const titleParts = title.split(" ");
-  const titlePrefix = titleParts.length > 2 ? titleParts.slice(0, -2).join(" ") : titleParts.slice(0, -1).join(" ");
-  const titleHighlight = titleParts.length > 2 ? titleParts.slice(-2).join(" ") : titleParts.slice(-1).join(" ");
+  const titlePrefix = heroMap.title_prefix || "90 Days Graphic Design";
+  const titleHighlight = heroMap.title_highlight || "Mastery Program.";
 
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
-        badge={`Most Popular · ${duration} · Tamil`}
-        titlePrefix={titlePrefix || "90 Days Graphic Design"}
-        titleHighlight={titleHighlight ? `${titleHighlight}.` : "Mastery Program."}
+        badge={heroMap.badge || `Most Popular · ${duration} · Tamil`}
+        titlePrefix={titlePrefix}
+        titleHighlight={titleHighlight}
         description={description}
         highlights={highlights}
         imageSrc={imageSrc}
         altText={title}
         enrollUrl={enrollUrl}
-        communityUrl={EXTERNAL_URLS.community}
+        communityUrl={communityUrl}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
-      <ToolsCoveredSection />
+      <ToolsCoveredSection
+        badge={toolsMap.badge || "MASTER INDUSTRY STANDARD"}
+        titlePrefix={toolsMap.title_prefix || "Creative Tools &"}
+        titleHighlight={toolsMap.title_highlight || "AI Software."}
+        subtitle={toolsMap.description || "Gain practical mastery across industry-standard vector, raster, and AI design tools."}
+      />
 
       {/* ── 03 Creative Interactive Roadmap Section ── */}
       <ProgramRoadmapSection
-        title="90 Days Graphic Design Mastery Roadmap"
-        subtitle="Follow a structured step-by-step journey designed to help you learn, practice, build a portfolio and launch your design career."
-        badge="Structured Curriculum"
+        title={roadmapMap.title_prefix ? `${roadmapMap.title_prefix} ${roadmapMap.title_highlight || ''}` : "90 Days Graphic Design Mastery Roadmap"}
+        subtitle={roadmapMap.description || "Follow a structured step-by-step journey designed to help you learn, practice, build a portfolio and launch your design career."}
+        badge={roadmapMap.badge || "Structured Curriculum"}
       />
 
       {/* ── 04 Practical Projects Section ── */}
-      <PracticalProjectsSection />
+      <PracticalProjectsSection
+        subtitle={projectsMap.description || "Every module includes actual client-level design projects so you graduate with a job-winning portfolio."}
+      />
 
       {/* ── 05 After 90 Days You Can (Full-Width Blue Showcase) ── */}
-      <After90DaysSection enrollUrl={EXTERNAL_URLS.signup} />
+      <After90DaysSection
+        badge={outcomesMap.badge || "CAREER TRANSFORMATION"}
+        title={outcomesMap.title_prefix ? `${outcomesMap.title_prefix} ${outcomesMap.title_highlight || ''}` : "After 90 Days You Can"}
+        subtitle={outcomesMap.description || "From landing your first ₹30k/mo freelance client to securing a high-demand graphic design role."}
+        enrollUrl={enrollUrl}
+      />
 
       {/* ── 06 Our Students Success Stories (Centered Heading with Success in Blue) ── */}
       <VideoTestimonialCarousel
         centered
-        titlePrefix="Our Students"
-        titleHighlight="Success"
-        titleSuffix="Stories"
+        titlePrefix={testimonialsMap.title_prefix || "Our Students"}
+        titleHighlight={testimonialsMap.title_highlight || "Success"}
+        titleSuffix={testimonialsMap.title_suffix || "Stories"}
       />
 
       {/* ── 07 Complete Support & Enrollment Master Section ── */}
       <ProgramEnrollmentSupportSection
-        enrollUrl={EXTERNAL_URLS.signup}
-        duration="90 Days"
-        seatsText="20 Seats Available"
+        enrollUrl={supportMap.enroll_url || enrollUrl}
+        duration={supportMap.duration_text || duration}
+        seatsText={supportMap.seats_text || "20 Seats Available"}
       />
 
       {/* ── 08 Frequently Asked Questions (2-Column Accordion) ── */}
@@ -123,10 +147,11 @@ export default async function GraphicDesignProgramPage() {
 
       {/* ── 09 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA
-        enrollUrl={EXTERNAL_URLS.signup}
-        text="Limited Seats Available"
-        buttonText="ENROLL NOW"
+        enrollUrl={stickyMap.enroll_url || enrollUrl}
+        text={stickyMap.notice_text || "Limited Seats Available"}
+        buttonText={stickyMap.button_text || "ENROLL NOW"}
       />
     </main>
   );
 }
+

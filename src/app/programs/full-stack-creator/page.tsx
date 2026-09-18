@@ -88,46 +88,67 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
-import { getProgramBySlug } from "@/lib/cms";
+import { getProgramBySlug, getFullStackCreatorProgramData } from "@/lib/cms";
 
 export default async function FullStackCreatorPage() {
-  const cmsProgram = await getProgramBySlug("full-stack-creator");
+  const [cmsProgram, cmsData] = await Promise.all([
+    getProgramBySlug("full-stack-creator"),
+    getFullStackCreatorProgramData(),
+  ]);
 
-  const duration = cmsProgram?.duration || "6 Months";
+  const heroMap = cmsData.hero || {};
+  const toolsMap = cmsData.tools || {};
+  const syllabusMap = cmsData.syllabus || {};
+  const skillsMoneyMap = cmsData.skillsMoney || {};
+  const certMap = cmsData.certification || {};
+  const economyMap = cmsData.creatorEconomy || {};
+  const bonusMap = cmsData.templatesBonus || {};
+  const whoMap = cmsData.whoIsThisFor || {};
+  const mentorMap = cmsData.mentors || {};
+  const offerMap = cmsData.offer || {};
+  const faqMap = cmsData.faq || {};
+  const stickyMap = cmsData.sticky || {};
+
+  const duration = heroMap.highlight_duration || cmsProgram?.duration || "6 Months";
   const title = cmsProgram?.title || "Full Stack Digital Creator Program";
-  const description = cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
-  const imageSrc = cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
-  const enrollUrl = cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const description = heroMap.description || cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
+  const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
+  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const communityUrl = heroMap.community_url || EXTERNAL_URLS.community;
 
   const highlights: HighlightItem[] = [
     { iconType: "clock", label: "Duration", value: duration },
-    { iconType: "globe", label: "Language", value: "100% Tamil" },
-    { iconType: "level", label: "Skill Level", value: cmsProgram?.level === "beginner" ? "Beginner" : "Beginner to Advanced" },
-    { iconType: "work", label: "Coverage", value: "6 Major Domains" },
+    { iconType: "globe", label: "Language", value: heroMap.highlight_language || "100% Tamil" },
+    { iconType: "level", label: "Skill Level", value: heroMap.highlight_level || (cmsProgram?.level === "beginner" ? "Beginner" : "Beginner to Advanced") },
+    { iconType: "work", label: "Coverage", value: heroMap.highlight_projects || "25+ Live Projects" },
   ];
 
-  // Split title if possible into prefix and highlight
-  const titleParts = title.split(" ");
-  const titlePrefix = titleParts.length > 2 ? titleParts.slice(0, -2).join(" ") : titleParts.slice(0, -1).join(" ");
-  const titleHighlight = titleParts.length > 2 ? titleParts.slice(-2).join(" ") : titleParts.slice(-1).join(" ");
+  const titlePrefix = heroMap.title_prefix || "Full Stack Digital";
+  const titleHighlight = heroMap.title_highlight || "Creator Program.";
 
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
-        badge={`Flagship Track · ${duration} · Tamil`}
-        titlePrefix={titlePrefix || "Full Stack Digital"}
-        titleHighlight={titleHighlight ? `${titleHighlight}.` : "Creator Program."}
+        badge={heroMap.badge || `Flagship Track · ${duration} · Tamil`}
+        titlePrefix={titlePrefix}
+        titleHighlight={titleHighlight}
         description={description}
         highlights={highlights}
         imageSrc={imageSrc}
         altText={title}
         enrollUrl={enrollUrl}
-        communityUrl={EXTERNAL_URLS.community}
+        communityUrl={communityUrl}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
-      <ToolsCoveredSection tools={FULL_STACK_TOOLS} />
+      <ToolsCoveredSection
+        badge={toolsMap.badge || "FULL STACK SUITE"}
+        titlePrefix={toolsMap.title_prefix || "Master the Complete"}
+        titleHighlight={toolsMap.title_highlight || "Creative Arsenal."}
+        subtitle={toolsMap.description || "Learn Premiere Pro, After Effects, Figma, Webflow, WordPress, and cutting-edge Generative AI."}
+        tools={FULL_STACK_TOOLS}
+      />
 
       {/* ── 03 Syllabus Mind-Map Section (Why we are different from others) ── */}
       <ProgramSyllabusMapSection />
@@ -159,17 +180,21 @@ export default async function FullStackCreatorPage() {
       <GuidanceMentorsSection />
 
       {/* ── 11 AI Powered Full Stack Creator System (Offer Box & Join Today) ── */}
-      <FullStackCreatorOfferSection enrollUrl={EXTERNAL_URLS.signup} />
+      <FullStackCreatorOfferSection
+        enrollUrl={offerMap.enroll_url || enrollUrl}
+        durationText={offerMap.duration_text || duration}
+      />
 
       {/* ── 12 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
       <ProgramFAQSection />
 
       {/* ── 13 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA
-        enrollUrl={EXTERNAL_URLS.signup}
-        text="Limited Seats Available"
-        buttonText="ENROLL NOW"
+        enrollUrl={stickyMap.enroll_url || enrollUrl}
+        text={stickyMap.notice_text || "Limited Seats Available"}
+        buttonText={stickyMap.button_text || "ENROLL NOW"}
       />
     </main>
   );
 }
+

@@ -962,3 +962,103 @@ export async function getContactPageData() {
     };
   }
 }
+
+/**
+ * Fetch 90-Days Graphic Design Program Section Data
+ */
+export async function getGraphicDesignProgramData() {
+  try {
+    const [hero, tools, roadmap, projects, outcomes, testimonials, support, faq, sticky] = await Promise.all([
+      getSectionFieldMap("90-days-graphic-design", "hero"),
+      getSectionFieldMap("90-days-graphic-design", "tools"),
+      getSectionFieldMap("90-days-graphic-design", "roadmap"),
+      getSectionFieldMap("90-days-graphic-design", "projects"),
+      getSectionFieldMap("90-days-graphic-design", "outcomes"),
+      getSectionFieldMap("90-days-graphic-design", "testimonials"),
+      getSectionFieldMap("90-days-graphic-design", "enrollment_support"),
+      getSectionFieldMap("90-days-graphic-design", "faq"),
+      getSectionFieldMap("90-days-graphic-design", "sticky_cta"),
+    ]);
+    return { hero, tools, roadmap, projects, outcomes, testimonials, support, faq, sticky };
+  } catch {
+    return {
+      hero: {},
+      tools: {},
+      roadmap: {},
+      projects: {},
+      outcomes: {},
+      testimonials: {},
+      support: {},
+      faq: {},
+      sticky: {},
+    };
+  }
+}
+
+/**
+ * Fetch Full Stack Digital Creator Program Section Data
+ */
+export async function getFullStackCreatorProgramData() {
+  try {
+    const [hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, faq, sticky] = await Promise.all([
+      getSectionFieldMap("full-stack-creator", "hero"),
+      getSectionFieldMap("full-stack-creator", "tools"),
+      getSectionFieldMap("full-stack-creator", "syllabus"),
+      getSectionFieldMap("full-stack-creator", "skills_money"),
+      getSectionFieldMap("full-stack-creator", "certification"),
+      getSectionFieldMap("full-stack-creator", "creator_economy"),
+      getSectionFieldMap("full-stack-creator", "templates_bonus"),
+      getSectionFieldMap("full-stack-creator", "who_is_this_for"),
+      getSectionFieldMap("full-stack-creator", "guidance_mentors"),
+      getSectionFieldMap("full-stack-creator", "offer"),
+      getSectionFieldMap("full-stack-creator", "faq"),
+      getSectionFieldMap("full-stack-creator", "sticky_cta"),
+    ]);
+    return { hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, faq, sticky };
+  } catch {
+    return {
+      hero: {},
+      tools: {},
+      syllabus: {},
+      skillsMoney: {},
+      certification: {},
+      creatorEconomy: {},
+      templatesBonus: {},
+      whoIsThisFor: {},
+      mentors: {},
+      offer: {},
+      faq: {},
+      sticky: {},
+    };
+  }
+}
+
+/**
+ * Fetch 3 Hours Live Workshop Section Data
+ */
+export async function getWorkshopProgramData() {
+  try {
+    const [hero, whatYouDiscover, bonuses, whoShouldAttend, mentorBio, pricingCta, faq, sticky] = await Promise.all([
+      getSectionFieldMap("3-hours-live-workshop", "hero"),
+      getSectionFieldMap("3-hours-live-workshop", "what_you_discover"),
+      getSectionFieldMap("3-hours-live-workshop", "bonuses"),
+      getSectionFieldMap("3-hours-live-workshop", "who_should_attend"),
+      getSectionFieldMap("3-hours-live-workshop", "mentor_bio"),
+      getSectionFieldMap("3-hours-live-workshop", "pricing_cta"),
+      getSectionFieldMap("3-hours-live-workshop", "faq"),
+      getSectionFieldMap("3-hours-live-workshop", "sticky_cta"),
+    ]);
+    return { hero, whatYouDiscover, bonuses, whoShouldAttend, mentorBio, pricingCta, faq, sticky };
+  } catch {
+    return {
+      hero: {},
+      whatYouDiscover: {},
+      bonuses: {},
+      whoShouldAttend: {},
+      mentorBio: {},
+      pricingCta: {},
+      faq: {},
+      sticky: {},
+    };
+  }
+}

@@ -105,13 +105,25 @@ const MENTOR_ACCOMPLISHMENTS = [
   "Helping Beginners Build Successful Creative Careers",
 ];
 
-import { getProgramBySlug } from "@/lib/cms";
+import { getProgramBySlug, getWorkshopProgramData } from "@/lib/cms";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function ThreeHoursLiveWorkshopPage() {
-  const program = await getProgramBySlug("3-hours-live-workshop");
+  const [program, cmsData] = await Promise.all([
+    getProgramBySlug("3-hours-live-workshop"),
+    getWorkshopProgramData(),
+  ]);
+
+  const heroMap = cmsData.hero || {};
+  const discoverMap = cmsData.whatYouDiscover || {};
+  const bonusesMap = cmsData.bonuses || {};
+  const whoMap = cmsData.whoShouldAttend || {};
+  const mentorMap = cmsData.mentorBio || {};
+  const pricingMap = cmsData.pricingCta || {};
+  const faqMap = cmsData.faq || {};
+  const stickyMap = cmsData.sticky || {};
 
   const highlights: HighlightItem[] = [
     { iconType: "clock", label: "Duration", value: program?.duration || "3 Hours Live" },
@@ -120,22 +132,64 @@ export default async function ThreeHoursLiveWorkshopPage() {
     { iconType: "work", label: "Format", value: "Interactive Live" },
   ];
 
+  const heroBadge = heroMap.badge || "Live Workshop · 3 Hours · Tamil";
+  const heroTitlePrefix = heroMap.title_prefix || "3 Hours Live";
+  const heroTitleHighlight = heroMap.title_highlight || "Workshop.";
+  const heroDesc = heroMap.description || program?.description || "A complete beginner's roadmap to learning Graphic Design and building a profitable printing and freelancing business — taught completely in practical Tamil.";
+  const heroEnrollUrl = heroMap.enroll_url || program?.cta_url || EXTERNAL_URLS.workshop;
+
+  const discoverCards = [
+    {
+      title: discoverMap.card_1_title || DISCOVER_CARDS[0].title,
+      desc: discoverMap.card_1_desc || DISCOVER_CARDS[0].desc,
+      image: DISCOVER_CARDS[0].image,
+    },
+    {
+      title: discoverMap.card_2_title || DISCOVER_CARDS[1].title,
+      desc: discoverMap.card_2_desc || DISCOVER_CARDS[1].desc,
+      image: DISCOVER_CARDS[1].image,
+    },
+    {
+      title: discoverMap.card_3_title || DISCOVER_CARDS[2].title,
+      desc: discoverMap.card_3_desc || DISCOVER_CARDS[2].desc,
+      image: DISCOVER_CARDS[2].image,
+    },
+  ];
+
+  const bonusItems = [
+    {
+      tag: "BONUS 01",
+      valueTag: bonusesMap.bonus_1_value || BONUS_ITEMS[0].valueTag,
+      title: bonusesMap.bonus_1_title || BONUS_ITEMS[0].title,
+      desc: bonusesMap.bonus_1_desc || BONUS_ITEMS[0].desc,
+      image: BONUS_ITEMS[0].image,
+    },
+    {
+      tag: "BONUS 02",
+      valueTag: bonusesMap.bonus_2_value || BONUS_ITEMS[1].valueTag,
+      title: bonusesMap.bonus_2_title || BONUS_ITEMS[1].title,
+      desc: bonusesMap.bonus_2_desc || BONUS_ITEMS[1].desc,
+      image: BONUS_ITEMS[1].image,
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Signature Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
-        badge="Live Workshop · 3 Hours · Tamil"
-        titlePrefix="3 Hours Live"
-        titleHighlight="Workshop."
-        description={program?.description || "A complete beginner's roadmap to learning Graphic Design and building a profitable printing and freelancing business — taught completely in practical Tamil."}
+        badge={heroBadge}
+        titlePrefix={heroTitlePrefix}
+        titleHighlight={heroTitleHighlight}
+        description={heroDesc}
         highlights={highlights}
         imageSrc={program?.thumbnail_url || "/assets/workshop/printing-business-workshop.webp"}
         altText="3 Hours Live Workshop on Starting Your Printing Business with Graphic Design Skill"
-        enrollUrl={program?.cta_url || EXTERNAL_URLS.workshop}
+        enrollUrl={heroEnrollUrl}
         communityUrl={EXTERNAL_URLS.community}
         buttonText={program?.cta_text || "Register Now for ₹99"}
         youtubeId="nWlzU8ol7uY"
       />
+
 
       {/* ── 02 "In This Live Workshop You'll Discover" (Curriculum Highlights) ── */}
       <section className="py-20 sm:py-28 bg-white relative">
@@ -144,7 +198,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#1748BB]" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                Curriculum Highlights
+                {discoverMap.badge || "Curriculum Highlights"}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB]" />
             </div>
@@ -153,7 +207,8 @@ export default async function ThreeHoursLiveWorkshopPage() {
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"
               style={{ fontSize: "clamp(28px, 4.2vw, 48px)" }}
             >
-              In This Live <span className="text-[#1748BB]">Workshop</span> You&apos;ll Discover
+              {discoverMap.title_prefix || "In This Live"}{" "}
+              <span className="text-[#1748BB]">{discoverMap.title_highlight || "Workshop You'll Discover"}</span>
             </h2>
             <p className="font-sans text-neutral-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-normal">
               A complete beginner&apos;s roadmap to learning Graphic Design and building a lucrative freelance career in Tamil.
@@ -161,7 +216,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {DISCOVER_CARDS.map((card) => (
+            {discoverCards.map((card) => (
               <div
                 key={card.title}
                 className="group rounded-[28px] bg-white border border-neutral-200/90 hover:border-[#1748BB]/50 p-6 shadow-[0_10px_35px_rgba(23,72,187,0.06)] hover:shadow-[0_20px_50px_rgba(23,72,187,0.14)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
@@ -201,7 +256,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-8 h-[2px] bg-[#1748BB]" />
               <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                Fast Action Bonuses
+                {bonusesMap.badge || "Fast Action Bonuses"}
               </span>
               <div className="w-8 h-[2px] bg-[#1748BB]" />
             </div>
@@ -210,7 +265,8 @@ export default async function ThreeHoursLiveWorkshopPage() {
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"
               style={{ fontSize: "clamp(28px, 4.2vw, 48px)" }}
             >
-              Enroll Now For <span className="text-[#1748BB]">Exciting Bonuses</span>
+              {bonusesMap.title_prefix || "Enroll Now For"}{" "}
+              <span className="text-[#1748BB]">{bonusesMap.title_highlight || "Exciting Bonuses"}</span>
             </h2>
             <p className="font-sans text-neutral-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-normal">
               Get Exclusive Bonuses Worth ₹4,999 Absolutely Free with Your ₹99 Workshop Ticket.
@@ -218,7 +274,8 @@ export default async function ThreeHoursLiveWorkshopPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {BONUS_ITEMS.map((bonus) => (
+            {bonusItems.map((bonus) => (
+
               <div
                 key={bonus.title}
                 className="group rounded-[32px] bg-white border border-[#BFDBFE]/80 hover:border-[#1748BB] p-7 sm:p-8 shadow-[0_12px_40px_rgba(23,72,187,0.08)] hover:shadow-[0_20px_55px_rgba(23,72,187,0.18)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between relative overflow-hidden"
