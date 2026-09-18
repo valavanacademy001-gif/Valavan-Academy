@@ -1116,3 +1116,39 @@ export async function getWorkshopProgramData() {
     };
   }
 }
+
+export interface CMSTrackingSettings {
+  meta_pixel_id?: string;
+  meta_pixel_enabled?: string;
+  ga4_measurement_id?: string;
+  ga4_enabled?: string;
+  gtm_container_id?: string;
+  gtm_enabled?: string;
+  clarity_project_id?: string;
+  clarity_enabled?: string;
+  tiktok_pixel_id?: string;
+  tiktok_enabled?: string;
+  linkedin_partner_id?: string;
+  linkedin_enabled?: string;
+  hotjar_site_id?: string;
+  hotjar_enabled?: string;
+  custom_head_code?: string;
+  custom_body_top_code?: string;
+  custom_footer_code?: string;
+  cookie_consent_enabled?: string;
+  conversion_goals_data?: string;
+}
+
+/**
+ * Fetch Global Tracking & Analytics Configuration
+ */
+export async function getTrackingSettings(): Promise<CMSTrackingSettings> {
+  try {
+    const map = await getSectionFieldMap("global_settings", "tracking_analytics");
+    return map as CMSTrackingSettings;
+  } catch (err) {
+    console.error("Error fetching tracking settings:", err);
+    return {};
+  }
+}
+

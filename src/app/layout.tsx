@@ -99,7 +99,11 @@ export const metadata: Metadata = {
   },
 };
 
-import { getSiteSettings } from "@/lib/cms";
+import { Suspense } from "react";
+import { getSiteSettings, getTrackingSettings } from "@/lib/cms";
+import TrackingScriptsInjector from "@/components/tracking/TrackingScriptsInjector";
+import ClientTracker from "@/components/tracking/ClientTracker";
+import CookieConsentBanner from "@/components/tracking/CookieConsentBanner";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
 interface RootLayoutProps {
@@ -110,7 +114,10 @@ import PwaDisableProvider from "@/components/layout/PwaDisableProvider";
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const settings = await getSiteSettings();
+  const [settings, trackingSettings] = await Promise.all([
+    getSiteSettings(),
+    getTrackingSettings(),
+  ]);
 
   return (
     <html
@@ -125,10 +132,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap"
         />
+        {/* Marketing Tracking Scripts & Pixels */}
+        <TrackingScriptsInjector settings={trackingSettings} />
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <PwaDisableProvider />
         <CustomCursor />
+        <Suspense fallback={null}>
+          <ClientTracker />
+        </Suspense>
+        <CookieConsentBanner enabled={trackingSettings.cookie_consent_enabled !== "false"} />
         <ReducedMotionProvider>
           <SmoothScrollProvider>
             <Navbar />
@@ -142,3 +155,4 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
+
