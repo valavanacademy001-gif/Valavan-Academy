@@ -39,8 +39,10 @@ import {
   getSkillStackData,
   getCertificationsSectionData,
   getPublishedLearnerStories,
+  getLearnerStoriesData,
   getCommunitySectionData,
   getPublishedTestimonials,
+  getTestimonialsSectionData,
   getFinalCTAData,
   getSectionVisibilityMap,
 } from "@/lib/cms";
@@ -56,8 +58,10 @@ export default async function HomePage() {
     skillStackData,
     certificationsSection,
     learnerStories,
+    learnerStoriesData,
     communityData,
     testimonials,
+    testimonialsSectionData,
     finalCtaData,
     visibilityMap,
   ] = await Promise.all([
@@ -70,8 +74,10 @@ export default async function HomePage() {
     getSkillStackData(),
     getCertificationsSectionData(),
     getPublishedLearnerStories(),
+    getLearnerStoriesData(),
     getCommunitySectionData(),
     getPublishedTestimonials(),
+    getTestimonialsSectionData(),
     getFinalCTAData(),
     getSectionVisibilityMap("home"),
   ]);
@@ -105,16 +111,27 @@ export default async function HomePage() {
       )}
 
       {/* 08 — Real People, Real Transformations (curved video carousel) */}
-      {visibilityMap.learner_stories !== false && <VideoTestimonialCarousel stories={learnerStories} />}
+      {visibilityMap.learner_stories !== false && (
+        <VideoTestimonialCarousel
+          stories={learnerStories}
+          meta={learnerStoriesData}
+        />
+      )}
 
       {/* 09 — Community (solid blue) */}
       {visibilityMap.community !== false && <CommunitySection meta={communityData} />}
 
       {/* 10 — Student Reviews (masonry testimonials) */}
-      {visibilityMap.testimonials !== false && <StudentReviewsSection reviews={testimonials} />}
+      {visibilityMap.testimonials !== false && (
+        <StudentReviewsSection
+          reviews={testimonials}
+          meta={testimonialsSectionData}
+        />
+      )}
 
       {/* 11 — Final CTA */}
       {visibilityMap.cta !== false && <FinalCTASection meta={finalCtaData} />}
     </>
   );
 }
+

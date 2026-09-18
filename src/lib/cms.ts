@@ -588,6 +588,56 @@ export async function getCommunitySectionData(): Promise<CMSSectionMeta> {
 }
 
 /**
+ * Fetch Learner Stories Section Header Meta Data
+ */
+export async function getLearnerStoriesData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "learner_stories");
+    return {
+      badge: map.badge || "LEARNER STORIES",
+      headline_prefix: map.headline_prefix || "Real People,",
+      headline_highlight: map.headline_highlight || "Real Transformations.",
+      heading: map.heading || "Real People, Real Transformations.",
+      description: map.description || "Career changers who redefined their future with Valavan Academy — in their own words.",
+      ...map,
+    };
+  } catch {
+    return {
+      badge: "LEARNER STORIES",
+      headline_prefix: "Real People,",
+      headline_highlight: "Real Transformations.",
+      heading: "Real People, Real Transformations.",
+      description: "Career changers who redefined their future with Valavan Academy — in their own words.",
+    };
+  }
+}
+
+/**
+ * Fetch Testimonials / Student Reviews Section Header Meta Data
+ */
+export async function getTestimonialsSectionData(): Promise<CMSSectionMeta> {
+  try {
+    const map = await getSectionFieldMap("home", "testimonials");
+    return {
+      badge: map.badge || "STUDENT FEEDBACKS",
+      headline_prefix: map.headline_prefix || "Hear from",
+      headline_highlight: map.headline_highlight || "Our Students",
+      heading: map.heading || "Hear from Our Students",
+      description: map.description || "Graphic Design, Video Editing & Web Design Success Stories from Tamil Students",
+      ...map,
+    };
+  } catch {
+    return {
+      badge: "STUDENT FEEDBACKS",
+      headline_prefix: "Hear from",
+      headline_highlight: "Our Students",
+      heading: "Hear from Our Students",
+      description: "Graphic Design, Video Editing & Web Design Success Stories from Tamil Students",
+    };
+  }
+}
+
+/**
  * Fetch Final CTA Section Data
  */
 export async function getFinalCTAData(): Promise<CMSSectionMeta> {

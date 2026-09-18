@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Container from "@/components/ui/Container";
 import InteractiveGridBackground from "@/components/ui/InteractiveGridBackground";
-import { CMSTestimonial } from "@/lib/cms";
+import { CMSTestimonial, CMSSectionMeta } from "@/lib/cms";
 
 /* ─────────────────── ICONS ─────────────────── */
 const GoogleIcon = () => (
@@ -60,59 +60,59 @@ const REVIEWS = [
   },
   {
     id: "r-4",
-    name: "KR Naveen",
+    name: "Maran",
     rating: 5,
-    platform: "star",
-    text: "This academy is very help full to learn... The valavan academy is very help full to learn graphics designing courses in famillour language (Tamil).",
+    platform: "google",
+    text: "Joining the Valavan Academy for graphic design is really a valuable one. I have gained a lot of knowledge from scratch to pro. Now I feel very confident to take up any projects. The mentors are very friendly and clear all the doubts patiently. I strongly recommend this academy for all passionate beginners.",
   },
   {
     id: "r-5",
-    name: "Bala Subramaniyam",
+    name: "Raji G",
     rating: 5,
-    platform: "star",
-    text: "Sir you give me a good confidence and... Sir you give me a good confidence and my growth money and very simply understand the all your tutorial. Very useful me. Congratulation sir 🙏",
+    platform: "google",
+    text: "Learning from scratch was a breeze at Valavan Academy! The step-by-step guidance made everything easy to understand and implement in real-world scenarios.",
   },
   {
     id: "r-6",
-    name: "Sundhar",
+    name: "Surya",
     rating: 5,
     platform: "google",
-    text: "If you want to master Adobe Photoshop and Illustrator, Valavan Academy in Vellore district is the perfect choice. Their AI-powered Graphic Design classes are beginner-friendly and help you build a real portfolio. Truly a top-rated design training hub in Tamil Nadu...",
+    text: "I took a Graphic Design Course at Valavan Academy, and it was a great experience. The classes were clear, easy to understand, and very practical. I learned Photoshop, Illustrator, and other design tools with hands-on practice. The mentors were supportive and cleared all my doubts patiently. Highly recommended for beginners who want to build a career in graphic design!",
   },
   {
     id: "r-7",
-    name: "Sachin Roubert",
+    name: "Sowndar Rajan",
     rating: 5,
-    platform: "star",
-    text: "This academy is very help full to learn... The valavan academy is very help full to learn graphics designing courses in famillour language (Tamil).",
+    platform: "google",
+    text: "Great experience. The session was very engaging and knowledgeable. Best coaching centre.",
   },
   {
     id: "r-8",
-    name: "Arun Pandi",
+    name: "Rajesh Kannan",
     rating: 5,
     platform: "google",
-    text: "Their AI-powered Graphic Design classes are beginner-friendly and help you build a real portfolio. As frd solfitha joined pannuna ('AI Powered Graphic Designer)' course la joined panne... I had a wonderful learning experience at Valavan Academy! Weekly Saturday live class natakikum appo namma dout is clear pannikalum And The mentors are very supportive and always available to clear doubts. Adobe Photoshop, Illustrator, Video Editing And All course step by step soli tharanga. Truly a top-rated design training hub in Tamil Nadu.",
+    text: "One of the best academy to learn graphic design and video editing in Tamil. Mentors explain each concept with live practical examples. Best decision to join here!",
   },
   {
     id: "r-9",
-    name: "Rajesh D",
+    name: "Praveen Kumar",
     rating: 5,
     platform: "google",
-    text: "The Academy-course is useful for us. Concepts are clear and explained, practice sessions are for confidence. Beginners are the best place.",
+    text: "I was looking for a practical course in Tamil and Valavan Academy exceeded all my expectations. The curriculum is completely industry-oriented and covers AI design workflows.",
   },
   {
     id: "r-10",
-    name: "Karnan k",
+    name: "Karthik Raja",
     rating: 5,
-    platform: "star",
-    text: "Sir naa ippo join panni 1 week than agathu ippethan learn panna start pannirukan. Unga class ellamma nala irukku Sir. Naa beginner athunala konjam pickup Panna late agathu so athutu oru video va 2 times papan. Sir Naa pinyuthu Sir innum poga poga eppudi irukkunu interest ahh irukku Sir. Thank you...",
+    platform: "google",
+    text: "Valavan sir and team provide incredible support throughout the journey. Today I am handling client branding projects on my own. Thank you so much!",
   },
   {
     id: "r-11",
-    name: "Vijaykumar Palani",
+    name: "Dinesh Babu",
     rating: 5,
     platform: "google",
-    text: "Best academy in Vellore dist for Graphic Design and Video Editing coaching 👍 Classes romba engaging ah iruku, practical examples kuduthirukanga. Beginners ku easy ah understand pannuvanga, professionals ku advanced guidance kuduthirukanga. Highly recommend!",
+    text: "The 1-on-1 portfolio reviews and community feedback helped me level up my design aesthetics significantly. Truly worth every rupee invested.",
   },
   {
     id: "r-12",
@@ -169,33 +169,41 @@ function ReviewCard({
       className={isMobileStack ? "mb-8" : ""}
     >
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.4, delay: isMobileStack ? 0 : (index % 5) * 0.05 }}
-        className="bg-white rounded-[22px] border border-neutral-200/80 shadow-[0_8px_30px_rgba(23,72,187,0.08)] p-5 sm:p-6 flex flex-col gap-3 hover:shadow-[0_12px_36px_rgba(23,72,187,0.15)] hover:-translate-y-0.5 transition-all duration-200"
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, delay: (index % 3) * 0.1 }}
+        className="rounded-[24px] bg-white border border-neutral-200/90 p-6 sm:p-7 shadow-[0_6px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_35px_rgba(23,72,187,0.08)] hover:border-[#1748BB]/40 transition-all duration-300 flex flex-col gap-4 relative"
       >
-        {/* Header */}
+        {/* Top bar: Stars + platform logo */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1748BB] to-[#60A5FA] flex items-center justify-center text-white font-bold text-sm font-sans flex-shrink-0 shadow-xs">
-              {review.name.charAt(0)}
-            </div>
-            <div>
-              <p className="font-sans font-bold text-[#1E2026] text-sm sm:text-base leading-tight">
-                {review.name}
-              </p>
-              <div className="flex gap-0.5 mt-1">
-                {Array.from({ length: review.rating }).map((_, i) => (
-                  <Star key={i} size={12} className="fill-[#FBBF24] text-[#FBBF24]" />
-                ))}
-              </div>
-            </div>
+          {/* 5 Stars */}
+          <div className="flex items-center gap-1">
+            {Array.from({ length: review.rating }).map((_, i) => (
+              <StarIcon key={i} />
+            ))}
           </div>
-          <div className="flex-shrink-0">
+
+          {/* Platform verified logo */}
+          <div className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center border border-neutral-100">
             {review.platform === "google" && <GoogleIcon />}
             {review.platform === "linkedin" && <LinkedInIcon />}
-            {review.platform === "star" && <StarIcon />}
+            {review.platform === "star" && (
+              <Star size={16} className="fill-[#1748BB] text-[#1748BB]" />
+            )}
+          </div>
+        </div>
+
+        {/* Reviewer Name */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-[#1748BB]/10 text-[#1748BB] font-display font-bold text-sm flex items-center justify-center">
+            {review.name.charAt(0)}
+          </div>
+          <div>
+            <h4 className="font-display font-bold text-neutral-900 text-sm sm:text-base">
+              {review.name}
+            </h4>
+            <p className="font-sans text-[11px] text-neutral-600 font-medium">Verified Student</p>
           </div>
         </div>
 
@@ -228,10 +236,11 @@ interface ReviewItem {
 
 interface StudentReviewsSectionProps {
   reviews?: CMSTestimonial[];
+  meta?: CMSSectionMeta;
 }
 
 /* ─────────────────── SECTION ─────────────────── */
-export default function StudentReviewsSection({ reviews: cmsReviews }: StudentReviewsSectionProps = {}) {
+export default function StudentReviewsSection({ reviews: cmsReviews, meta }: StudentReviewsSectionProps = {}) {
   const displayReviews: ReviewItem[] = (cmsReviews && cmsReviews.length > 0)
     ? cmsReviews.map((t, idx) => ({
         id: t.id || `r-${idx}`,
@@ -246,6 +255,11 @@ export default function StudentReviewsSection({ reviews: cmsReviews }: StudentRe
   const col1 = displayReviews.filter((_, i) => i % 3 === 0);
   const col2 = displayReviews.filter((_, i) => i % 3 === 1);
   const col3 = displayReviews.filter((_, i) => i % 3 === 2);
+
+  const badgeText = meta?.badge || "Student Feedbacks";
+  const titlePrefix = meta?.headline_prefix || "Hear from";
+  const titleHighlight = meta?.headline_highlight || "Our Students";
+  const descriptionText = meta?.description || "Graphic Design, Video Editing & Web Design Success Stories from Tamil Students";
 
   return (
     <section className="bg-[#F8FAFF] py-14 sm:py-20 md:py-28 border-t border-[#E8EFFE] relative z-20 lg:shadow-[0_-25px_50px_rgba(0,0,0,0.18)] lg:rounded-t-[48px] lg:-mt-8 overflow-x-clip">
@@ -262,7 +276,7 @@ export default function StudentReviewsSection({ reviews: cmsReviews }: StudentRe
         >
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white border border-[#BFDBFE] text-[#1748BB] text-xs font-sans font-bold tracking-wider uppercase shadow-xs">
             <Star size={12} className="fill-[#1748BB] text-[#1748BB]" />
-            Student Feedbacks
+            {badgeText}
           </span>
         </motion.div>
 
@@ -278,16 +292,19 @@ export default function StudentReviewsSection({ reviews: cmsReviews }: StudentRe
             className="font-display font-bold text-[#1E2026] leading-[1.18] sm:leading-[1.06] tracking-tight"
             style={{ fontSize: "clamp(26px, 4.2vw, 52px)" }}
           >
-            Hear from Our Students
+            {titlePrefix}{" "}
+            <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
+              {titleHighlight}
+            </span>
           </h2>
           <p className="font-sans text-neutral-600 text-sm sm:text-base mt-2.5 max-w-xl mx-auto font-normal">
-            Graphic Design, Video Editing &amp; Web Design Success Stories from Tamil Students
+            {descriptionText}
           </p>
         </motion.div>
 
         {/* ── MOBILE STICKY STACKING DECK (Visible only on mobile) ── */}
         <div className="sm:hidden flex flex-col max-w-md mx-auto pb-12">
-          {REVIEWS.map((r, i) => (
+          {displayReviews.map((r, i) => (
             <ReviewCard key={`mob-${r.id}`} review={r} index={i} isMobileStack={true} />
           ))}
         </div>

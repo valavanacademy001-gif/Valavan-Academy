@@ -16,7 +16,7 @@ import { motion, PanInfo } from "framer-motion";
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
-import { CMSLearnerStory } from "@/lib/cms";
+import { CMSLearnerStory, CMSSectionMeta } from "@/lib/cms";
 
 const VIDEOS = [
   { id: "BzQ9wNPit5I", name: "Learner Story 1" },
@@ -100,6 +100,7 @@ interface VideoTestimonialCarouselProps {
   noTopShadow?: boolean;
   customTitle?: React.ReactNode;
   stories?: CMSLearnerStory[];
+  meta?: CMSSectionMeta;
 }
 
 export default function VideoTestimonialCarousel({
@@ -112,6 +113,7 @@ export default function VideoTestimonialCarousel({
   noTopShadow = false,
   customTitle,
   stories,
+  meta,
 }: VideoTestimonialCarouselProps = {}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -119,6 +121,11 @@ export default function VideoTestimonialCarousel({
   const [isMobile, setIsMobile] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const effectiveKicker = meta?.badge || kicker;
+  const effectiveTitlePrefix = meta?.headline_prefix || titlePrefix;
+  const effectiveTitleHighlight = meta?.headline_highlight || titleHighlight;
+  const effectiveSubtitle = meta?.description || subtitle;
 
   const items = (stories && stories.length > 0)
     ? stories.map((s, idx) => {
@@ -188,12 +195,23 @@ export default function VideoTestimonialCarousel({
 
   return (
     <section
-      className="relative z-20 bg-white py-14 sm:py-20 md:py-28 overflow-hidden border-t border-neutral-100 select-none lg:shadow-[0_-25px_50px_rgba(0,0,0,0.18)] lg:rounded-t-[48px] lg:-mt-8"
+      className={`py-14 sm:py-20 md:py-28 relative bg-white overflow-hidden ${
+        noTopShadow ? "" : "border-t border-neutral-100"
+      }`}
     >
       <Container>
-        {/* Header */}
+        {/* Section Header: Dual Layout (Centered vs Two-Column) */}
         {centered ? (
-          <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+            <FadeUp delay={0}>
+              <div className="flex items-center justify-center gap-3 mb-3 sm:mb-4">
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+                <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
+                  {effectiveKicker}
+                </span>
+                <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
+              </div>
+            </FadeUp>
             <FadeUp delay={0.05}>
               <h2
                 className="font-display font-bold leading-tight tracking-tight"
@@ -203,9 +221,9 @@ export default function VideoTestimonialCarousel({
                   customTitle
                 ) : (
                   <>
-                    {titlePrefix}{" "}
+                    {effectiveTitlePrefix}{" "}
                     <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                      {titleHighlight}
+                      {effectiveTitleHighlight}
                     </span>{" "}
                     {titleSuffix}
                   </>
@@ -219,7 +237,7 @@ export default function VideoTestimonialCarousel({
               <div className="flex items-center gap-3 mb-3 sm:mb-4">
                 <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
                 <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-semibold">
-                  {kicker}
+                  {effectiveKicker}
                 </span>
                 <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
               </div>
@@ -230,13 +248,13 @@ export default function VideoTestimonialCarousel({
                   className="font-display font-bold leading-[1.18] sm:leading-[1.06] tracking-tight"
                   style={{ fontSize: "clamp(26px, 4vw, 52px)", color: "#1E2026" }}
                 >
-                  {titlePrefix}{" "}
-                  <span className="text-[#1748BB]">{titleHighlight}</span>
+                  {effectiveTitlePrefix}{" "}
+                  <span className="text-[#1748BB]">{effectiveTitleHighlight}</span>
                 </h2>
               </FadeUp>
               <FadeUp delay={0.1}>
                 <p className="font-sans text-sm sm:text-base md:text-lg leading-relaxed font-normal text-neutral-600 pt-1">
-                  {subtitle}
+                  {effectiveSubtitle}
                 </p>
               </FadeUp>
             </div>
