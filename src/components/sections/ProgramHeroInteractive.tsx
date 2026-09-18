@@ -305,14 +305,14 @@ export default function ProgramHeroInteractive({
               {show3DIcons && (
                 <motion.div
                   style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
-                  className="absolute -top-7 -right-4 sm:-top-9 sm:-right-6 md:-top-11 md:-right-8 lg:-top-12 lg:-right-8 xl:-top-14 xl:-right-10 z-40 pointer-events-auto select-none"
+                  className="absolute -top-5 -right-3 sm:-top-6 sm:-right-4 md:-top-7 md:-right-5 lg:-top-8 lg:-right-6 xl:-top-9 xl:-right-7 z-40 pointer-events-auto select-none"
                 >
                   {/* Entrance animation: flies in smoothly from right with elastic rebound */}
                   <motion.div
-                    initial={{ x: 140, y: -30, rotate: 32, scale: 0.35, opacity: 0 }}
+                    initial={{ x: 100, y: -20, rotate: 28, scale: 0.4, opacity: 0 }}
                     animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
                     transition={{
-                      duration: 1.25,
+                      duration: 1.2,
                       delay: 0.18,
                       ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
                     }}
@@ -320,9 +320,9 @@ export default function ProgramHeroInteractive({
                     {/* Continuous ambient float & subtle wiggle */}
                     <motion.div
                       animate={{
-                        y: [0, -14, 0, 10, 0],
-                        x: [0, 6, 0, -6, 0],
-                        rotate: [0, 7, 0, -6, 0],
+                        y: [0, -10, 0, 8, 0],
+                        x: [0, 4, 0, -4, 0],
+                        rotate: [0, 6, 0, -5, 0],
                       }}
                       transition={{
                         duration: 5.2,
@@ -330,21 +330,21 @@ export default function ProgramHeroInteractive({
                         ease: "easeInOut",
                       }}
                       whileHover={{
-                        scale: 1.15,
-                        rotate: 15,
+                        scale: 1.12,
+                        rotate: 12,
                         transition: { type: "spring", stiffness: 350, damping: 12 },
                       }}
-                      whileTap={{ scale: 0.92 }}
+                      whileTap={{ scale: 0.94 }}
                       className="cursor-pointer"
                     >
-                      <div className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-30 lg:h-30 xl:w-34 xl:h-34 drop-shadow-[0_24px_35px_rgba(0,0,0,0.65)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)]">
+                      <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-24 xl:h-24 drop-shadow-[0_16px_24px_rgba(0,0,0,0.55)] drop-shadow-[0_6px_10px_rgba(0,0,0,0.35)]">
                         <Image
                           src={topRight3DIcon}
                           alt="Adobe Illustrator 3D Badge"
                           fill
                           className="object-contain pointer-events-none"
                           priority
-                          sizes="(max-width: 768px) 96px, 144px"
+                          sizes="(max-width: 768px) 72px, 96px"
                         />
                       </div>
                     </motion.div>
@@ -490,61 +490,61 @@ export default function ProgramHeroInteractive({
                   </div>
                 )}
               </motion.div>
-
-              {/* ─── 2. Floating 3D Photoshop (Ps) Sphere (Bottom-Right of Hero) ─── */}
-              {show3DIcons && (
-                <motion.div
-                  style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
-                  className="absolute -bottom-10 -right-6 sm:-bottom-12 sm:-right-8 md:-bottom-14 md:-right-10 lg:-bottom-16 lg:-right-12 xl:-bottom-20 xl:-right-16 z-40 pointer-events-auto select-none"
-                >
-                  {/* Entrance animation: flies in smoothly from right with elastic rebound */}
-                  <motion.div
-                    initial={{ x: 180, y: 50, rotate: -38, scale: 0.35, opacity: 0 }}
-                    animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
-                    transition={{
-                      duration: 1.45,
-                      delay: 0.35,
-                      ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
-                    }}
-                  >
-                    {/* Continuous ambient float & subtle wiggle */}
-                    <motion.div
-                      animate={{
-                        y: [0, 16, 0, -12, 0],
-                        x: [0, -8, 0, 7, 0],
-                        rotate: [0, -8, 0, 6, 0],
-                      }}
-                      transition={{
-                        duration: 6.2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.4,
-                      }}
-                      whileHover={{
-                        scale: 1.15,
-                        rotate: -15,
-                        transition: { type: "spring", stiffness: 350, damping: 12 },
-                      }}
-                      whileTap={{ scale: 0.92 }}
-                      className="cursor-pointer"
-                    >
-                      <div className="relative w-22 h-22 sm:w-28 sm:h-28 md:w-34 md:h-34 lg:w-40 lg:h-40 xl:w-48 xl:h-48 drop-shadow-[0_28px_45px_rgba(0,0,0,0.7)] drop-shadow-[0_12px_22px_rgba(0,0,0,0.45)]">
-                        <Image
-                          src={bottomRight3DIcon}
-                          alt="Adobe Photoshop 3D Badge"
-                          fill
-                          className="object-contain pointer-events-none"
-                          priority
-                          sizes="(max-width: 768px) 128px, 208px"
-                        />
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-              )}
             </div>
           </div>
         </Container>
+
+        {/* ─── 2. Floating 3D Photoshop (Ps) Sphere (Placed far at Bottom-Right Corner of the Hero Section) ─── */}
+        {show3DIcons && (
+          <motion.div
+            style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
+            className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-12 xl:bottom-12 xl:right-16 z-30 pointer-events-auto select-none"
+          >
+            {/* Entrance animation: flies in smoothly from right with elastic rebound */}
+            <motion.div
+              initial={{ x: 130, y: 35, rotate: -30, scale: 0.35, opacity: 0 }}
+              animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+              transition={{
+                duration: 1.35,
+                delay: 0.35,
+                ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
+              }}
+            >
+              {/* Continuous ambient float & subtle wiggle */}
+              <motion.div
+                animate={{
+                  y: [0, 12, 0, -10, 0],
+                  x: [0, -6, 0, 5, 0],
+                  rotate: [0, -6, 0, 5, 0],
+                }}
+                transition={{
+                  duration: 6.0,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.3,
+                }}
+                whileHover={{
+                  scale: 1.12,
+                  rotate: -12,
+                  transition: { type: "spring", stiffness: 350, damping: 12 },
+                }}
+                whileTap={{ scale: 0.94 }}
+                className="cursor-pointer"
+              >
+                <div className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-28 lg:h-28 xl:w-34 xl:h-34 drop-shadow-[0_20px_32px_rgba(0,0,0,0.6)] drop-shadow-[0_8px_14px_rgba(0,0,0,0.38)]">
+                  <Image
+                    src={bottomRight3DIcon}
+                    alt="Adobe Photoshop 3D Badge"
+                    fill
+                    className="object-contain pointer-events-none"
+                    priority
+                    sizes="(max-width: 768px) 88px, 136px"
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
