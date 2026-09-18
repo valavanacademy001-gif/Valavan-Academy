@@ -3,10 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 
 /**
- * CustomCursor — Fluid Trailing Magnetic Blue Ring
+ * CustomCursor — Fluid Trailing Magnetic Blue Ring with Center Point Dot
  *
- * Keeps the normal system pointer 100% natural and visible, while rendering
- * a silky smooth trailing blue ring that floats & drags with inertia behind the mouse.
+ * Renders a trailing outer blue circle with a sharp blue dot at its center,
+ * moving together with smooth drag & spring inertia behind the mouse.
  */
 export default function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
@@ -54,13 +54,13 @@ export default function CustomCursor() {
       setIsVisible(true);
     };
 
-    // Silky smooth trailing Lerp loop (0.13 for gentle fluid trailing drag)
+    // Silky smooth trailing Lerp loop (0.14 for fluid trailing drag)
     const render = () => {
       const deltaX = mouseX - ringX;
       const deltaY = mouseY - ringY;
 
-      ringX += deltaX * 0.13;
-      ringY += deltaY * 0.13;
+      ringX += deltaX * 0.14;
+      ringY += deltaY * 0.14;
 
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
 
@@ -102,19 +102,28 @@ export default function CustomCursor() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden select-none hidden lg:block"
     >
-      {/* Silky Smooth Trailing Ring (floats behind mouse with fluid drag inertia) */}
+      {/* Outer Blue Circle with Center Blue Point Dot inside */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 rounded-full will-change-transform pointer-events-none transition-all duration-200 ease-out ${
+        className={`fixed top-0 left-0 flex items-center justify-center rounded-full will-change-transform pointer-events-none transition-all duration-200 ease-out ${
           isVisible ? "opacity-100" : "opacity-0"
         } ${
           isHovered
-            ? "w-11 h-11 border-[1.5px] border-[#1748BB] bg-[#1748BB]/12 backdrop-blur-[0.5px] shadow-[0_0_16px_rgba(23,72,187,0.3)]"
+            ? "w-11 h-11 border-[1.5px] border-[#1748BB] bg-[#1748BB]/10 backdrop-blur-[0.5px] shadow-[0_0_16px_rgba(23,72,187,0.3)]"
             : isClicking
-            ? "w-6 h-6 border-[2px] border-[#1748BB] bg-[#1748BB]/25 shadow-[0_0_10px_rgba(23,72,187,0.4)]"
-            : "w-8 h-8 border-[1.5px] border-[#1748BB]/60 bg-[#1748BB]/5 shadow-[0_0_8px_rgba(23,72,187,0.15)]"
+            ? "w-6 h-6 border-[2px] border-[#1748BB] bg-[#1748BB]/20 shadow-[0_0_10px_rgba(23,72,187,0.4)]"
+            : "w-8 h-8 border-[1.5px] border-[#1748BB]/70 bg-[#1748BB]/5 shadow-[0_0_10px_rgba(23,72,187,0.2)]"
         }`}
-      />
+      >
+        {/* Center Blue Point Dot */}
+        <div
+          className={`rounded-full bg-[#1748BB] transition-all duration-200 shrink-0 ${
+            isHovered
+              ? "w-2.5 h-2.5 opacity-90 shadow-[0_0_8px_rgba(23,72,187,0.6)]"
+              : "w-2 h-2 opacity-100 shadow-[0_0_6px_rgba(23,72,187,0.5)]"
+          }`}
+        />
+      </div>
     </div>
   );
 }
