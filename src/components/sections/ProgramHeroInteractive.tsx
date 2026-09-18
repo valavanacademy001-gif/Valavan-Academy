@@ -31,30 +31,31 @@ interface ProgramHeroInteractiveProps {
 }
 
 function renderIcon(type: string) {
+  const iconProps = { size: 16, className: "text-[#BACFFF] shrink-0" };
   switch (type) {
     case "students":
     case "graduation":
-      return <GraduationCap size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <GraduationCap {...iconProps} />;
     case "projects":
     case "folder":
-      return <FolderGit2 size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <FolderGit2 {...iconProps} />;
     case "lessons":
     case "video":
-      return <Video size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <Video {...iconProps} />;
     case "access":
     case "globe":
-      return <Globe size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <Globe {...iconProps} />;
     case "guidance":
     case "mentor":
-      return <UserCheck size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <UserCheck {...iconProps} />;
     case "clock":
-      return <Clock size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <Clock {...iconProps} />;
     case "level":
-      return <BarChart size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <BarChart {...iconProps} />;
     case "work":
-      return <Layers size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <Layers {...iconProps} />;
     default:
-      return <Sparkles size={18} className="text-[#BACFFF] mb-1.5" />;
+      return <Sparkles {...iconProps} />;
   }
 }
 
@@ -230,23 +231,27 @@ export default function ProgramHeroInteractive({
                 {description}
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 pt-2">
-                {highlights.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex flex-col justify-between shadow-sm hover:bg-white/15 transition-all duration-200"
-                  >
-                    <div>
-                      {renderIcon(item.iconType)}
-                      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-bold text-[#BACFFF] block leading-tight">
-                        {item.label}
+              <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1.5">
+                {highlights.map((item, idx) => {
+                  const displayText =
+                    item.value && item.label && !item.value.toLowerCase().includes(item.label.toLowerCase())
+                      ? `${item.value} ${item.label}`
+                      : item.value || item.label;
+
+                  return (
+                    <div
+                      key={idx}
+                      className="px-3.5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center gap-2.5 shadow-sm hover:bg-white/15 hover:border-white/30 transition-all duration-200 whitespace-nowrap"
+                    >
+                      <div className="shrink-0 flex items-center justify-center">
+                        {renderIcon(item.iconType)}
+                      </div>
+                      <span className="font-sans text-xs sm:text-sm font-semibold text-white whitespace-nowrap tracking-normal">
+                        {displayText}
                       </span>
                     </div>
-                    <span className="text-xs sm:text-sm font-bold text-white mt-1 block">
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-4">
