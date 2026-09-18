@@ -478,15 +478,15 @@ export default function ProgramHeroInteractive({
           </div>
         </Container>
 
-        {/* ─── 2. Floating 3D Photoshop (Ps) Sphere (Placed far at Bottom-Right Corner of the Hero Section) ─── */}
+        {/* ─── 2. Floating 3D Photoshop (Ps) Sphere (Placed at Bottom-Left on Mobile, Bottom-Right on Desktop) ─── */}
         {show3DIcons && (
           <motion.div
             style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
-            className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-8 md:right-8 lg:bottom-10 lg:right-12 xl:bottom-12 xl:right-16 z-30 pointer-events-auto select-none"
+            className="absolute bottom-3 left-3 sm:bottom-4 sm:left-6 md:bottom-6 md:left-8 lg:bottom-10 lg:left-auto lg:right-12 xl:bottom-12 xl:right-16 z-30 pointer-events-auto select-none"
           >
-            {/* Entrance animation: flies in smoothly from right with elastic rebound */}
+            {/* Entrance animation: flies in smoothly with elastic rebound */}
             <motion.div
-              initial={{ x: 130, y: 35, rotate: -30, scale: 0.35, opacity: 0 }}
+              initial={{ x: isDesktop ? 130 : -100, y: 35, rotate: -30, scale: 0.35, opacity: 0 }}
               animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
               transition={{
                 duration: 1.35,
@@ -498,14 +498,14 @@ export default function ProgramHeroInteractive({
               <div
                 className="animate-sphere-2 cursor-pointer transition-transform duration-200 hover:scale-112 active:scale-95"
               >
-                <div className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-28 lg:h-28 xl:w-34 xl:h-34 drop-shadow-[0_20px_32px_rgba(0,0,0,0.6)] drop-shadow-[0_8px_14px_rgba(0,0,0,0.38)]">
+                <div className="relative w-15 h-15 sm:w-18 sm:h-18 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-34 xl:h-34 drop-shadow-[0_20px_32px_rgba(0,0,0,0.6)] drop-shadow-[0_8px_14px_rgba(0,0,0,0.38)]">
                   <Image
                     src={bottomRight3DIcon}
                     alt="Adobe Photoshop 3D Badge"
                     fill
                     className="object-contain pointer-events-none"
                     priority
-                    sizes="(max-width: 768px) 88px, 136px"
+                    sizes="(max-width: 768px) 76px, 136px"
                   />
                 </div>
               </div>
