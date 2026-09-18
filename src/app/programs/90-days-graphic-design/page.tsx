@@ -5,7 +5,7 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 import Container from "@/components/ui/Container";
 import { ArrowLeft, ArrowRight, Award, CheckCircle2, Sparkles, Layers, Clock, Globe, BarChart } from "lucide-react";
 import ProgramHeroInteractive from "@/components/sections/ProgramHeroInteractive";
-import ToolsCoveredSection from "@/components/sections/ToolsCoveredSection";
+import ToolsCoveredSection, { DEFAULT_GRAPHIC_DESIGN_TOOLS, extractToolsFromMap } from "@/components/sections/ToolsCoveredSection";
 import ProgramRoadmapSection from "@/components/sections/ProgramRoadmapSection";
 import PracticalProjectsSection from "@/components/sections/PracticalProjectsSection";
 import After90DaysSection from "@/components/sections/After90DaysSection";
@@ -35,16 +35,6 @@ const CURRICULUM = [
   { week: "Week 13", topic: "Portfolio Building & Freelancing", desc: "Curating your top 10 portfolio projects, setting freelance pricing, and onboarding clients." },
 ];
 
-const TOOLS = [
-  "Adobe Photoshop",
-  "Adobe Illustrator",
-  "Canva Pro",
-  "Figma Basics",
-  "Adobe Firefly",
-  "Midjourney AI",
-  "Adobe Lightroom",
-];
-
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -72,17 +62,22 @@ export default async function GraphicDesignProgramPage() {
   const description = heroMap.description || cmsProgram?.description || "A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
-  const communityUrl = heroMap.community_url || EXTERNAL_URLS.community;
+  const buttonText = heroMap.enroll_btn_text || "Enroll Now";
+  const secondaryButtonText = heroMap.secondary_btn_text || "View Curriculum";
+  const secondaryButtonUrl = heroMap.secondary_btn_url || "#roadmap";
 
   const highlights: HighlightItem[] = [
-    { iconType: "clock", label: "Duration", value: duration },
-    { iconType: "globe", label: "Language", value: heroMap.highlight_language || "100% Tamil" },
-    { iconType: "level", label: "Skill Level", value: heroMap.highlight_level || (cmsProgram?.level === "beginner" ? "Beginner to Pro" : "Beginner to Intermediate") },
-    { iconType: "work", label: "Practical Work", value: heroMap.highlight_projects || "10+ Live Projects" },
+    { iconType: "students", label: "Students Trained", value: heroMap.stat_students || "10,000+" },
+    { iconType: "projects", label: "Portfolio Projects", value: heroMap.stat_projects || "20+ Projects" },
+    { iconType: "lessons", label: "Learning Lessons", value: heroMap.stat_lessons || "150+ Lessons" },
+    { iconType: "access", label: "Course Access", value: heroMap.stat_access || "Lifetime Access" },
+    { iconType: "guidance", label: "Mentorship", value: heroMap.stat_guidance || "Expert Guidance" },
   ];
 
   const titlePrefix = heroMap.title_prefix || "90 Days Graphic Design";
   const titleHighlight = heroMap.title_highlight || "Mastery Program.";
+
+  const dynamicTools = extractToolsFromMap(toolsMap, DEFAULT_GRAPHIC_DESIGN_TOOLS);
 
   return (
     <main className="min-h-screen bg-white">
@@ -96,7 +91,9 @@ export default async function GraphicDesignProgramPage() {
         imageSrc={imageSrc}
         altText={title}
         enrollUrl={enrollUrl}
-        communityUrl={communityUrl}
+        buttonText={buttonText}
+        secondaryButtonText={secondaryButtonText}
+        secondaryButtonUrl={secondaryButtonUrl}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
@@ -105,6 +102,7 @@ export default async function GraphicDesignProgramPage() {
         titlePrefix={toolsMap.title_prefix || "Creative Tools &"}
         titleHighlight={toolsMap.title_highlight || "AI Software."}
         subtitle={toolsMap.description || "Gain practical mastery across industry-standard vector, raster, and AI design tools."}
+        tools={dynamicTools}
       />
 
       {/* ── 03 Creative Interactive Roadmap Section ── */}

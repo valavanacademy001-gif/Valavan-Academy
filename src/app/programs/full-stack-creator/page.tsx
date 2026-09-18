@@ -5,7 +5,7 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 import Container from "@/components/ui/Container";
 import { ArrowLeft, ArrowRight, Sparkles, Clock, Globe, BarChart, Layers, Video, Palette, Layout, Bot, Briefcase, Megaphone } from "lucide-react";
 import ProgramHeroInteractive from "@/components/sections/ProgramHeroInteractive";
-import ToolsCoveredSection, { ToolItem } from "@/components/sections/ToolsCoveredSection";
+import ToolsCoveredSection, { ToolItem, extractToolsFromMap } from "@/components/sections/ToolsCoveredSection";
 import ProgramSyllabusMapSection from "@/components/sections/ProgramSyllabusMapSection";
 import SkillsMoneyCarouselSection from "@/components/sections/SkillsMoneyCarouselSection";
 import VideoTestimonialCarousel from "@/components/sections/VideoTestimonialCarousel";
@@ -114,17 +114,22 @@ export default async function FullStackCreatorPage() {
   const description = heroMap.description || cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
-  const communityUrl = heroMap.community_url || EXTERNAL_URLS.community;
+  const buttonText = heroMap.enroll_btn_text || "Enroll Now";
+  const secondaryButtonText = heroMap.secondary_btn_text || "View Curriculum";
+  const secondaryButtonUrl = heroMap.secondary_btn_url || "#syllabus";
 
   const highlights: HighlightItem[] = [
-    { iconType: "clock", label: "Duration", value: duration },
-    { iconType: "globe", label: "Language", value: heroMap.highlight_language || "100% Tamil" },
-    { iconType: "level", label: "Skill Level", value: heroMap.highlight_level || (cmsProgram?.level === "beginner" ? "Beginner" : "Beginner to Advanced") },
-    { iconType: "work", label: "Coverage", value: heroMap.highlight_projects || "25+ Live Projects" },
+    { iconType: "students", label: "Students Trained", value: heroMap.stat_students || "10,000+" },
+    { iconType: "projects", label: "Portfolio Projects", value: heroMap.stat_projects || "25+ Projects" },
+    { iconType: "lessons", label: "Learning Lessons", value: heroMap.stat_lessons || "150+ Lessons" },
+    { iconType: "access", label: "Course Access", value: heroMap.stat_access || "Lifetime Access" },
+    { iconType: "guidance", label: "Mentorship", value: heroMap.stat_guidance || "Expert Guidance" },
   ];
 
   const titlePrefix = heroMap.title_prefix || "Full Stack Digital";
   const titleHighlight = heroMap.title_highlight || "Creator Program.";
+
+  const dynamicTools = extractToolsFromMap(toolsMap, FULL_STACK_TOOLS);
 
   return (
     <main className="min-h-screen bg-white">
@@ -138,7 +143,9 @@ export default async function FullStackCreatorPage() {
         imageSrc={imageSrc}
         altText={title}
         enrollUrl={enrollUrl}
-        communityUrl={communityUrl}
+        buttonText={buttonText}
+        secondaryButtonText={secondaryButtonText}
+        secondaryButtonUrl={secondaryButtonUrl}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
@@ -147,7 +154,7 @@ export default async function FullStackCreatorPage() {
         titlePrefix={toolsMap.title_prefix || "Master the Complete"}
         titleHighlight={toolsMap.title_highlight || "Creative Arsenal."}
         subtitle={toolsMap.description || "Learn Premiere Pro, After Effects, Figma, Webflow, WordPress, and cutting-edge Generative AI."}
-        tools={FULL_STACK_TOOLS}
+        tools={dynamicTools}
       />
 
       {/* ── 03 Syllabus Mind-Map Section (Why we are different from others) ── */}

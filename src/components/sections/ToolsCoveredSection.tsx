@@ -21,7 +21,7 @@ interface ToolsCoveredSectionProps {
   tools?: ToolItem[];
 }
 
-const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
+export const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
   { name: "Adobe InDesign", logo: "/assets/tools/indesign.png" },
   { name: "Adobe Illustrator", logo: "/assets/tools/illustrator.png" },
   { name: "Adobe Photoshop", logo: "/assets/tools/ps.png" },
@@ -31,6 +31,24 @@ const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
   { name: "CorelDraw", logo: "/assets/tools/coreldraw.png" },
   { name: "Color Palette & Theory", logo: "/assets/tools/color wheel.png" },
 ];
+
+export function extractToolsFromMap(
+  toolsMap: Record<string, string> | undefined,
+  fallbackTools: ToolItem[]
+): ToolItem[] {
+  if (!toolsMap || Object.keys(toolsMap).length === 0) return fallbackTools;
+
+  const dynamicTools: ToolItem[] = [];
+  for (let i = 1; i <= 12; i++) {
+    const name = toolsMap[`tool_${i}_name`];
+    const image = toolsMap[`tool_${i}_image`];
+    if (name && image) {
+      dynamicTools.push({ name, logo: image });
+    }
+  }
+
+  return dynamicTools.length > 0 ? dynamicTools : fallbackTools;
+}
 
 export default function ToolsCoveredSection({
   title,

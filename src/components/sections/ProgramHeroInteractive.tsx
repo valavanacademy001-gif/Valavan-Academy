@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
-import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck } from "lucide-react";
 
 export interface HighlightItem {
-  iconType: "clock" | "globe" | "level" | "work";
+  iconType: "clock" | "globe" | "level" | "work" | "students" | "projects" | "lessons" | "access" | "guidance" | string;
   label: string;
   value: string;
 }
@@ -22,18 +22,33 @@ interface ProgramHeroInteractiveProps {
   imageSrc: string;
   altText: string;
   enrollUrl: string;
-  communityUrl: string;
+  communityUrl?: string;
   buttonText?: string;
+  secondaryButtonText?: string;
+  secondaryButtonUrl?: string;
   youtubeId?: string;
   videoUrl?: string;
 }
 
-function renderIcon(type: "clock" | "globe" | "level" | "work") {
+function renderIcon(type: string) {
   switch (type) {
-    case "clock":
-      return <Clock size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "students":
+    case "graduation":
+      return <GraduationCap size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "projects":
+    case "folder":
+      return <FolderGit2 size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "lessons":
+    case "video":
+      return <Video size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "access":
     case "globe":
       return <Globe size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "guidance":
+    case "mentor":
+      return <UserCheck size={18} className="text-[#BACFFF] mb-1.5" />;
+    case "clock":
+      return <Clock size={18} className="text-[#BACFFF] mb-1.5" />;
     case "level":
       return <BarChart size={18} className="text-[#BACFFF] mb-1.5" />;
     case "work":
@@ -53,7 +68,9 @@ export default function ProgramHeroInteractive({
   altText,
   enrollUrl,
   communityUrl,
-  buttonText = "Enroll in Program",
+  buttonText = "Enroll Now",
+  secondaryButtonText = "View Curriculum",
+  secondaryButtonUrl = "#roadmap",
   youtubeId,
   videoUrl,
 }: ProgramHeroInteractiveProps) {
@@ -213,15 +230,15 @@ export default function ProgramHeroInteractive({
                 {description}
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 pt-2">
                 {highlights.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 sm:p-4 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex flex-col justify-between shadow-sm hover:bg-white/15 transition-colors"
+                    className="p-3 sm:p-3.5 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex flex-col justify-between shadow-sm hover:bg-white/15 transition-all duration-200"
                   >
                     <div>
                       {renderIcon(item.iconType)}
-                      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-bold text-[#BACFFF] block">
+                      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider font-bold text-[#BACFFF] block leading-tight">
                         {item.label}
                       </span>
                     </div>
@@ -247,15 +264,16 @@ export default function ProgramHeroInteractive({
                 </a>
 
                 <a
-                  href={communityUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={secondaryButtonUrl || communityUrl || "#roadmap"}
+                  target={secondaryButtonUrl?.startsWith("#") ? undefined : "_blank"}
+                  rel={secondaryButtonUrl?.startsWith("#") ? undefined : "noopener noreferrer"}
                   style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
                   className="inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
                 >
                   <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">
-                    ↗ Ask in Community
+                    {secondaryButtonText}
                   </span>
+                  <ArrowRight size={17} style={{ color: "#FFFFFF" }} className="!text-white" />
                 </a>
               </div>
             </motion.div>
