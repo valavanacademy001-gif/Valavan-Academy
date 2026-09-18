@@ -28,6 +28,9 @@ interface ProgramHeroInteractiveProps {
   secondaryButtonUrl?: string;
   youtubeId?: string;
   videoUrl?: string;
+  show3DIcons?: boolean;
+  topRight3DIcon?: string;
+  bottomRight3DIcon?: string;
 }
 
 function renderIcon(type: string) {
@@ -74,6 +77,9 @@ export default function ProgramHeroInteractive({
   secondaryButtonUrl = "#roadmap",
   youtubeId,
   videoUrl,
+  show3DIcons = false,
+  topRight3DIcon = "/assets/icons/illustrator-3d-sphere.png",
+  bottomRight3DIcon = "/assets/icons/photoshop-3d-sphere.png",
 }: ProgramHeroInteractiveProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -149,6 +155,10 @@ export default function ProgramHeroInteractive({
   // Banner Heading + Arrow opacity (fades in as card expands to center stage)
   const bannerHeadingOpacity = useTransform(smoothProgress, [0.28, 0.58], [0, 1]);
   const bannerHeadingY = useTransform(smoothProgress, [0.28, 0.58], [15, 0]);
+
+  // Floating 3D Spheres fade out as video card expands to full stage
+  const sphereOpacity = useTransform(smoothProgress, [0, 0.22], [1, 0]);
+  const sphereScale = useTransform(smoothProgress, [0, 0.22], [1, 0.6]);
 
   // Shift image/video down by 68px as it expands so it sits in the lower center with zero top clipping
   const imageY = useTransform(smoothProgress, [0, 0.65], [0, 68]);
@@ -289,8 +299,59 @@ export default function ProgramHeroInteractive({
               </div>
             </motion.div>
 
-            {/* Right Hero Image/Video Showcase (Transforms into massive centered showcase with Image 2 Frame & Question) */}
+            {/* Right Hero Image/Video Showcase with Floating 3D Orbs */}
             <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
+              {/* ─── 1. Floating 3D Illustrator (Ai) Sphere (Top-Right of Video) ─── */}
+              {show3DIcons && (
+                <motion.div
+                  style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
+                  className="absolute -top-7 -right-4 sm:-top-9 sm:-right-6 md:-top-11 md:-right-8 lg:-top-12 lg:-right-8 xl:-top-14 xl:-right-10 z-40 pointer-events-auto select-none"
+                >
+                  {/* Entrance animation: flies in smoothly from right with elastic rebound */}
+                  <motion.div
+                    initial={{ x: 140, y: -30, rotate: 32, scale: 0.35, opacity: 0 }}
+                    animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                    transition={{
+                      duration: 1.25,
+                      delay: 0.18,
+                      ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
+                    }}
+                  >
+                    {/* Continuous ambient float & subtle wiggle */}
+                    <motion.div
+                      animate={{
+                        y: [0, -14, 0, 10, 0],
+                        x: [0, 6, 0, -6, 0],
+                        rotate: [0, 7, 0, -6, 0],
+                      }}
+                      transition={{
+                        duration: 5.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      whileHover={{
+                        scale: 1.15,
+                        rotate: 15,
+                        transition: { type: "spring", stiffness: 350, damping: 12 },
+                      }}
+                      whileTap={{ scale: 0.92 }}
+                      className="cursor-pointer"
+                    >
+                      <div className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-30 lg:h-30 xl:w-34 xl:h-34 drop-shadow-[0_24px_35px_rgba(0,0,0,0.65)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.4)]">
+                        <Image
+                          src={topRight3DIcon}
+                          alt="Adobe Illustrator 3D Badge"
+                          fill
+                          className="object-contain pointer-events-none"
+                          priority
+                          sizes="(max-width: 768px) 96px, 144px"
+                        />
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              )}
+
               {/* Outer Glowing Border Stroke Frame matching Image 2 */}
               <motion.div
                 style={
@@ -429,6 +490,58 @@ export default function ProgramHeroInteractive({
                   </div>
                 )}
               </motion.div>
+
+              {/* ─── 2. Floating 3D Photoshop (Ps) Sphere (Bottom-Right of Hero) ─── */}
+              {show3DIcons && (
+                <motion.div
+                  style={isDesktop ? { opacity: sphereOpacity, scale: sphereScale } : {}}
+                  className="absolute -bottom-10 -right-6 sm:-bottom-12 sm:-right-8 md:-bottom-14 md:-right-10 lg:-bottom-16 lg:-right-12 xl:-bottom-20 xl:-right-16 z-40 pointer-events-auto select-none"
+                >
+                  {/* Entrance animation: flies in smoothly from right with elastic rebound */}
+                  <motion.div
+                    initial={{ x: 180, y: 50, rotate: -38, scale: 0.35, opacity: 0 }}
+                    animate={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                    transition={{
+                      duration: 1.45,
+                      delay: 0.35,
+                      ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
+                    }}
+                  >
+                    {/* Continuous ambient float & subtle wiggle */}
+                    <motion.div
+                      animate={{
+                        y: [0, 16, 0, -12, 0],
+                        x: [0, -8, 0, 7, 0],
+                        rotate: [0, -8, 0, 6, 0],
+                      }}
+                      transition={{
+                        duration: 6.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.4,
+                      }}
+                      whileHover={{
+                        scale: 1.15,
+                        rotate: -15,
+                        transition: { type: "spring", stiffness: 350, damping: 12 },
+                      }}
+                      whileTap={{ scale: 0.92 }}
+                      className="cursor-pointer"
+                    >
+                      <div className="relative w-22 h-22 sm:w-28 sm:h-28 md:w-34 md:h-34 lg:w-40 lg:h-40 xl:w-48 xl:h-48 drop-shadow-[0_28px_45px_rgba(0,0,0,0.7)] drop-shadow-[0_12px_22px_rgba(0,0,0,0.45)]">
+                        <Image
+                          src={bottomRight3DIcon}
+                          alt="Adobe Photoshop 3D Badge"
+                          fill
+                          className="object-contain pointer-events-none"
+                          priority
+                          sizes="(max-width: 768px) 128px, 208px"
+                        />
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              )}
             </div>
           </div>
         </Container>
@@ -436,3 +549,4 @@ export default function ProgramHeroInteractive({
     </div>
   );
 }
+

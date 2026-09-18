@@ -96,6 +96,9 @@ export default async function GraphicDesignProgramPage() {
         secondaryButtonUrl={secondaryButtonUrl}
         youtubeId={heroMap.youtube_video_id || heroMap.youtube_id || heroMap.video_id || "BYSgZWZMgMU"}
         videoUrl={heroMap.video_url || "https://www.youtube.com/embed/BYSgZWZMgMU?si=TeHULtawXhx5PWig&start=2"}
+        show3DIcons={true}
+        topRight3DIcon={heroMap.top_right_3d_icon || "/assets/icons/illustrator-3d-sphere.png"}
+        bottomRight3DIcon={heroMap.bottom_right_3d_icon || "/assets/icons/photoshop-3d-sphere.png"}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
