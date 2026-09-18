@@ -15,10 +15,14 @@ import {
   Building2,
   Sparkles,
   CheckCircle2,
+  Award,
+  TrendingUp,
+  UserCheck,
+  Layers,
 } from "lucide-react";
 
 export interface OutcomeItem {
-  iconType: "job" | "freelance" | "portfolio" | "client" | "branding" | "packaging" | "workflow" | "business";
+  iconType: string;
   title: string;
   tag: string;
 }
@@ -29,71 +33,105 @@ interface After90DaysSectionProps {
   badge?: string;
   enrollUrl?: string;
   outcomes?: OutcomeItem[];
+  outcomesMap?: Record<string, string>;
 }
 
-const DEFAULT_OUTCOMES: OutcomeItem[] = [
+export const DEFAULT_OUTCOMES: OutcomeItem[] = [
   {
-    iconType: "job",
-    title: "Apply For Graphic Design Jobs",
-    tag: "Career Ready",
-  },
-  {
-    iconType: "freelance",
-    title: "Start Freelancing With Confidence",
-    tag: "High Income",
+    iconType: "design",
+    title: "Create Professional Designs With Confidence",
+    tag: "Core Skill",
   },
   {
     iconType: "portfolio",
-    title: "Build A Professional Portfolio",
-    tag: "Real Proof",
+    title: "Build Your Own Portfolio",
+    tag: "Showcase",
   },
   {
     iconType: "client",
-    title: "Handle Client Projects Independently",
-    tag: "End-to-End",
+    title: "Handle Real Client Projects",
+    tag: "Hands-on",
+  },
+  {
+    iconType: "social",
+    title: "Design Social Media Creatives",
+    tag: "Social Growth",
+  },
+  {
+    iconType: "ad",
+    title: "Create Advertising Campaign Assets",
+    tag: "Marketing",
   },
   {
     iconType: "branding",
-    title: "Design Branding & Marketing Materials",
-    tag: "Commercial",
+    title: "Develop Brand Identities",
+    tag: "Branding",
   },
   {
-    iconType: "packaging",
-    title: "Create Packaging & Print Designs",
-    tag: "Print & Dieline",
+    iconType: "freelance",
+    title: "Work As A Freelancer",
+    tag: "High Income",
   },
   {
-    iconType: "workflow",
-    title: "Understand Industry Workflows",
-    tag: "Agencies & Studios",
+    iconType: "job",
+    title: "Apply For Design Opportunities",
+    tag: "Career Ready",
   },
   {
-    iconType: "business",
-    title: "Start Building Your Own Design Business",
-    tag: "Entrepreneurship",
+    iconType: "personal_brand",
+    title: "Build A Personal Brand",
+    tag: "Authority",
+  },
+  {
+    iconType: "growth",
+    title: "Continue Growing As A Creative Professional",
+    tag: "Lifelong Growth",
   },
 ];
 
-function renderOutcomeIcon(type: OutcomeItem["iconType"]) {
+export function extractOutcomesFromMap(
+  outcomesMap?: Record<string, string>,
+  fallbackOutcomes: OutcomeItem[] = DEFAULT_OUTCOMES
+): OutcomeItem[] {
+  if (!outcomesMap || Object.keys(outcomesMap).length === 0) return fallbackOutcomes;
+
+  const list: OutcomeItem[] = [];
+  for (let i = 1; i <= 12; i++) {
+    const title = outcomesMap[`outcome_${i}_title`] || outcomesMap[`item_${i}_title`];
+    if (title) {
+      const tag = outcomesMap[`outcome_${i}_tag`] || outcomesMap[`item_${i}_tag`] || "Guaranteed Skill";
+      const iconType = fallbackOutcomes[i - 1]?.iconType || "growth";
+      list.push({ title, tag, iconType });
+    }
+  }
+
+  return list.length > 0 ? list : fallbackOutcomes;
+}
+
+function renderOutcomeIcon(type: string) {
   const iconProps = { size: 20, className: "transition-colors duration-300" };
 
   switch (type) {
-    case "job":
-      return <Briefcase {...iconProps} />;
-    case "freelance":
-      return <Laptop {...iconProps} />;
+    case "design":
+      return <Palette {...iconProps} />;
     case "portfolio":
       return <GraduationCap {...iconProps} />;
     case "client":
-      return <DollarSign {...iconProps} />;
+      return <Briefcase {...iconProps} />;
+    case "social":
+      return <Layers {...iconProps} />;
+    case "ad":
+      return <Sparkles {...iconProps} />;
     case "branding":
-      return <Palette {...iconProps} />;
-    case "packaging":
-      return <Package {...iconProps} />;
-    case "workflow":
-      return <Cpu {...iconProps} />;
-    case "business":
+      return <Award {...iconProps} />;
+    case "freelance":
+      return <Laptop {...iconProps} />;
+    case "job":
       return <Building2 {...iconProps} />;
+    case "personal_brand":
+      return <UserCheck {...iconProps} />;
+    case "growth":
+      return <TrendingUp {...iconProps} />;
     default:
       return <Sparkles {...iconProps} />;
   }
@@ -105,7 +143,10 @@ export default function After90DaysSection({
   badge = "Career Outcomes",
   enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
   outcomes = DEFAULT_OUTCOMES,
+  outcomesMap,
 }: After90DaysSectionProps) {
+  const effectiveOutcomes = outcomesMap ? extractOutcomesFromMap(outcomesMap, outcomes) : outcomes;
+
   return (
     <section
       className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-14 sm:py-20 md:py-24 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB] lg:min-h-screen"
@@ -149,8 +190,7 @@ export default function After90DaysSection({
               className="font-display font-bold text-white leading-tight tracking-tight mb-2.5"
               style={{ fontSize: "clamp(30px, 4.2vw, 50px)", color: "#FFFFFF" }}
             >
-              After{" "}
-              <span style={{ color: "#BACFFF" }}>90 Days</span> You Can.
+              After <span style={{ color: "#BACFFF" }}>90 Days</span> You Can.
             </h2>
           </FadeUp>
 
@@ -164,12 +204,11 @@ export default function After90DaysSection({
           </FadeUp>
         </div>
 
-        {/* 8 Modern Glass Outcome Cards in Compact Balanced Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 max-w-6xl mx-auto">
-          {outcomes.map((item, index) => (
-            <FadeUp key={item.title} delay={index * 0.05} className="h-full">
+        {/* 10 Modern Glass Outcome Cards in Balanced 5-column Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 max-w-7xl mx-auto">
+          {effectiveOutcomes.map((item, index) => (
+            <FadeUp key={item.title} delay={index * 0.04} className="h-full">
               <div className="group h-full p-4 sm:p-5 rounded-[22px] bg-white/10 hover:bg-white border border-white/20 hover:border-white transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)] hover:-translate-y-1.5 flex flex-col justify-between gap-4 backdrop-blur-md cursor-default">
-                
                 {/* Top Icon & Tag */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="w-10 h-10 rounded-xl bg-white/15 group-hover:bg-[#1748BB] text-white group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm">
@@ -180,7 +219,7 @@ export default function After90DaysSection({
                   </span>
                 </div>
 
-                {/* Outcome Title (Clash Display Semibold, White in normal, Blue on hover) */}
+                {/* Outcome Title */}
                 <div>
                   <h3 className="font-display font-semibold text-sm sm:text-base text-white group-hover:text-[#1748BB] leading-snug tracking-normal transition-colors duration-300">
                     {item.title}

@@ -122,6 +122,7 @@ export default async function GraphicDesignProgramPage() {
         title={outcomesMap.title_prefix ? `${outcomesMap.title_prefix} ${outcomesMap.title_highlight || ''}` : "After 90 Days You Can"}
         subtitle={outcomesMap.description || "From landing your first ₹30k/mo freelance client to securing a high-demand graphic design role."}
         enrollUrl={enrollUrl}
+        outcomesMap={outcomesMap}
       />
 
       {/* ── 06 Our Students Success Stories (Centered Heading with Success in Blue) ── */}
