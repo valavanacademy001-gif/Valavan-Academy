@@ -129,8 +129,6 @@ export default async function FullStackCreatorPage() {
   const titlePrefix = heroMap.title_prefix || "Full Stack Digital";
   const titleHighlight = heroMap.title_highlight || "Creator Program.";
 
-  const dynamicTools = extractToolsFromMap(toolsMap, FULL_STACK_TOOLS);
-
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
@@ -154,7 +152,8 @@ export default async function FullStackCreatorPage() {
         titlePrefix={toolsMap.title_prefix || "Master the Complete"}
         titleHighlight={toolsMap.title_highlight || "Creative Arsenal."}
         subtitle={toolsMap.description || "Learn Premiere Pro, After Effects, Figma, Webflow, WordPress, and cutting-edge Generative AI."}
-        tools={dynamicTools}
+        tools={FULL_STACK_TOOLS}
+        toolsMap={toolsMap}
       />
 
       {/* ── 03 Syllabus Mind-Map Section (Why we are different from others) ── */}

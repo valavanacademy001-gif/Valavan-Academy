@@ -8,7 +8,8 @@ import FadeUp from "@/components/animations/FadeUp";
 
 export interface RoadmapItem {
   phase: string;
-  duration: string;
+  duration?: string;
+  description?: string;
   topics: string[];
 }
 
@@ -17,58 +18,94 @@ interface ProgramRoadmapSectionProps {
   subtitle?: string;
   badge?: string;
   phases?: RoadmapItem[];
+  roadmapMap?: Record<string, string>;
 }
 
-const DEFAULT_GRAPHIC_DESIGN_ROADMAP: RoadmapItem[] = [
+export const DEFAULT_GRAPHIC_DESIGN_ROADMAP: RoadmapItem[] = [
   {
     phase: "Foundation",
     duration: "(Week 1–3)",
+    description: "Build a strong creative foundation and understand the principles behind great design.",
     topics: [
-      "Design Thinking Basics",
-      "Typography Fundamentals",
+      "Design Fundamentals",
       "Color Theory",
+      "Typography",
       "Layout Principles",
-      "Photoshop Introduction",
-      "Design Practice Exercises",
-      "Creative Mindset Development",
+      "Visual Hierarchy",
+      "Design Thinking",
+      "Creative Mindset",
     ],
   },
   {
     phase: "Skill Development",
     duration: "(Week 4–8)",
+    description: "Master the tools, workflows, and techniques used in professional design projects.",
     topics: [
-      "Photoshop Advanced Techniques",
-      "Branding Design",
-      "Logo Design",
+      "Photoshop Mastery",
+      "Image Editing",
       "Social Media Design",
-      "Thumbnail Design",
       "Poster Design",
-      "Print Design Fundamentals",
-      "Packaging Design Introduction",
+      "Branding Design",
+      "Advertisement Creatives",
+      "Client Workflows",
     ],
   },
   {
     phase: "Career & Growth",
     duration: "(Week 9–12)",
+    description: "Transform your skills into opportunities.",
     topics: [
-      "Portfolio Development",
+      "Portfolio Building",
+      "Freelancing Basics",
       "Client Communication",
-      "Freelancing Roadmap",
       "Personal Branding",
-      "Pricing Strategies",
-      "Design Business Fundamentals",
-      "Career Growth Framework",
+      "Project Presentation",
+      "Pricing & Packaging",
+      "Career Preparation",
     ],
   },
 ];
+
+export function extractRoadmapPhases(
+  roadmapMap?: Record<string, string>,
+  fallbackPhases: RoadmapItem[] = DEFAULT_GRAPHIC_DESIGN_ROADMAP
+): RoadmapItem[] {
+  if (!roadmapMap || Object.keys(roadmapMap).length === 0) return fallbackPhases;
+
+  const phases: RoadmapItem[] = [];
+  for (let i = 1; i <= 6; i++) {
+    const title = roadmapMap[`phase_${i}_title`];
+    if (!title) continue;
+    const duration = roadmapMap[`phase_${i}_duration`] || "";
+    const description = roadmapMap[`phase_${i}_desc`] || "";
+    const rawTopics = roadmapMap[`phase_${i}_topics`];
+    const topics = rawTopics
+      ? rawTopics
+          .split(/\n|,/)
+          .map((t) => t.replace(/^[✔•\-\*]\s*/, "").trim())
+          .filter(Boolean)
+      : [];
+
+    phases.push({
+      phase: title,
+      duration,
+      description,
+      topics,
+    });
+  }
+
+  return phases.length > 0 ? phases : fallbackPhases;
+}
 
 export default function ProgramRoadmapSection({
   title = "90 Days Graphic Design Mastery Roadmap",
   subtitle = "Follow a structured step-by-step journey designed to help you learn, practice, build a portfolio and launch your design career.",
   badge = "Curriculum Roadmap",
   phases = DEFAULT_GRAPHIC_DESIGN_ROADMAP,
+  roadmapMap,
 }: ProgramRoadmapSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const effectivePhases = roadmapMap ? extractRoadmapPhases(roadmapMap, phases) : phases;
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -148,11 +185,10 @@ export default function ProgramRoadmapSection({
       });
     }, containerRef);
 
-    return () => ctx.revert();
-  }, [phases]);
+  }, [effectivePhases]);
 
   return (
-    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
+    <section id="roadmap" className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100">
       {/* Ambient background glow */}
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
@@ -183,7 +219,7 @@ export default function ProgramRoadmapSection({
 
         {/* ── Alternating Zig-Zag Layout with Directional GSAP Scroll Animations ── */}
         <div ref={containerRef} className="max-w-5xl mx-auto space-y-14 sm:space-y-20 relative">
-          {phases.map((item, index) => {
+          {effectivePhases.map((item, index) => {
             const isEven = index % 2 === 0;
 
             // Even: Text on Left (slide-from-left), Card on Right (slide-from-right)
@@ -214,13 +250,20 @@ export default function ProgramRoadmapSection({
                   </span>
                   <h3
                     style={{ color: "#1748BB" }}
-                    className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl !text-[#1748BB] leading-[0.94] tracking-tight mb-2.5"
+                    className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl !text-[#1748BB] leading-[0.94] tracking-tight mb-2"
                   >
                     {item.phase}
                   </h3>
-                  <p className="font-sans text-base sm:text-lg font-semibold text-neutral-500">
-                    {item.duration}
-                  </p>
+                  {item.duration && (
+                    <p className="font-sans text-sm sm:text-base font-semibold text-neutral-500 mb-2">
+                      {item.duration}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p className="font-sans text-sm sm:text-base leading-relaxed text-neutral-600 mt-1 max-w-md">
+                      {item.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Vibrant Blue Rounded Card */}
@@ -243,13 +286,20 @@ export default function ProgramRoadmapSection({
                       `,
                     }}
                   >
+                    <div className="mb-4 pb-3 border-b border-white/15 flex items-center justify-between">
+                      <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-white/85">
+                        You&apos;ll Learn
+                      </span>
+                    </div>
                     <ul className="space-y-3 sm:space-y-3.5 relative z-10">
                       {item.topics.map((topic) => (
                         <li
                           key={topic}
                           className="flex items-center gap-3 font-sans text-sm sm:text-base text-white/95 group-hover:text-white transition-colors"
                         >
-                          <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] shrink-0" />
+                          <span className="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-sm">
+                            ✔
+                          </span>
                           <span className="font-medium">{topic}</span>
                         </li>
                       ))}

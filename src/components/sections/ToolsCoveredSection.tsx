@@ -19,6 +19,7 @@ interface ToolsCoveredSectionProps {
   subtitle?: string;
   badge?: string;
   tools?: ToolItem[];
+  toolsMap?: Record<string, string>;
 }
 
 export const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
@@ -57,9 +58,11 @@ export default function ToolsCoveredSection({
   subtitle = "Learn the tools used by professional designers, agencies, freelancers and creative businesses worldwide.",
   badge = "How It Works",
   tools = DEFAULT_GRAPHIC_DESIGN_TOOLS,
+  toolsMap,
 }: ToolsCoveredSectionProps) {
+  const effectiveTools = toolsMap ? extractToolsFromMap(toolsMap, tools) : tools;
   // Duplicate tools array 4 times for a perfectly seamless, gapless infinite loop
-  const marqueeItems = [...tools, ...tools, ...tools, ...tools];
+  const marqueeItems = [...effectiveTools, ...effectiveTools, ...effectiveTools, ...effectiveTools];
 
   return (
     <section className="py-10 sm:py-18 md:py-24 bg-white relative overflow-hidden border-b border-neutral-100">

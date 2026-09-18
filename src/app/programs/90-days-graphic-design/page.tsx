@@ -77,8 +77,6 @@ export default async function GraphicDesignProgramPage() {
   const titlePrefix = heroMap.title_prefix || "90 Days Graphic Design";
   const titleHighlight = heroMap.title_highlight || "Mastery Program.";
 
-  const dynamicTools = extractToolsFromMap(toolsMap, DEFAULT_GRAPHIC_DESIGN_TOOLS);
-
   return (
     <main className="min-h-screen bg-white">
       {/* ── 01 Interactive Expanding Hero Section ── */}
@@ -102,7 +100,7 @@ export default async function GraphicDesignProgramPage() {
         titlePrefix={toolsMap.title_prefix || "Creative Tools &"}
         titleHighlight={toolsMap.title_highlight || "AI Software."}
         subtitle={toolsMap.description || "Gain practical mastery across industry-standard vector, raster, and AI design tools."}
-        tools={dynamicTools}
+        toolsMap={toolsMap}
       />
 
       {/* ── 03 Creative Interactive Roadmap Section ── */}
@@ -110,6 +108,7 @@ export default async function GraphicDesignProgramPage() {
         title={roadmapMap.title_prefix ? `${roadmapMap.title_prefix} ${roadmapMap.title_highlight || ''}` : "90 Days Graphic Design Mastery Roadmap"}
         subtitle={roadmapMap.description || "Follow a structured step-by-step journey designed to help you learn, practice, build a portfolio and launch your design career."}
         badge={roadmapMap.badge || "Structured Curriculum"}
+        roadmapMap={roadmapMap}
       />
 
       {/* ── 04 Practical Projects Section ── */}
