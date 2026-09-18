@@ -185,7 +185,6 @@ html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: hidden;
   max-width: 100%;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -201,7 +200,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
   max-width: 100%;
   position: relative;
   -webkit-overflow-scrolling: touch;

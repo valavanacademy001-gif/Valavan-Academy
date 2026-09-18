@@ -153,24 +153,24 @@ export default function ProgramHeroInteractive({
   };
 
   // Banner Heading + Arrow opacity (fades in as card expands to center stage)
-  const bannerHeadingOpacity = useTransform(smoothProgress, [0.20, 0.42], [0, 1]);
-  const bannerHeadingY = useTransform(smoothProgress, [0.20, 0.42], [15, 0]);
+  const bannerHeadingOpacity = useTransform(smoothProgress, [0.18, 0.42], [0, 1]);
+  const bannerHeadingY = useTransform(smoothProgress, [0.18, 0.42], [12, 0]);
 
   // Floating 3D Spheres fade out as video card expands to full stage
-  const sphereOpacity = useTransform(smoothProgress, [0, 0.18], [1, 0]);
-  const sphereScale = useTransform(smoothProgress, [0, 0.18], [1, 0.6]);
+  const sphereOpacity = useTransform(smoothProgress, [0, 0.16], [1, 0]);
+  const sphereScale = useTransform(smoothProgress, [0, 0.16], [1, 0.6]);
 
-  // Shift image/video down by 68px as it expands so it sits in the lower center with zero top clipping
-  const imageY = useTransform(smoothProgress, [0, 0.48], [0, 68]);
+  // Optical vertical centering adjustment
+  const imageY = useTransform(smoothProgress, [0, 0.45], [0, 0]);
 
   // Desktop Animation Transforms for seamless Expansion Effect
-  const textOpacity = useTransform(smoothProgress, [0, 0.28], [1, 0]);
-  const textX = useTransform(smoothProgress, [0, 0.28], [0, -70]);
-  const imageX = useTransform(smoothProgress, [0, 0.48], ["0%", "-66%"]);
-  const imageScale = useTransform(smoothProgress, [0, 0.48, 1], [1, 1.88, 1.88]);
+  const textOpacity = useTransform(smoothProgress, [0, 0.25], [1, 0]);
+  const textX = useTransform(smoothProgress, [0, 0.25], [0, -60]);
+  const imageX = useTransform(smoothProgress, [0, 0.45], ["0%", "-70%"]);
+  const imageScale = useTransform(smoothProgress, [0, 0.45, 1], [1, 1.75, 1.75]);
   const imageShadow = useTransform(
     smoothProgress,
-    [0, 0.48],
+    [0, 0.45],
     ["0 20px 45px rgba(0,0,0,0.28)", "0 30px 75px rgba(0,0,0,0.45)"]
   );
 
@@ -178,7 +178,7 @@ export default function ProgramHeroInteractive({
     <div
       ref={containerRef}
       className={`relative bg-[#1748BB] text-white ${
-        isDesktop ? "h-[200vh]" : "w-full pb-12 pt-24 sm:pt-28"
+        isDesktop ? "h-[180vh]" : "w-full pb-12 pt-24 sm:pt-28"
       }`}
       style={{
         backgroundImage: `
@@ -204,7 +204,7 @@ export default function ProgramHeroInteractive({
       <div
         className={`${
           isDesktop
-            ? "sticky top-0 h-screen w-full flex flex-col justify-center pt-8 overflow-visible z-20"
+            ? "sticky top-0 h-screen w-full flex items-center justify-center pt-14 overflow-visible z-20"
             : "relative z-10 overflow-hidden"
         }`}
       >

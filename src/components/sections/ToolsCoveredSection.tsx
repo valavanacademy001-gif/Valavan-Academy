@@ -65,7 +65,7 @@ export default function ToolsCoveredSection({
   const marqueeItems = [...effectiveTools, ...effectiveTools, ...effectiveTools, ...effectiveTools];
 
   return (
-    <section className="py-10 sm:py-18 md:py-24 bg-white relative overflow-hidden border-b border-neutral-100">
+    <section className="py-10 sm:py-18 md:py-24 bg-white relative z-30 overflow-hidden border-b border-neutral-100">
       <Container>
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
