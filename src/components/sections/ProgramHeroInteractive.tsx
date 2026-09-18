@@ -193,11 +193,11 @@ export default function ProgramHeroInteractive({
       }}
     >
       <div
-        className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-white/10 rounded-full blur-[140px] pointer-events-none"
+        className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-white/10 rounded-full blur-[60px] lg:blur-[140px] pointer-events-none"
         aria-hidden
       />
       <div
-        className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-[#0A2E8A]/50 rounded-full blur-[100px] pointer-events-none"
+        className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-[#0A2E8A]/50 rounded-full blur-[40px] lg:blur-[100px] pointer-events-none"
         aria-hidden
       />
 
@@ -205,7 +205,7 @@ export default function ProgramHeroInteractive({
         className={`${
           isDesktop
             ? "sticky top-0 h-screen w-full flex flex-col justify-center pt-8 overflow-visible"
-            : "relative z-10"
+            : "relative z-10 overflow-hidden"
         }`}
       >
         <Container className="relative z-10 w-full py-8 lg:py-0">
@@ -317,25 +317,9 @@ export default function ProgramHeroInteractive({
                       ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
                     }}
                   >
-                    {/* Continuous ambient float & subtle wiggle */}
-                    <motion.div
-                      animate={{
-                        y: [0, -10, 0, 8, 0],
-                        x: [0, 4, 0, -4, 0],
-                        rotate: [0, 6, 0, -5, 0],
-                      }}
-                      transition={{
-                        duration: 5.2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      whileHover={{
-                        scale: 1.12,
-                        rotate: 12,
-                        transition: { type: "spring", stiffness: 350, damping: 12 },
-                      }}
-                      whileTap={{ scale: 0.94 }}
-                      className="cursor-pointer"
+                    {/* Continuous ambient float & subtle wiggle powered by GPU CSS */}
+                    <div
+                      className="animate-sphere-1 cursor-pointer transition-transform duration-200 hover:scale-112 active:scale-95"
                     >
                       <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-24 xl:h-24 drop-shadow-[0_16px_24px_rgba(0,0,0,0.55)] drop-shadow-[0_6px_10px_rgba(0,0,0,0.35)]">
                         <Image
@@ -347,7 +331,7 @@ export default function ProgramHeroInteractive({
                           sizes="(max-width: 768px) 72px, 96px"
                         />
                       </div>
-                    </motion.div>
+                    </div>
                   </motion.div>
                 </motion.div>
               )}
@@ -510,26 +494,9 @@ export default function ProgramHeroInteractive({
                 ease: [0.34, 1.56, 0.64, 1], // Elastic overshoot
               }}
             >
-              {/* Continuous ambient float & subtle wiggle */}
-              <motion.div
-                animate={{
-                  y: [0, 12, 0, -10, 0],
-                  x: [0, -6, 0, 5, 0],
-                  rotate: [0, -6, 0, 5, 0],
-                }}
-                transition={{
-                  duration: 6.0,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.3,
-                }}
-                whileHover={{
-                  scale: 1.12,
-                  rotate: -12,
-                  transition: { type: "spring", stiffness: 350, damping: 12 },
-                }}
-                whileTap={{ scale: 0.94 }}
-                className="cursor-pointer"
+              {/* Continuous ambient float & subtle wiggle powered by GPU CSS */}
+              <div
+                className="animate-sphere-2 cursor-pointer transition-transform duration-200 hover:scale-112 active:scale-95"
               >
                 <div className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-28 lg:h-28 xl:w-34 xl:h-34 drop-shadow-[0_20px_32px_rgba(0,0,0,0.6)] drop-shadow-[0_8px_14px_rgba(0,0,0,0.38)]">
                   <Image
@@ -541,7 +508,7 @@ export default function ProgramHeroInteractive({
                     sizes="(max-width: 768px) 88px, 136px"
                   />
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -185,8 +185,10 @@ html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
   max-width: 100%;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -199,10 +201,54 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: clip;
+  overflow-x: hidden;
   max-width: 100%;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
+
+/* ── GPU-Accelerated 3D Sphere Floating Animations (Runs off-thread) ── */
+@keyframes sphere-float-wiggle-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(3px, -8px, 0) rotate(5deg);
+  }
+  50% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  75% {
+    transform: translate3d(-3px, 6px, 0) rotate(-4deg);
+  }
+}
+
+@keyframes sphere-float-wiggle-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(-5px, 9px, 0) rotate(-5deg);
+  }
+  50% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  75% {
+    transform: translate3d(4px, -7px, 0) rotate(4deg);
+  }
+}
+
+.animate-sphere-1 {
+  animation: sphere-float-wiggle-1 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-sphere-2 {
+  animation: sphere-float-wiggle-2 6.0s ease-in-out infinite 0.3s;
+  will-change: transform;
+}
+
 
 /* ── Typography Defaults ─────────────────────────────────────────── */
 @layer base {

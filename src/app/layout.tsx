@@ -103,7 +103,6 @@ import { Suspense } from "react";
 import { getSiteSettings, getTrackingSettings } from "@/lib/cms";
 import TrackingScriptsInjector from "@/components/tracking/TrackingScriptsInjector";
 import ClientTracker from "@/components/tracking/ClientTracker";
-import CookieConsentBanner from "@/components/tracking/CookieConsentBanner";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
 interface RootLayoutProps {
@@ -141,7 +140,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <Suspense fallback={null}>
           <ClientTracker />
         </Suspense>
-        <CookieConsentBanner enabled={trackingSettings.cookie_consent_enabled !== "false"} />
         <ReducedMotionProvider>
           <SmoothScrollProvider>
             <Navbar />
