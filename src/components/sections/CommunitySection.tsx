@@ -16,11 +16,42 @@ import CountUp from "@/components/ui/CountUp";
 import { EXTERNAL_URLS } from "@/data/site.config";
 import { CMSSectionMeta } from "@/lib/cms";
 
-const DEFAULT_COMMUNITY_STATS = [
-  { target: 40, suffix: "K+", label: "Community Members" },
-  { target: 100, suffix: "+", label: "Workshops Held" },
-  { target: 5, suffix: "K+", label: "Students Trained" },
-];
+function parseCommunityStat(
+  rawStr?: string,
+  fallbackTarget: number = 0,
+  fallbackSuffix: string = "",
+  fallbackLabel: string = ""
+): { target: number | null; suffix: string; label: string; rawText?: string } {
+  if (!rawStr || !rawStr.trim()) {
+    return { target: fallbackTarget, suffix: fallbackSuffix, label: fallbackLabel };
+  }
+
+  const trimmed = rawStr.trim();
+  const match = trimmed.match(/^([₹$€]?\s*(\d+(?:\.\d+)?)\s*([a-zA-Z%+]+)?)\s*(.*)$/);
+
+  if (match) {
+    const rawVal = match[1].trim();
+    const num = parseFloat(match[2]);
+    const suffix = (match[3] || "").trim();
+    const label = (match[4] || "").trim();
+
+    if (!isNaN(num)) {
+      return {
+        target: num,
+        suffix: suffix,
+        label: label || fallbackLabel,
+        rawText: rawVal,
+      };
+    }
+  }
+
+  return {
+    target: null,
+    suffix: "",
+    label: trimmed,
+    rawText: trimmed,
+  };
+}
 
 interface CommunitySectionProps {
   meta?: CMSSectionMeta;
@@ -32,6 +63,12 @@ export default function CommunitySection({ meta }: CommunitySectionProps = {}) {
 
   const ctaText = meta?.primaryButtonText || "Join the Community";
   const ctaUrl = meta?.primaryButtonUrl || EXTERNAL_URLS.community;
+
+  const stats = [
+    parseCommunityStat(meta?.stat_members, 40, "K+", "Community Members"),
+    parseCommunityStat(meta?.stat_workshops, 100, "+", "Workshops Held"),
+    parseCommunityStat(meta?.stat_students, 5, "K+", "Students Trained"),
+  ];
 
   return (
     <section
@@ -125,12 +162,12 @@ export default function CommunitySection({ meta }: CommunitySectionProps = {}) {
           {/* Right — Stats Cards */}
           <div className="lg:col-span-5 pt-4 lg:pt-0">
             <div className="flex flex-col lg:grid lg:grid-cols-1 lg:gap-5 pb-8 lg:pb-0">
-              {DEFAULT_COMMUNITY_STATS.map((stat, i) => {
+              {stats.map((stat, i) => {
                 const topOffset = 85 + i * 14;
                 const zIndex = 10 + i * 10;
                 return (
                   <div
-                    key={stat.label}
+                    key={`${stat.label}-${i}`}
                     className="sticky lg:static mb-4 lg:mb-0"
                     style={{
                       top: `${topOffset}px`,
@@ -152,7 +189,11 @@ export default function CommunitySection({ meta }: CommunitySectionProps = {}) {
                           className="font-display font-extrabold text-4xl sm:text-5xl tracking-tight leading-none"
                           style={{ color: "#1748BB" }}
                         >
-                          <CountUp end={stat.target} suffix={stat.suffix} duration={1800} />
+                          {stat.target !== null ? (
+                            <CountUp end={stat.target} suffix={stat.suffix} duration={1800} />
+                          ) : (
+                            stat.rawText
+                          )}
                         </p>
                         <p
                           className="font-sans text-sm sm:text-base font-semibold mt-1"

@@ -645,6 +645,8 @@ export async function getFinalCTAData(): Promise<CMSSectionMeta> {
     const map = await getSectionFieldMap("home", "cta");
     return {
       badge: map.badge || "Get Started",
+      headline_prefix: map.headline_prefix || "Your next chapter",
+      headline_highlight: map.headline_highlight || "Starts here.",
       heading: map.heading || "Your Next Chapter Starts Here.",
       description: map.description || "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
       primaryButtonText: map.primary_button_text || "Explore Courses",
@@ -656,6 +658,8 @@ export async function getFinalCTAData(): Promise<CMSSectionMeta> {
   } catch {
     return {
       badge: "Get Started",
+      headline_prefix: "Your next chapter",
+      headline_highlight: "Starts here.",
       heading: "Your Next Chapter Starts Here.",
       description: "Learn practical digital skills. Build real projects. Create your future — in Tamil.",
       primaryButtonText: "Explore Courses",

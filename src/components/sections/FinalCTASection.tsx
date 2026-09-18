@@ -61,8 +61,24 @@ export default function FinalCTASection({ meta }: FinalCTASectionProps = {}) {
             className="font-display font-bold leading-[1.02] sm:leading-[1.06] tracking-tight mx-auto"
             style={{ fontSize: "clamp(36px, 5.5vw, 76px)", maxWidth: "14ch", color: "#1E2026" }}
           >
-            {meta?.heading ? (
-              meta.heading
+            {meta?.headline_prefix || meta?.headline_highlight ? (
+              <>
+                {meta.headline_prefix || "Your next chapter"}{" "}
+                <span style={{ color: "#1748BB" }}>{meta.headline_highlight || "Starts here."}</span>
+              </>
+            ) : meta?.heading ? (
+              (() => {
+                const raw = meta.heading;
+                const match = raw.match(/^(.*?)(starts\s+here\.?)$/i);
+                if (match) {
+                  return (
+                    <>
+                      {match[1]} <span style={{ color: "#1748BB" }}>{match[2]}</span>
+                    </>
+                  );
+                }
+                return raw;
+              })()
             ) : (
               <>
                 Your Next Chapter{" "}
