@@ -10,7 +10,7 @@ import ProgramRoadmapSection from "@/components/sections/ProgramRoadmapSection";
 import PracticalProjectsSection from "@/components/sections/PracticalProjectsSection";
 import After90DaysSection from "@/components/sections/After90DaysSection";
 import VideoTestimonialCarousel from "@/components/sections/VideoTestimonialCarousel";
-import ProgramEnrollmentSupportSection from "@/components/sections/ProgramEnrollmentSupportSection";
+import ProgramDesignJourneyCTASection from "@/components/sections/ProgramDesignJourneyCTASection";
 import ProgramFAQSection from "@/components/sections/ProgramFAQSection";
 import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA";
 
@@ -39,12 +39,13 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
-import { getProgramBySlug, getGraphicDesignProgramData } from "@/lib/cms";
+import { getProgramBySlug, getGraphicDesignProgramData, getPublishedLearnerStories } from "@/lib/cms";
 
 export default async function GraphicDesignProgramPage() {
-  const [cmsProgram, cmsData] = await Promise.all([
+  const [cmsProgram, cmsData, learnerStories] = await Promise.all([
     getProgramBySlug("90-days-graphic-design"),
     getGraphicDesignProgramData(),
+    getPublishedLearnerStories(),
   ]);
 
   const heroMap = cmsData.hero || {};
@@ -125,19 +126,30 @@ export default async function GraphicDesignProgramPage() {
         outcomesMap={outcomesMap}
       />
 
-      {/* ── 06 Our Students Success Stories (Centered Heading with Success in Blue) ── */}
+      {/* ── 06 Student Stories (3D YouTube Shorts Carousel - Editable in CMS) ── */}
       <VideoTestimonialCarousel
         centered
-        titlePrefix={testimonialsMap.title_prefix || "Our Students"}
-        titleHighlight={testimonialsMap.title_highlight || "Success"}
-        titleSuffix={testimonialsMap.title_suffix || "Stories"}
+        kicker={testimonialsMap.badge || "▶ Watch Student Stories"}
+        titlePrefix={testimonialsMap.title_prefix || "See What's Possible When"}
+        titleHighlight={testimonialsMap.title_highlight || "Skills Meet Action."}
+        subtitle={testimonialsMap.description || "Thousands of learners have transformed their creativity into real opportunities through consistent learning and implementation."}
+        stories={learnerStories}
+        meta={testimonialsMap}
       />
 
-      {/* ── 07 Complete Support & Enrollment Master Section ── */}
-      <ProgramEnrollmentSupportSection
-        enrollUrl={supportMap.enroll_url || enrollUrl}
-        duration={supportMap.duration_text || duration}
-        seatsText={supportMap.seats_text || "20 Seats Available"}
+      {/* ── 07 Pre-FAQ Call to Action (Your Design Journey Starts Today - Editable in CMS) ── */}
+      <ProgramDesignJourneyCTASection
+        badge={supportMap.badge || "START YOUR JOURNEY"}
+        titlePrefix={supportMap.title_prefix || "Your Design Journey"}
+        titleHighlight={supportMap.title_highlight || "Starts Today."}
+        headlineSub={supportMap.headline_sub || "Every successful designer started with a blank canvas. The difference is they started."}
+        description={supportMap.description || "If you're ready to build a valuable creative skill, create an impressive portfolio, and open new opportunities, this program is designed for you."}
+        primaryBtnText={supportMap.primary_btn_text || "🚀 Enroll Now"}
+        primaryBtnUrl={supportMap.enroll_url || supportMap.primary_btn_url || enrollUrl}
+        secondaryBtnText={supportMap.secondary_btn_text || "📖 View Curriculum"}
+        secondaryBtnUrl={supportMap.secondary_btn_url || "#roadmap"}
+        footerSubtext={supportMap.footer_subtext || "Join thousands of learners building their creative future with Valavan Academy."}
+        supportMap={supportMap}
       />
 
       {/* ── 08 Frequently Asked Questions (2-Column Accordion) ── */}

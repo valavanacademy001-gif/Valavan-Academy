@@ -123,8 +123,8 @@ export default function VideoTestimonialCarousel({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const effectiveKicker = meta?.badge || kicker;
-  const effectiveTitlePrefix = meta?.headline_prefix || titlePrefix;
-  const effectiveTitleHighlight = meta?.headline_highlight || titleHighlight;
+  const effectiveTitlePrefix = meta?.headline_prefix || (meta as Record<string, any>)?.title_prefix || titlePrefix;
+  const effectiveTitleHighlight = meta?.headline_highlight || (meta as Record<string, any>)?.title_highlight || titleHighlight;
   const effectiveSubtitle = meta?.description || subtitle;
 
   const items = (stories && stories.length > 0)
@@ -230,6 +230,13 @@ export default function VideoTestimonialCarousel({
                 )}
               </h2>
             </FadeUp>
+            {effectiveSubtitle && (
+              <FadeUp delay={0.1}>
+                <p className="mt-4 font-sans text-sm sm:text-base md:text-lg leading-relaxed text-neutral-600 font-normal max-w-2xl mx-auto">
+                  {effectiveSubtitle}
+                </p>
+              </FadeUp>
+            )}
           </div>
         ) : (
           <>
