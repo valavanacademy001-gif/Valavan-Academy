@@ -3,11 +3,28 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle, Users, CheckCircle2, ArrowRight } from "lucide-react";
 import { CMSThankYouData } from "@/lib/cms";
 
 interface ThankYouViewProps {
   data: CMSThankYouData;
+}
+
+/**
+ * Official WhatsApp Vector Icon Component
+ */
+function WhatsAppIcon({ className = "w-5 h-5", size = 20 }: { className?: string; size?: number }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M17.472 14.382c-.301-.15-1.78-.879-2.056-.979-.276-.1-.477-.15-.678.15-.201.3-.777.979-.953 1.18-.175.201-.351.226-.652.075-.301-.15-1.27-.468-2.42-1.493-.895-.798-1.5-1.784-1.675-2.085-.176-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.151-.176.201-.301.302-.502.1-.201.05-.376-.025-.527-.075-.15-.678-1.634-.929-2.237-.245-.588-.493-.508-.678-.517-.175-.008-.376-.01-.577-.01-.201 0-.527.075-.803.376s-1.053 1.029-1.053 2.509 1.078 2.91 1.229 3.111c.15.201 2.12 3.238 5.136 4.542.717.311 1.277.496 1.713.635.72.229 1.375.197 1.893.12.577-.087 1.78-.728 2.03-1.43.251-.703.251-1.305.176-1.431-.076-.126-.276-.201-.577-.351zM12.004 21.996h-.002c-1.745 0-3.456-.468-4.96-1.353l-.356-.211-3.689.967.984-3.596-.232-.369a9.948 9.948 0 0 1-1.528-5.32c0-5.518 4.49-10.008 10.008-10.008 2.673 0 5.187 1.042 7.077 2.932a9.94 9.94 0 0 1 2.931 7.077c0 5.519-4.49 10.009-10.009 10.009zM21.545 2.455C18.995-.096 15.6-.001 12.004 0 5.384 0 0 5.384 0 12.004c0 2.112.551 4.174 1.599 5.99L0 24l6.177-1.62c1.758.959 3.738 1.464 5.827 1.464 6.62 0 12.004-5.384 12.004-12.004 0-3.208-1.25-6.224-3.463-8.435z" />
+    </svg>
+  );
 }
 
 export default function ThankYouView({ data }: ThankYouViewProps) {
@@ -75,7 +92,7 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2 rounded-full border border-white/20 transition-all cursor-pointer"
           >
-            <MessageCircle size={14} className="text-[#4ADE80]" />
+            <WhatsAppIcon size={14} className="text-[#4ADE80]" />
             <span>Support: +91 82205 11273</span>
           </a>
         </div>
@@ -118,7 +135,7 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
             </p>
           </div>
 
-          {/* Two Green Pill Action Buttons (Matching reference style) */}
+          {/* Two Green Pill Action Buttons with proper WhatsApp Icon */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none">
             
             {/* Button 1: I Need Course Access (WhatsApp direct support) */}
@@ -129,7 +146,7 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
               style={{ backgroundColor: "#22C55E", color: "#FFFFFF" }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#22C55E] hover:bg-[#16A34A] !text-white font-sans font-bold text-sm sm:text-base px-7 sm:px-9 py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_8px_25px_rgba(34,197,94,0.35)] cursor-pointer"
             >
-              <MessageCircle size={18} className="text-white shrink-0" />
+              <WhatsAppIcon size={20} className="text-white shrink-0" />
               <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">{data.courseAccessBtnText}</span>
             </a>
 
@@ -141,7 +158,7 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
               style={{ backgroundColor: "#22C55E", color: "#FFFFFF" }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#22C55E] hover:bg-[#16A34A] !text-white font-sans font-bold text-sm sm:text-base px-7 sm:px-9 py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_8px_25px_rgba(34,197,94,0.35)] cursor-pointer"
             >
-              <Users size={18} className="text-white shrink-0" />
+              <WhatsAppIcon size={20} className="text-white shrink-0" />
               <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">{data.whatsappGroupBtnText}</span>
             </a>
           </div>
