@@ -76,10 +76,16 @@ export default function Footer({ settings }: FooterProps = {}) {
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
 
-  const handleHomeClick = (e: React.MouseEvent) => {
-    if (pathname === "/") {
+  const handleNavClick = (href: string) => (e: React.MouseEvent) => {
+    if (pathname === href) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
     }
   };
 
@@ -120,7 +126,7 @@ export default function Footer({ settings }: FooterProps = {}) {
             {/* Logo */}
             <Link
               href="/"
-              onClick={handleHomeClick}
+              onClick={handleNavClick("/")}
               className="inline-flex items-center group cursor-pointer"
               aria-label="Valavan Academy — Go to top"
             >
@@ -169,7 +175,7 @@ export default function Footer({ settings }: FooterProps = {}) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    onClick={link.href === "/" ? handleHomeClick : undefined}
+                    onClick={handleNavClick(link.href)}
                     className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors cursor-pointer"
                   >
                     {link.label}
@@ -189,7 +195,8 @@ export default function Footer({ settings }: FooterProps = {}) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors leading-snug"
+                    onClick={handleNavClick(link.href)}
+                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors leading-snug cursor-pointer"
                   >
                     {link.label}
                   </Link>

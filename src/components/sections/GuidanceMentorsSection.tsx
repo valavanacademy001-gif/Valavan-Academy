@@ -12,7 +12,7 @@ interface GuidanceMentorsSectionProps {
   description?: string;
   whyTitlePrefix?: string;
   whyTitleHighlight?: string;
-  whyDesc1?: string;
+  points?: string[];
   whyDesc2?: string;
   teamImage?: string;
   mentorMap?: Record<string, string>;
@@ -25,7 +25,7 @@ export default function GuidanceMentorsSection({
   description,
   whyTitlePrefix,
   whyTitleHighlight,
-  whyDesc1,
+  points,
   whyDesc2,
   teamImage,
   mentorMap,
@@ -40,14 +40,40 @@ export default function GuidanceMentorsSection({
 
   const effectiveWhyTitlePrefix = whyTitlePrefix || mentorMap?.why_title_prefix || "Why Choose";
   const effectiveWhyTitleHighlight = whyTitleHighlight || mentorMap?.why_title_highlight || "Valavan Academy ?";
-  const effectiveWhyDesc1 =
-    whyDesc1 ||
-    mentorMap?.why_desc_1 ||
-    "At Valavan Academy, we believe creativity becomes powerful only when it turns into opportunity. With 15+ years of real-world design experience, we train students using practical methods that match today's industry needs.";
+
+  const defaultPoints = [
+    "Practical Learning",
+    "Tamil-First Education",
+    "Industry Experience",
+    "Proven Frameworks",
+    "Supportive Community",
+    "Real-World Focus",
+  ];
+
+  const cmsPoints = mentorMap
+    ? [
+        mentorMap.point_1,
+        mentorMap.point_2,
+        mentorMap.point_3,
+        mentorMap.point_4,
+        mentorMap.point_5,
+        mentorMap.point_6,
+      ].filter(Boolean) as string[]
+    : [];
+
+  const effectivePoints =
+    points && points.length > 0
+      ? points
+      : cmsPoints.length > 0
+      ? cmsPoints
+      : defaultPoints;
+
   const effectiveWhyDesc2 =
     whyDesc2 ||
     mentorMap?.why_desc_2 ||
+    mentorMap?.description_paragraph ||
     "More than 1,000 freelancers and studio designers have already upgraded their skills through our programs, and our 180K+ YouTube learning community continues to grow every day. Our mission is to help 10,000+ creative learners build confidence, develop job-ready portfolios, and step into freelancing or professional design careers successfully.";
+
   const effectiveTeamImage =
     teamImage ||
     mentorMap?.team_image ||
@@ -98,16 +124,20 @@ export default function GuidanceMentorsSection({
               </h3>
             </FadeUp>
 
+            {/* Checkmark Feature Points Grid */}
             <FadeUp delay={0.15}>
-              <p className="font-sans text-neutral-600 text-sm sm:text-base leading-relaxed font-normal">
-                {effectiveWhyDesc1}
-              </p>
-            </FadeUp>
-
-            <FadeUp delay={0.2}>
-              <p className="font-sans text-neutral-600 text-sm sm:text-base leading-relaxed font-normal">
-                {effectiveWhyDesc2}
-              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                {effectivePoints.map((pt) => (
+                  <div key={pt} className="flex items-center gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-[#1748BB]/10 text-[#1748BB] flex items-center justify-center shrink-0 font-bold text-xs">
+                      ✔
+                    </span>
+                    <span className="font-sans text-sm sm:text-[15px] font-semibold text-[#1E2026]">
+                      {pt}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </FadeUp>
           </div>
 

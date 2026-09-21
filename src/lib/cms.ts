@@ -1054,7 +1054,7 @@ export async function getGraphicDesignProgramData() {
  */
 export async function getFullStackCreatorProgramData() {
   try {
-    const [hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, faq, sticky] = await Promise.all([
+    const [hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, finalCta, faq, sticky] = await Promise.all([
       getSectionFieldMap("full-stack-creator", "hero"),
       getSectionFieldMap("full-stack-creator", "tools"),
       getSectionFieldMap("full-stack-creator", "syllabus"),
@@ -1065,10 +1065,11 @@ export async function getFullStackCreatorProgramData() {
       getSectionFieldMap("full-stack-creator", "who_is_this_for"),
       getSectionFieldMap("full-stack-creator", "guidance_mentors"),
       getSectionFieldMap("full-stack-creator", "offer"),
+      getSectionFieldMap("full-stack-creator", "final_cta"),
       getSectionFieldMap("full-stack-creator", "faq"),
       getSectionFieldMap("full-stack-creator", "sticky_cta"),
     ]);
-    return { hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, faq, sticky };
+    return { hero, tools, syllabus, skillsMoney, certification, creatorEconomy, templatesBonus, whoIsThisFor, mentors, offer, finalCta, faq, sticky };
   } catch {
     return {
       hero: {},
@@ -1081,6 +1082,7 @@ export async function getFullStackCreatorProgramData() {
       whoIsThisFor: {},
       mentors: {},
       offer: {},
+      finalCta: {},
       faq: {},
       sticky: {},
     };

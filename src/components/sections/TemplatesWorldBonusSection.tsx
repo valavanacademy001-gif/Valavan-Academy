@@ -10,9 +10,10 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 
 interface TemplatesWorldBonusSectionProps {
   badge?: string;
+  title?: string;
   titlePrefix?: string;
   titleHighlight?: string;
-  subtitle?: string;
+  features?: string[];
   imageSrc?: string;
   buttonText?: string;
   enrollUrl?: string;
@@ -21,29 +22,62 @@ interface TemplatesWorldBonusSectionProps {
 
 export default function TemplatesWorldBonusSection({
   badge,
+  title,
   titlePrefix,
   titleHighlight,
-  subtitle,
+  features,
   imageSrc,
   buttonText,
   enrollUrl = EXTERNAL_URLS.signup,
   bonusMap,
 }: TemplatesWorldBonusSectionProps = {}) {
-  const effectiveBadge = badge || bonusMap?.badge || "Additional Bonuses";
-  const effectiveTitlePrefix = titlePrefix || bonusMap?.title_prefix || "Access To";
-  const effectiveTitleHighlight = titleHighlight || bonusMap?.title_highlight || "Templatesworld";
-  const effectiveSubtitle =
-    subtitle ||
-    bonusMap?.subtitle ||
-    bonusMap?.description ||
-    "Save hours of work using ready-to-use professional creative resources";
+  const effectiveBadge = badge || bonusMap?.badge || "WHAT YOU'LL GET";
+  const effectiveTitle =
+    title ||
+    bonusMap?.title ||
+    (bonusMap?.title_prefix
+      ? `${bonusMap.title_prefix} ${bonusMap.title_highlight || ""}`.trim()
+      : "Complete Program Access");
+
+  const defaultFeatures = [
+    "Full Curriculum",
+    "Lifetime Access",
+    "Community Access",
+    "Resource Library",
+    "Templates & Assets",
+    "AI Systems",
+    "Project-Based Learning",
+    "Future Updates",
+  ];
+
+  const cmsFeatures = bonusMap
+    ? [
+        bonusMap.feature_1,
+        bonusMap.feature_2,
+        bonusMap.feature_3,
+        bonusMap.feature_4,
+        bonusMap.feature_5,
+        bonusMap.feature_6,
+        bonusMap.feature_7,
+        bonusMap.feature_8,
+      ].filter(Boolean) as string[]
+    : [];
+
+  const effectiveFeatures =
+    features && features.length > 0
+      ? features
+      : cmsFeatures.length > 0
+      ? cmsFeatures
+      : defaultFeatures;
+
   const effectiveImageSrc =
     imageSrc ||
     bonusMap?.image ||
     bonusMap?.image_url ||
     "/assets/programs/full-stack-creator/Untitled-design-3-1-1-2048x1152-1-1024x576.webp";
-  const effectiveButtonText = buttonText || bonusMap?.button_text || "Get Access Now";
+  const effectiveButtonText = buttonText || bonusMap?.button_text || "🚀 Join Full Stack Creator Program";
   const effectiveEnrollUrl = bonusMap?.enroll_url || enrollUrl;
+
   return (
     <section
       className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-14 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none border-t border-white/10 text-center flex flex-col justify-center lg:min-h-screen"
@@ -67,10 +101,10 @@ export default function TemplatesWorldBonusSection({
 
       <Container className="relative z-10 flex flex-col items-center">
         {/* ── 01 Centered Header ── */}
-        <div className="max-w-3xl mx-auto mb-6 sm:mb-12">
+        <div className="max-w-3xl mx-auto mb-6 sm:mb-8">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
-              <span className="inline-flex items-center gap-2 border border-white/30 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md shadow-sm">
+              <span className="inline-flex items-center gap-2 border border-white/30 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md shadow-sm uppercase tracking-wider">
                 <Gift size={14} className="text-[#BACFFF]" />
                 {effectiveBadge}
               </span>
@@ -79,45 +113,32 @@ export default function TemplatesWorldBonusSection({
 
           <FadeUp delay={0.05}>
             <h2
-              className="font-display font-bold leading-[1.08] tracking-tight mb-3.5"
+              className="font-display font-bold leading-[1.08] tracking-tight mb-2"
               style={{ fontSize: "clamp(32px, 4.4vw, 56px)", color: "#FFFFFF" }}
             >
-              {effectiveTitlePrefix}{" "}
-              <span style={{ color: "#BACFFF" }} className="!text-[#BACFFF]">
-                {effectiveTitleHighlight}
-              </span>
+              {effectiveTitle}
             </h2>
-          </FadeUp>
-
-          <FadeUp delay={0.1}>
-            <p
-              className="font-sans text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-normal font-medium"
-              style={{ color: "#BACFFF" }}
-            >
-              {effectiveSubtitle}
-            </p>
           </FadeUp>
         </div>
 
-        {/* ── 02 Centered 3D Template Mockup Image (Compact & Balanced) ── */}
-        <FadeUp delay={0.15} className="w-full max-w-lg sm:max-w-xl md:max-w-[580px] mb-8 sm:mb-10">
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-            className="relative w-full aspect-[16/10] rounded-[24px] sm:rounded-[30px] overflow-hidden border border-white/20 shadow-[0_16px_50px_rgba(0,0,0,0.35)] bg-black/15 backdrop-blur-sm group hover:border-white/40 transition-all duration-400"
-          >
-            <Image
-              src={effectiveImageSrc}
-              alt="Templatesworld Complete Professional Asset Vault"
-              fill
-              className="object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500 ease-out"
-              sizes="(max-width: 640px) 100vw, 580px"
-              priority
-            />
-          </motion.div>
+        {/* ── 02 8 Included Features Grid ── */}
+        <FadeUp delay={0.1} className="w-full max-w-4xl mb-8 sm:mb-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            {effectiveFeatures.map((feat) => (
+              <div
+                key={feat}
+                className="flex items-center gap-2.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-xl px-3.5 py-2.5 text-left backdrop-blur-sm transition-colors shadow-sm"
+              >
+                <span className="text-[#60A5FA] font-bold text-sm shrink-0">✔</span>
+                <span className="font-sans text-xs sm:text-sm font-semibold text-white truncate">
+                  {feat}
+                </span>
+              </div>
+            ))}
+          </div>
         </FadeUp>
 
-        {/* ── 03 Centered White Action Button ── */}
+        {/* ── 04 Centered White Action Button ── */}
         <FadeUp delay={0.2}>
           <a
             href={effectiveEnrollUrl}

@@ -33,7 +33,7 @@ export default function ProgramDesignJourneyCTASection({
   footerSubtext = "Join thousands of learners building their creative future with Valavan Academy.",
   supportMap,
 }: ProgramDesignJourneyCTASectionProps) {
-  const effectiveBadge = supportMap?.badge || badge || "START YOUR JOURNEY";
+  const effectiveBadge = badge !== undefined ? badge : (supportMap?.badge || "");
   const effectiveTitlePrefix = supportMap?.title_prefix || titlePrefix;
   const effectiveTitleHighlight = supportMap?.title_highlight || titleHighlight;
   const effectiveHeadlineSub =
@@ -51,7 +51,7 @@ export default function ProgramDesignJourneyCTASection({
   const effectiveFooterSubtext = supportMap?.footer_subtext || footerSubtext;
 
   return (
-    <section className="py-12 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-b border-neutral-100">
+    <section className="py-8 sm:py-12 md:py-16 bg-[#FBFDFF] relative z-20 overflow-hidden border-b border-neutral-100">
       {/* Soft Ambient Radial Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#1748BB]/6 rounded-full blur-[140px] pointer-events-none"
@@ -59,16 +59,18 @@ export default function ProgramDesignJourneyCTASection({
       />
 
       <Container className="relative z-10 text-center">
-        <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
-          {/* Badge */}
-          <FadeUp delay={0}>
-            <div className="inline-flex items-center justify-center">
-              <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm uppercase tracking-wider">
-                <Sparkles size={13} className="text-[#1748BB]" />
-                {effectiveBadge}
-              </span>
-            </div>
-          </FadeUp>
+        <div className="max-w-3xl mx-auto space-y-5 sm:space-y-6">
+          {/* Badge (Optional) */}
+          {effectiveBadge && (
+            <FadeUp delay={0}>
+              <div className="inline-flex items-center justify-center">
+                <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm uppercase tracking-wider">
+                  <Sparkles size={13} className="text-[#1748BB]" />
+                  {effectiveBadge}
+                </span>
+              </div>
+            </FadeUp>
+          )}
 
           {/* Heading */}
           <FadeUp delay={0.05}>

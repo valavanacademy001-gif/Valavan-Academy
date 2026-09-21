@@ -15,6 +15,7 @@ import TemplatesWorldBonusSection from "@/components/sections/TemplatesWorldBonu
 import WhoIsThisForSection from "@/components/sections/WhoIsThisForSection";
 import GuidanceMentorsSection from "@/components/sections/GuidanceMentorsSection";
 import FullStackCreatorOfferSection from "@/components/sections/FullStackCreatorOfferSection";
+import ProgramDesignJourneyCTASection from "@/components/sections/ProgramDesignJourneyCTASection";
 import ProgramFAQSection from "@/components/sections/ProgramFAQSection";
 import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA";
 
@@ -106,6 +107,7 @@ export default async function FullStackCreatorPage() {
   const whoMap = cmsData.whoIsThisFor || {};
   const mentorMap = cmsData.mentors || {};
   const offerMap = cmsData.offer || {};
+  const finalCtaMap = cmsData.finalCta || {};
   const faqMap = cmsData.faq || {};
   const stickyMap = cmsData.sticky || {};
 
@@ -209,7 +211,22 @@ export default async function FullStackCreatorPage() {
         offerMap={offerMap}
       />
 
-      {/* ── 12 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
+      {/* ── 12 Pre-FAQ Final Call to Action ── */}
+      <ProgramDesignJourneyCTASection
+        badge=""
+        titlePrefix={finalCtaMap.title_prefix || "The Future Belongs To "}
+        titleHighlight={finalCtaMap.title_highlight || "Creators."}
+        headlineSub={finalCtaMap.headline_sub || "The people who can design, communicate, create content, use AI, and build audiences will have more opportunities than ever before."}
+        description={finalCtaMap.description || "Start building those skills today."}
+        primaryBtnText={finalCtaMap.primary_btn_text || "🚀 Join The Program"}
+        primaryBtnUrl={finalCtaMap.primary_btn_url || enrollUrl}
+        secondaryBtnText={finalCtaMap.secondary_btn_text || "📖 Explore Curriculum"}
+        secondaryBtnUrl={finalCtaMap.secondary_btn_url || "#syllabus"}
+        footerSubtext={finalCtaMap.footer_subtext || "Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy – Empowering The Next Generation Of Digital Creators. 🚀"}
+        supportMap={finalCtaMap}
+      />
+
+      {/* ── 13 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
       <ProgramFAQSection
         faqMap={faqMap}
       />

@@ -11,7 +11,7 @@ interface ProgramStickyBottomCTAProps {
 }
 
 export default function ProgramStickyBottomCTA({
-  enrollUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfS0lpB0PwruYS3v83iDIu7AW0M_A7JqxZdPPfqD84m7qi9Tg/viewform",
+  enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
   text = "Limited Seats Available",
   buttonText = "ENROLL NOW",
 }: ProgramStickyBottomCTAProps) {
@@ -19,8 +19,8 @@ export default function ProgramStickyBottomCTA({
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show sticky CTA once scrolled past 400px
-      if (window.scrollY > 400) {
+      // Show sticky CTA once scrolled past 300px
+      if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -28,6 +28,7 @@ export default function ProgramStickyBottomCTA({
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -38,15 +39,21 @@ export default function ProgramStickyBottomCTA({
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-0 left-0 right-0 z-50 bg-[#1748BB] text-white py-2 sm:py-2.5 px-4 sm:px-8 border-t border-white/20 shadow-[0_-8px_30px_rgba(0,0,0,0.22)] select-none"
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="fixed bottom-0 left-0 right-0 z-50 bg-[#1748BB] text-white py-2.5 sm:py-3 px-3.5 sm:px-8 border-t border-white/20 shadow-[0_-8px_30px_rgba(0,0,0,0.25)] select-none"
+          style={{
+            paddingBottom: "max(0.625rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))",
+          }}
         >
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4 w-full">
             
-            {/* Left/Center Text */}
-            <div className="flex items-center gap-2 mx-auto sm:mx-0">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <p className="font-display font-semibold text-xs sm:text-sm tracking-wide text-white" style={{ color: "#FFFFFF" }}>
+            {/* Left Notice Text with pulsing dot */}
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse shrink-0 shadow-[0_0_8px_#10B981]" />
+              <p
+                className="font-display font-semibold text-xs sm:text-sm tracking-normal sm:tracking-wide text-white truncate"
+                style={{ color: "#FFFFFF" }}
+              >
                 {text}
               </p>
             </div>
@@ -57,12 +64,13 @@ export default function ProgramStickyBottomCTA({
                 href={enrollUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 bg-[#092B82] sm:bg-white hover:bg-[#071F60] sm:hover:bg-[#F0F5FF] !text-white sm:!text-[#1748BB] font-sans font-bold text-xs px-4.5 sm:px-6 py-1.5 sm:py-2 rounded-full border border-white/40 sm:border-transparent hover:scale-105 transition-all duration-200 shadow-md"
+                style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-xs px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-200 shadow-md whitespace-nowrap"
               >
-                <span className="!text-white sm:!text-[#1748BB] font-bold tracking-wider uppercase text-[11px] sm:text-xs">
+                <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold tracking-wider uppercase text-[11px] sm:text-xs">
                   {buttonText}
                 </span>
-                <ArrowRight size={13} className="!text-white sm:!text-[#1748BB]" />
+                <ArrowRight size={13} style={{ color: "#1748BB" }} className="!text-[#1748BB] shrink-0" />
               </a>
             </div>
 

@@ -24,9 +24,38 @@ export default function SmoothScrollProvider({
   const pathname = usePathname();
 
   useEffect(() => {
-    // Delay scroll reset until Next.js completes page unmount & mount
+    // Disable automatic browser scroll restoration to prevent stuck footer position on route change
+    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
+    // Phase 1: Immediate instant scroll to top on pathname change
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+      lenisRef.current.resize();
+    }
+
+    // Phase 2: Frame-aligned reset after Next.js page mount
+    const rafId = requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      }
+    });
+
+    // Phase 3: Short timeout after components finish rendering/hydrating
     const timer = setTimeout(() => {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
       if (lenisRef.current) {
         lenisRef.current.scrollTo(0, { immediate: true });
         lenisRef.current.resize();
@@ -34,7 +63,10 @@ export default function SmoothScrollProvider({
       ScrollTrigger.refresh();
     }, 60);
 
-    return () => clearTimeout(timer);
+    return () => {
+      cancelAnimationFrame(rafId);
+      clearTimeout(timer);
+    };
   }, [pathname]);
 
   useEffect(() => {
