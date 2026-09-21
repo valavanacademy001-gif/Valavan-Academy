@@ -12,7 +12,7 @@ interface ProgramStickyBottomCTAProps {
 
 export default function ProgramStickyBottomCTA({
   enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
-  text = "Limited Seats Available",
+  text = "Limited Seats Only",
   buttonText = "ENROLL NOW",
 }: ProgramStickyBottomCTAProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,18 +40,18 @@ export default function ProgramStickyBottomCTA({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="fixed bottom-0 left-0 right-0 z-50 bg-[#1748BB] text-white py-2.5 sm:py-3 px-3.5 sm:px-8 border-t border-white/20 shadow-[0_-8px_30px_rgba(0,0,0,0.25)] select-none"
+          className="fixed bottom-0 left-0 right-0 w-full max-w-[100vw] z-50 bg-[#1748BB] text-white py-2 sm:py-2.5 px-3 sm:px-6 border-t border-white/20 shadow-[0_-8px_30px_rgba(0,0,0,0.35)] select-none box-border"
           style={{
-            paddingBottom: "max(0.625rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)))",
+            paddingBottom: "max(0.5rem, calc(0.4rem + env(safe-area-inset-bottom, 0px)))",
           }}
         >
-          <div className="max-w-6xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4 w-full">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full">
             
-            {/* Left Notice Text with pulsing dot */}
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse shrink-0 shadow-[0_0_8px_#10B981]" />
+            {/* Left Notice Text with pulsing green dot */}
+            <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0 shadow-[0_0_8px_#10B981]" />
               <p
-                className="font-display font-semibold text-xs sm:text-sm tracking-normal sm:tracking-wide text-white truncate"
+                className="font-display font-semibold text-xs sm:text-sm tracking-normal sm:tracking-wide text-white truncate leading-tight"
                 style={{ color: "#FFFFFF" }}
               >
                 {text}
@@ -59,13 +59,13 @@ export default function ProgramStickyBottomCTA({
             </div>
 
             {/* Right Action Button */}
-            <div className="shrink-0">
+            <div className="shrink-0 flex items-center">
               <a
                 href={enrollUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
-                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-xs px-4 sm:px-6 py-1.5 sm:py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-200 shadow-md whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-1.5 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-xs px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full hover:scale-105 active:scale-95 transition-all duration-200 shadow-md whitespace-nowrap"
               >
                 <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold tracking-wider uppercase text-[11px] sm:text-xs">
                   {buttonText}

@@ -171,7 +171,7 @@ export default async function GraphicDesignProgramPage() {
       {/* ── 09 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA
         enrollUrl={stickyMap.enroll_url || enrollUrl}
-        text={stickyMap.notice_text || "Limited Seats Available"}
+        text={stickyMap.notice_text || "Limited Seats Only"}
         buttonText={stickyMap.button_text || "ENROLL NOW"}
       />
     </main>
