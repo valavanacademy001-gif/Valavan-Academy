@@ -62,6 +62,14 @@ const DEFAULT_TOOLS_FS: ToolItem[] = [
   { name: "Gemini AI", image: "/assets/tools/gemini-ai.png" },
 ];
 
+const DEFAULT_TOOLS_WS: ToolItem[] = [
+  { name: "Photoshop", image: "/assets/tools/ps.png" },
+  { name: "Illustrator", image: "/assets/tools/illustrator.png" },
+  { name: "Canva", image: "/assets/tools/canva.png" },
+  { name: "ChatGPT", image: "/assets/tools/chatgpt.png" },
+  { name: "Gemini AI", image: "/assets/tools/gemini-ai.png" },
+];
+
 const PROGRAMS: ProgramItem[] = [
   {
     id: "graphic-design",
@@ -105,19 +113,49 @@ interface ProgramsSectionProps {
 }
 
 export default function ProgramsSection({ programs: cmsPrograms, meta }: ProgramsSectionProps = {}) {
+  // Check CMS toggle for showing 3 Hours Live Workshop on homepage (default: hidden)
+  const showWorkshop =
+    meta?.show_workshop === "true" ||
+    meta?.show_3hours_workshop === "true" ||
+    meta?.show_workshop_card === "true";
+
+  const validCmsPrograms = (cmsPrograms && cmsPrograms.length > 0)
+    ? cmsPrograms.filter((cmsP) => {
+        const isWorkshop = cmsP.slug.includes("3-hours") || cmsP.slug.includes("workshop");
+        if (isWorkshop && !showWorkshop) {
+          return false;
+        }
+        return true;
+      })
+    : null;
+
   // Merge CMS programs with existing card presentation structure
-  const displayPrograms: ProgramItem[] = (cmsPrograms && cmsPrograms.length > 0)
-    ? cmsPrograms.map((cmsP, idx) => {
+  const displayPrograms: ProgramItem[] = (validCmsPrograms && validCmsPrograms.length > 0)
+    ? validCmsPrograms.map((cmsP, idx) => {
         const isGD = cmsP.slug.includes("graphic-design");
-        const defaultFallback = isGD ? PROGRAMS[0] : (PROGRAMS[1] || PROGRAMS[0]);
-        const customBadge = isGD ? meta?.program_1_badge : meta?.program_2_badge;
-        const customAccent = isGD ? meta?.program_1_accent : meta?.program_2_accent;
+        const isWorkshop = cmsP.slug.includes("3-hours") || cmsP.slug.includes("workshop");
+        const defaultFallback = isGD
+          ? PROGRAMS[0]
+          : isWorkshop
+          ? {
+              title: "3 Hours Live Workshop",
+              subtitle: "AI Powered Graphic Design & Printing Business Workshop",
+              description: "Master AI-powered graphic design, real printing secrets, pricing formulas, and business workflows in a comprehensive 3-hour live interactive Tamil workshop.",
+              duration: "3 Hours Live",
+              level: "Beginner to Advanced",
+              image: "/assets/images/workshop/poster.webp",
+              tools: DEFAULT_TOOLS_WS,
+            }
+          : (PROGRAMS[1] || PROGRAMS[0]);
+
+        const customBadge = isGD ? meta?.program_1_badge : isWorkshop ? meta?.program_3_badge : meta?.program_2_badge;
+        const customAccent = isGD ? meta?.program_1_accent : isWorkshop ? meta?.program_3_accent : meta?.program_2_accent;
 
         return {
           id: cmsP.slug,
           number: String(idx + 1).padStart(2, "0"),
-          badge: customBadge || (isGD ? "90 Days Program" : "180 Days Program"),
-          badgeAccent: customAccent || (isGD ? "Most Popular" : "Flagship Track"),
+          badge: customBadge || (isGD ? "90 Days Program" : isWorkshop ? "Live Workshop" : "180 Days Program"),
+          badgeAccent: customAccent || (isGD ? "Most Popular" : isWorkshop ? "Interactive Live" : "Flagship Track"),
           title: cmsP.title || defaultFallback.title,
           subtitle: cmsP.subtitle || defaultFallback.subtitle,
           description: cmsP.description || defaultFallback.description,
@@ -126,11 +164,14 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
           level: cmsP.level || defaultFallback.level,
           image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
           href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
-          tools: isGD ? DEFAULT_TOOLS_GD : DEFAULT_TOOLS_FS,
-          ctaLabel: cmsP.cta_text || "View Details",
+          tools: isGD ? DEFAULT_TOOLS_GD : isWorkshop ? DEFAULT_TOOLS_WS : DEFAULT_TOOLS_FS,
+          ctaLabel: cmsP.cta_text || (isWorkshop ? "Enroll in Workshop" : "View Details"),
         };
       })
     : PROGRAMS;
+
+  const isThreeCols = displayPrograms.length >= 3;
+
   return (
     <section
       id="programs"
@@ -191,8 +232,12 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
           </FadeUp>
         </div>
 
-        {/* ── 2-Column Minimal Program Showcase Cards ───────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch max-w-5xl mx-auto">
+        {/* ── Program Showcase Cards Grid ───────────────── */}
+        <div
+          className={`grid grid-cols-1 ${
+            isThreeCols ? "md:grid-cols-2 lg:grid-cols-3 max-w-7xl" : "lg:grid-cols-2 max-w-5xl"
+          } gap-8 lg:gap-10 items-stretch mx-auto`}
+        >
           {displayPrograms.map((program, idx) => (
             <FadeUp key={program.id} delay={0.12 * idx} className="h-full">
               <div className="group h-full rounded-[28px] sm:rounded-[32px] bg-white border border-neutral-200/90 p-6 sm:p-7 shadow-[0_12px_36px_rgba(0,0,0,0.05)] hover:shadow-[0_24px_55px_rgba(23,72,187,0.12)] hover:border-[#1748BB]/40 transition-all duration-400 flex flex-col justify-between relative overflow-hidden">
