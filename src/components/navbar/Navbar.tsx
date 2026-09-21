@@ -36,6 +36,22 @@ interface MegaMenuConfig {
   };
 }
 
+function renderMenuLabel(label: string) {
+  const match = label.match(/^(.*?)\s*(\([^)]+\))$/);
+  if (match) {
+    const [, mainText, bracketText] = match;
+    return (
+      <span className="inline-flex items-baseline gap-1.5 flex-wrap sm:flex-nowrap">
+        <span>{mainText}</span>
+        <span className="text-[11px] sm:text-xs font-semibold text-neutral-400 group-hover:text-[#1748BB] transition-colors whitespace-nowrap">
+          {bracketText}
+        </span>
+      </span>
+    );
+  }
+  return <span>{label}</span>;
+}
+
 const MEGA_MENUS: Record<string, MegaMenuConfig> = {
   programs: {
     col1Title: "PROGRAMS & WORKSHOPS",
@@ -316,10 +332,10 @@ export default function Navbar() {
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
-                                          <span>{item.label}</span>
+                                          {renderMenuLabel(item.label)}
                                           <ArrowUpRight
                                             size={14}
-                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                                           />
                                         </a>
                                       ) : (
@@ -328,10 +344,10 @@ export default function Navbar() {
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
-                                          <span>{item.label}</span>
+                                          {renderMenuLabel(item.label)}
                                           <ArrowUpRight
                                             size={14}
-                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                                           />
                                         </Link>
                                       )}
@@ -356,10 +372,10 @@ export default function Navbar() {
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
-                                          <span>{item.label}</span>
+                                          {renderMenuLabel(item.label)}
                                           <ArrowUpRight
                                             size={14}
-                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                                           />
                                         </a>
                                       ) : (
@@ -368,10 +384,10 @@ export default function Navbar() {
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
-                                          <span>{item.label}</span>
+                                          {renderMenuLabel(item.label)}
                                           <ArrowUpRight
                                             size={14}
-                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                                            className="text-neutral-400 group-hover:text-[#1748BB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                                           />
                                         </Link>
                                       )}
