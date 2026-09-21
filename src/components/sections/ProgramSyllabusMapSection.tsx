@@ -161,7 +161,7 @@ export default function ProgramSyllabusMapSection({
   }, []);
 
   return (
-    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100 select-none">
+    <section id="syllabus" className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100 select-none scroll-mt-10">
       {/* Soft Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"

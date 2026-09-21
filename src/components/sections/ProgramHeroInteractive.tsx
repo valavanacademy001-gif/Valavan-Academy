@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
-import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck, BookOpen, Bot } from "lucide-react";
 
 export interface HighlightItem {
-  iconType: "clock" | "globe" | "level" | "work" | "students" | "projects" | "lessons" | "access" | "guidance" | string;
-  label: string;
+  iconType: "clock" | "globe" | "level" | "work" | "students" | "projects" | "lessons" | "access" | "guidance" | "skills" | "book" | "ai" | "bot" | string;
+  label?: string;
   value: string;
 }
 
@@ -39,6 +39,11 @@ function renderIcon(type: string) {
     case "students":
     case "graduation":
       return <GraduationCap {...iconProps} />;
+    case "skills":
+    case "book":
+    case "books":
+    case "core":
+      return <BookOpen {...iconProps} />;
     case "projects":
     case "folder":
       return <FolderGit2 {...iconProps} />;
@@ -48,6 +53,10 @@ function renderIcon(type: string) {
     case "access":
     case "globe":
       return <Globe {...iconProps} />;
+    case "ai":
+    case "bot":
+    case "robot":
+      return <Bot {...iconProps} />;
     case "guidance":
     case "mentor":
       return <UserCheck {...iconProps} />;
@@ -249,10 +258,7 @@ export default function ProgramHeroInteractive({
 
               <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1.5">
                 {highlights.map((item, idx) => {
-                  const displayText =
-                    item.value && item.label && !item.value.toLowerCase().includes(item.label.toLowerCase())
-                      ? `${item.value} ${item.label}`
-                      : item.value || item.label;
+                  const displayText = item.value || item.label || "";
 
                   return (
                     <div

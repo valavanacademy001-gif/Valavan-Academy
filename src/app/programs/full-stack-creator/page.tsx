@@ -114,20 +114,20 @@ export default async function FullStackCreatorPage() {
   const description = heroMap.description || cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
-  const buttonText = heroMap.enroll_btn_text || "Enroll Now";
-  const secondaryButtonText = heroMap.secondary_btn_text || "View Curriculum";
+  const buttonText = heroMap.enroll_btn_text || "🚀 Join The Program";
+  const secondaryButtonText = heroMap.secondary_btn_text || "📖 View Curriculum";
   const secondaryButtonUrl = heroMap.secondary_btn_url || "#syllabus";
 
   const highlights: HighlightItem[] = [
-    { iconType: "students", label: "Students Trained", value: heroMap.stat_students || "10,000+" },
-    { iconType: "projects", label: "Portfolio Projects", value: heroMap.stat_projects || "25+ Projects" },
-    { iconType: "lessons", label: "Learning Lessons", value: heroMap.stat_lessons || "150+ Lessons" },
-    { iconType: "access", label: "Course Access", value: heroMap.stat_access || "Lifetime Access" },
-    { iconType: "guidance", label: "Mentorship", value: heroMap.stat_guidance || "Expert Guidance" },
+    { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
+    { iconType: "skills", value: heroMap.stat_skills || heroMap.stat_projects || "6 Core Skill Areas" },
+    { iconType: "lessons", value: heroMap.stat_lessons || "200+ Lessons" },
+    { iconType: "access", value: heroMap.stat_access || "Lifetime Access" },
+    { iconType: "ai", value: heroMap.stat_ai || heroMap.stat_guidance || "AI Integrated Learning" },
   ];
 
-  const titlePrefix = heroMap.title_prefix || "Full Stack Digital";
-  const titleHighlight = heroMap.title_highlight || "Creator Program.";
+  const titlePrefix = heroMap.title_prefix || "Become A Full Stack ";
+  const titleHighlight = heroMap.title_highlight || "Digital Creator.";
 
   return (
     <main className="min-h-screen bg-white">

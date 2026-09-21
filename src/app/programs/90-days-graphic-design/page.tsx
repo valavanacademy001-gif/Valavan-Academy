@@ -69,11 +69,11 @@ export default async function GraphicDesignProgramPage() {
   const secondaryButtonUrl = heroMap.secondary_btn_url || "#roadmap";
 
   const highlights: HighlightItem[] = [
-    { iconType: "students", label: "Students Trained", value: heroMap.stat_students || "10,000+" },
-    { iconType: "projects", label: "Portfolio Projects", value: heroMap.stat_projects || "20+ Projects" },
-    { iconType: "lessons", label: "Learning Lessons", value: heroMap.stat_lessons || "150+ Lessons" },
-    { iconType: "access", label: "Course Access", value: heroMap.stat_access || "Lifetime Access" },
-    { iconType: "guidance", label: "Mentorship", value: heroMap.stat_guidance || "Expert Guidance" },
+    { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
+    { iconType: "projects", value: heroMap.stat_projects || "20+ Projects" },
+    { iconType: "lessons", value: heroMap.stat_lessons || "150+ Lessons" },
+    { iconType: "access", value: heroMap.stat_access || "Lifetime Access" },
+    { iconType: "guidance", value: heroMap.stat_guidance || "Expert Guidance" },
   ];
 
   const titlePrefix = heroMap.title_prefix || "90 Days Graphic Design";
