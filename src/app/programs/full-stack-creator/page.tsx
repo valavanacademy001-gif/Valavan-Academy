@@ -160,7 +160,9 @@ export default async function FullStackCreatorPage() {
       <ProgramSyllabusMapSection />
 
       {/* ── 04 Learn Skills That Actually Make Money (Infinite 3D Floating Carousel) ── */}
-      <SkillsMoneyCarouselSection />
+      <SkillsMoneyCarouselSection
+        skillsMoneyMap={skillsMoneyMap}
+      />
 
       {/* ── 05 Student Success Stories Video Carousel ── */}
       <VideoTestimonialCarousel

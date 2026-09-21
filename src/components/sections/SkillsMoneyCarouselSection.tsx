@@ -59,21 +59,50 @@ const DEFAULT_SKILL_MODULES: SkillModuleImage[] = [
   },
 ];
 
+export function extractSkillModulesFromMap(
+  map: Record<string, string> | undefined,
+  fallback: SkillModuleImage[]
+): SkillModuleImage[] {
+  if (!map || Object.keys(map).length === 0) return fallback;
+
+  const items: SkillModuleImage[] = [];
+  for (let i = 1; i <= 20; i++) {
+    const src = map[`card_${i}_image`] || map[`module_${i}_image`];
+    const alt = map[`card_${i}_title`] || map[`module_${i}_title`] || `Skill Module ${i}`;
+    if (src && src.trim() !== "") {
+      items.push({ src: src.trim(), alt: alt.trim() });
+    }
+  }
+  return items.length > 0 ? items : fallback;
+}
+
 interface SkillsMoneyCarouselSectionProps {
   badge?: string;
   title?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
   subtitle?: string;
   images?: SkillModuleImage[];
+  skillsMoneyMap?: Record<string, string>;
 }
 
 export default function SkillsMoneyCarouselSection({
-  badge = "Topics",
-  title = "Learn Skills That Actually Make Money",
-  subtitle = "Not outdated theory. Real digital skills businesses & clients are hiring for right now.",
+  badge,
+  title,
+  titlePrefix,
+  titleHighlight,
+  subtitle,
   images = DEFAULT_SKILL_MODULES,
+  skillsMoneyMap,
 }: SkillsMoneyCarouselSectionProps) {
+  const effectiveBadge = badge || skillsMoneyMap?.badge || "Topics";
+  const effectiveTitlePrefix = titlePrefix || skillsMoneyMap?.title_prefix || "Learn Skills That";
+  const effectiveTitleHighlight = titleHighlight || skillsMoneyMap?.title_highlight || "Actually Make Money";
+  const effectiveSubtitle = subtitle || skillsMoneyMap?.description || "Not outdated theory. Real digital skills businesses & clients are hiring for right now.";
+  const effectiveImages = skillsMoneyMap ? extractSkillModulesFromMap(skillsMoneyMap, images) : images;
+
   // Duplicate array 3 times for continuous seamless marquee
-  const allItems = [...images, ...images, ...images];
+  const allItems = [...effectiveImages, ...effectiveImages, ...effectiveImages];
 
   return (
     <section
@@ -103,21 +132,30 @@ export default function SkillsMoneyCarouselSection({
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-white/25 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm shadow-sm">
                 <PlaySquare size={13} className="text-[#BACFFF]" />
-                {badge}
+                {effectiveBadge}
               </span>
             </div>
           </FadeUp>
 
           <FadeUp delay={0.05}>
-            <h2
-              className="font-display font-bold leading-tight tracking-tight mb-3.5"
-              style={{ fontSize: "clamp(30px, 4.2vw, 52px)", color: "#FFFFFF" }}
-            >
-              Learn Skills That{" "}
-              <span style={{ color: "#BACFFF" }} className="!text-[#BACFFF]">
-                Actually Make Money
-              </span>
-            </h2>
+            {title ? (
+              <h2
+                className="font-display font-bold leading-tight tracking-tight mb-3.5"
+                style={{ fontSize: "clamp(30px, 4.2vw, 52px)", color: "#FFFFFF" }}
+              >
+                {title}
+              </h2>
+            ) : (
+              <h2
+                className="font-display font-bold leading-tight tracking-tight mb-3.5"
+                style={{ fontSize: "clamp(30px, 4.2vw, 52px)", color: "#FFFFFF" }}
+              >
+                {effectiveTitlePrefix}{" "}
+                <span style={{ color: "#BACFFF" }} className="!text-[#BACFFF]">
+                  {effectiveTitleHighlight}
+                </span>
+              </h2>
+            )}
           </FadeUp>
 
           <FadeUp delay={0.1}>
@@ -125,7 +163,7 @@ export default function SkillsMoneyCarouselSection({
               className="font-sans text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-medium"
               style={{ color: "#BACFFF" }}
             >
-              {subtitle}
+              {effectiveSubtitle}
             </p>
           </FadeUp>
         </div>
