@@ -70,6 +70,69 @@ const DEFAULT_TOOLS_WS: ToolItem[] = [
   { name: "Gemini AI", image: "/assets/tools/gemini-ai.png" },
 ];
 
+const TOOL_MAP: Record<string, string> = {
+  "photoshop": "/assets/tools/ps.png",
+  "ps": "/assets/tools/ps.png",
+  "adobe photoshop": "/assets/tools/ps.png",
+  "illustrator": "/assets/tools/illustrator.png",
+  "ai": "/assets/tools/illustrator.png",
+  "adobe illustrator": "/assets/tools/illustrator.png",
+  "canva": "/assets/tools/canva.png",
+  "canva pro": "/assets/tools/canva.png",
+  "coreldraw": "/assets/tools/coreldraw.png",
+  "coraldraw": "/assets/tools/coreldraw.png",
+  "indesign": "/assets/tools/indesign.png",
+  "id": "/assets/tools/indesign.png",
+  "adobe indesign": "/assets/tools/indesign.png",
+  "color palette": "/assets/tools/color wheel.png",
+  "color theory": "/assets/tools/color wheel.png",
+  "color wheel": "/assets/tools/color wheel.png",
+  "premiere pro": "/assets/tools/premiere-pro.png",
+  "premiere": "/assets/tools/premiere-pro.png",
+  "pr": "/assets/tools/premiere-pro.png",
+  "adobe premiere pro": "/assets/tools/premiere-pro.png",
+  "after effects": "/assets/tools/after-effects.png",
+  "ae": "/assets/tools/after-effects.png",
+  "adobe after effects": "/assets/tools/after-effects.png",
+  "media encoder": "/assets/tools/media-encoder.png",
+  "adobe podcast": "/assets/tools/adobe-podcast.png",
+  "wordpress": "/assets/tools/wordpress.png",
+  "wp": "/assets/tools/wordpress.png",
+  "elementor pro": "/assets/tools/elementor-pro.png",
+  "elementor": "/assets/tools/elementor-pro.png",
+  "woocommerce": "/assets/tools/woocommerce.png",
+  "woo": "/assets/tools/woocommerce.png",
+  "rank math": "/assets/tools/rank-math.png",
+  "wp rocket": "/assets/tools/wp-rocket.png",
+  "chatgpt": "/assets/tools/chatgpt.png",
+  "chat gpt": "/assets/tools/chatgpt.png",
+  "gemini": "/assets/tools/gemini-ai.png",
+  "gemini ai": "/assets/tools/gemini-ai.png",
+  "google gemini": "/assets/tools/gemini-ai.png",
+  "heygen": "/assets/tools/heygen.png",
+  "midjourney": "/assets/tools/gemini-ai.png",
+  "ai tools": "/assets/tools/gemini-ai.png",
+};
+
+function resolveTools(rawTools: unknown, fallback: ToolItem[]): ToolItem[] {
+  if (Array.isArray(rawTools) && rawTools.length > 0) {
+    const list: ToolItem[] = [];
+    for (const item of rawTools) {
+      if (typeof item === "string") {
+        const key = item.toLowerCase().trim();
+        const img = TOOL_MAP[key] || `/assets/tools/ps.png`;
+        list.push({ name: item, image: img });
+      } else if (typeof item === "object" && item !== null && "name" in item) {
+        const obj = item as { name: string; image?: string; logo?: string };
+        const img = obj.image || obj.logo || TOOL_MAP[obj.name.toLowerCase().trim()] || "/assets/tools/ps.png";
+        list.push({ name: obj.name, image: img });
+      }
+    }
+    if (list.length > 0) return list;
+  }
+  return fallback;
+}
+
 const PROGRAMS: ProgramItem[] = [
   {
     id: "graphic-design",
@@ -150,6 +213,7 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
 
         const customBadge = isGD ? meta?.program_1_badge : isWorkshop ? meta?.program_3_badge : meta?.program_2_badge;
         const customAccent = isGD ? meta?.program_1_accent : isWorkshop ? meta?.program_3_accent : meta?.program_2_accent;
+        const fallbackTools = isGD ? DEFAULT_TOOLS_GD : isWorkshop ? DEFAULT_TOOLS_WS : DEFAULT_TOOLS_FS;
 
         return {
           id: cmsP.slug,
@@ -164,7 +228,7 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
           level: cmsP.level || defaultFallback.level,
           image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
           href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
-          tools: isGD ? DEFAULT_TOOLS_GD : isWorkshop ? DEFAULT_TOOLS_WS : DEFAULT_TOOLS_FS,
+          tools: resolveTools(cmsP.software_tools, fallbackTools),
           ctaLabel: cmsP.cta_text || (isWorkshop ? "Enroll in Workshop" : "View Details"),
         };
       })
