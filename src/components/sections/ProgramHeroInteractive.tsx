@@ -186,8 +186,8 @@ export default function ProgramHeroInteractive({
   return (
     <div
       ref={containerRef}
-      className={`relative bg-[#1748BB] text-white ${
-        isDesktop ? "h-[180vh]" : "w-full pb-12 pt-24 sm:pt-28"
+      className={`relative bg-[#1748BB] text-white w-full pb-12 pt-24 sm:pt-28 lg:pb-0 lg:pt-0 ${
+        isDesktop ? "h-[180vh]" : "lg:h-[180vh]"
       }`}
       style={{
         backgroundImage: `
@@ -211,11 +211,7 @@ export default function ProgramHeroInteractive({
       />
 
       <div
-        className={`${
-          isDesktop
-            ? "sticky top-0 h-screen w-full flex items-center justify-center pt-14 overflow-visible z-20"
-            : "relative z-10 overflow-hidden"
-        }`}
+        className="relative z-10 overflow-hidden lg:overflow-visible lg:sticky lg:top-0 lg:h-screen lg:w-full lg:flex lg:items-center lg:justify-center lg:pt-14 lg:z-20"
       >
         <Container className="relative z-10 w-full py-8 lg:py-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
