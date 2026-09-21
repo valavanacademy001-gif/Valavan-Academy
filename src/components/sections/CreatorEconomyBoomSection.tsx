@@ -6,7 +6,49 @@ import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { TrendingUp, Sparkles, User, Settings } from "lucide-react";
 
-export default function CreatorEconomyBoomSection() {
+interface CreatorEconomyBoomSectionProps {
+  badge?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
+  description?: string;
+  economyMap?: Record<string, string>;
+}
+
+export default function CreatorEconomyBoomSection({
+  badge,
+  titlePrefix,
+  titleHighlight,
+  description,
+  economyMap,
+}: CreatorEconomyBoomSectionProps = {}) {
+  const effectiveBadge = badge || economyMap?.badge || "Growth Update";
+  const effectiveTitlePrefix = titlePrefix || economyMap?.title_prefix || "Creator Economy :";
+  const effectiveTitleHighlight = titleHighlight || economyMap?.title_highlight || "Why is it Booming ?";
+  const effectiveDescription =
+    description ||
+    economyMap?.description ||
+    "Graphic design blends creativity, visual storytelling, and technology to turn ideas into stunning visuals. With the rise of digital content, talented freelance designers are in high demand!";
+
+  const card1Tag = economyMap?.card_1_tag || "Market Demand";
+  const card1Rise = economyMap?.card_1_rise || "+250% Rise";
+  const card1Title = economyMap?.card_1_title || "Explosive Growth in India";
+  const card1Stat = economyMap?.card_1_stat || "250%";
+  const card1StatLabel = economyMap?.card_1_stat_label || "Industry Expansion Rate";
+  const card1Desc =
+    economyMap?.card_1_desc ||
+    "Between 2022–2030, India's freelancing and graphic design industry is set for massive growth driven by digital marketing, brand design demand, and AI-powered creative tools.";
+  const card1Source = economyMap?.card_1_source || "(Source: FICCI Report)";
+
+  const card2Tag = economyMap?.card_2_tag || "Multi-Sector Adoption";
+  const card2Badge = economyMap?.card_2_badge || "Global Reach";
+  const card2Title = economyMap?.card_2_title || "Diverse Opportunities";
+  const card2Stat = economyMap?.card_2_stat || "95%";
+  const card2StatLabel = economyMap?.card_2_stat_label || "Businesses Rely on Visuals";
+  const card2Desc =
+    economyMap?.card_2_desc ||
+    "From marketing and education to fashion, real estate, and e-commerce nearly every industry now depends on graphic design to build brand identity and attract customers.";
+  const card2Source = economyMap?.card_2_source || "(Source: Statista)";
+
   const points = [
     { label: "2 LPA", x: 40, y: 260, value: "Beginner" },
     { label: "4 LPA", x: 130, y: 185, value: "Junior Designer" },
@@ -33,7 +75,7 @@ export default function CreatorEconomyBoomSection() {
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">
                 <Sparkles size={13} className="text-[#1748BB]" />
-                Growth Update
+                {effectiveBadge}
               </span>
             </div>
           </FadeUp>
@@ -43,16 +85,16 @@ export default function CreatorEconomyBoomSection() {
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-3.5"
               style={{ fontSize: "clamp(30px, 4.2vw, 52px)" }}
             >
-              Creator Economy :{" "}
+              {effectiveTitlePrefix}{" "}
               <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Why is it Booming ?
+                {effectiveTitleHighlight}
               </span>
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.1}>
             <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
-              Graphic design blends creativity, visual storytelling, and technology to turn ideas into stunning visuals. With the rise of digital content, talented freelance designers are in high demand!
+              {effectiveDescription}
             </p>
           </FadeUp>
         </div>
@@ -69,15 +111,15 @@ export default function CreatorEconomyBoomSection() {
                 <div className="mb-6 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#1748BB] bg-[#F0F5FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
-                      Market Demand
+                      {card1Tag}
                     </span>
                     <span className="inline-flex items-center gap-1 text-emerald-600 text-xs font-bold font-mono bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                      <TrendingUp size={13} /> +250% Rise
+                      <TrendingUp size={13} /> {card1Rise}
                     </span>
                   </div>
 
                   <h3 className="font-display font-semibold text-2xl sm:text-3xl text-[#1E2026] leading-snug">
-                    Explosive Growth in India
+                    {card1Title}
                   </h3>
 
                   <div className="flex items-baseline gap-2">
@@ -85,18 +127,18 @@ export default function CreatorEconomyBoomSection() {
                       className="font-display font-bold text-4xl sm:text-5xl"
                       style={{ color: "#1748BB" }}
                     >
-                      250%
+                      {card1Stat}
                     </span>
                     <span className="text-xs text-neutral-500 font-sans font-medium">
-                      Industry Expansion Rate
+                      {card1StatLabel}
                     </span>
                   </div>
 
                   <p className="font-sans text-neutral-600 text-xs sm:text-sm leading-relaxed font-normal">
-                    Between 2022–2030, India&apos;s freelancing and graphic design industry is set for massive growth driven by digital marketing, brand design demand, and AI-powered creative tools.
+                    {card1Desc}
                   </p>
                   <p className="font-sans text-[11px] text-neutral-400 font-semibold italic">
-                    (Source: FICCI Report)
+                    {card1Source}
                   </p>
                 </div>
 
@@ -236,15 +278,15 @@ export default function CreatorEconomyBoomSection() {
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#1748BB] bg-[#F0F5FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
-                      Multi-Sector Adoption
+                      {card2Tag}
                     </span>
                     <span className="inline-flex items-center gap-1 text-[#1748BB] text-xs font-bold font-mono bg-[#EBF2FE] px-2.5 py-1 rounded-full border border-[#BFDBFE]">
-                      Global Reach
+                      {card2Badge}
                     </span>
                   </div>
 
                   <h3 className="font-display font-semibold text-2xl sm:text-3xl text-[#1E2026] leading-snug">
-                    Diverse Opportunities
+                    {card2Title}
                   </h3>
 
                   <div className="flex items-baseline gap-2">
@@ -252,18 +294,18 @@ export default function CreatorEconomyBoomSection() {
                       className="font-display font-bold text-4xl sm:text-5xl"
                       style={{ color: "#1748BB" }}
                     >
-                      95%
+                      {card2Stat}
                     </span>
                     <span className="text-xs text-neutral-500 font-sans font-medium">
-                      Businesses Rely on Visuals
+                      {card2StatLabel}
                     </span>
                   </div>
 
                   <p className="font-sans text-neutral-600 text-xs sm:text-sm leading-relaxed font-normal">
-                    From marketing and education to fashion, real estate, and e-commerce nearly every industry now depends on graphic design to build brand identity and attract customers.
+                    {card2Desc}
                   </p>
                   <p className="font-sans text-[11px] text-neutral-400 font-semibold italic">
-                    (Source: Statista)
+                    {card2Source}
                   </p>
                 </div>
 

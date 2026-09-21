@@ -143,13 +143,25 @@ const CLOCKWISE_NODES: NodeItem[] = [
 interface ProgramSyllabusMapSectionProps {
   title?: string;
   subtitle?: string;
+  syllabusMap?: Record<string, string>;
 }
 
 export default function ProgramSyllabusMapSection({
-  title = "Why we are different from others",
-  subtitle = "Learn directly from our mentors and engage 24/7 within the community",
+  title,
+  subtitle,
+  syllabusMap,
 }: ProgramSyllabusMapSectionProps) {
   const [activeIdx, setActiveIdx] = useState(0);
+
+  const effectiveTitle =
+    title ||
+    (syllabusMap?.title_prefix
+      ? `${syllabusMap.title_prefix} ${syllabusMap.title_highlight || ""}`.trim()
+      : "Why we are different from others");
+  const effectiveSubtitle =
+    subtitle ||
+    syllabusMap?.description ||
+    "Learn directly from our mentors and engage 24/7 within the community";
 
   // Clockwise rotating loop every 1.5s
   useEffect(() => {
@@ -176,13 +188,13 @@ export default function ProgramSyllabusMapSection({
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-3"
               style={{ fontSize: "clamp(30px, 4.2vw, 52px)" }}
             >
-              {title}
+              {effectiveTitle}
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.05}>
             <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
-              {subtitle}
+              {effectiveSubtitle}
             </p>
           </FadeUp>
         </div>

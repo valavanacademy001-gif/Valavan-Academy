@@ -157,7 +157,9 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 03 Syllabus Mind-Map Section (Why we are different from others) ── */}
-      <ProgramSyllabusMapSection />
+      <ProgramSyllabusMapSection
+        syllabusMap={syllabusMap}
+      />
 
       {/* ── 04 Learn Skills That Actually Make Money (Infinite 3D Floating Carousel) ── */}
       <SkillsMoneyCarouselSection
@@ -173,28 +175,44 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 06 Industry Ready Certification Section ── */}
-      <ProgramCertificationSection />
+      <ProgramCertificationSection
+        certMap={certMap}
+        enrollUrl={enrollUrl}
+      />
 
       {/* ── 07 Creator Economy : Why is it Booming ? (Animated Growth Chart & Market Demand) ── */}
-      <CreatorEconomyBoomSection />
+      <CreatorEconomyBoomSection
+        economyMap={economyMap}
+      />
 
       {/* ── 08 Access To Templatesworld (Full-Width Blue Background Centered Bonus Section) ── */}
-      <TemplatesWorldBonusSection />
+      <TemplatesWorldBonusSection
+        bonusMap={bonusMap}
+        enrollUrl={enrollUrl}
+      />
 
       {/* ── 09 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
-      <WhoIsThisForSection />
+      <WhoIsThisForSection
+        whoMap={whoMap}
+        enrollUrl={enrollUrl}
+      />
 
       {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}
-      <GuidanceMentorsSection />
+      <GuidanceMentorsSection
+        mentorMap={mentorMap}
+      />
 
       {/* ── 11 AI Powered Full Stack Creator System (Offer Box & Join Today) ── */}
       <FullStackCreatorOfferSection
         enrollUrl={offerMap.enroll_url || enrollUrl}
         durationText={offerMap.duration_text || duration}
+        offerMap={offerMap}
       />
 
       {/* ── 12 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
-      <ProgramFAQSection />
+      <ProgramFAQSection
+        faqMap={faqMap}
+      />
 
       {/* ── 13 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA

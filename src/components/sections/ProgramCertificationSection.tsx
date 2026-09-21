@@ -15,17 +15,46 @@ interface ProgramCertificationSectionProps {
   description?: string;
   certificateImage?: string;
   enrollUrl?: string;
+  certMap?: Record<string, string>;
 }
 
 export default function ProgramCertificationSection({
-  badge = "Get Certified",
-  title = "Industry Ready Certification",
-  subtitle = "Showcase your creator skills confidently with a professional completion certificate",
-  programTitle = "Earn a Professional Certification in Full Stack Digital Creator Program",
-  description = "Build credibility for freelancing, portfolio & job opportunities with recognized project-based learning",
-  certificateImage = "/assets/programs/full-stack-creator/CERTIFICATE-model-2.jpg-1-2048x1448.webp",
+  badge,
+  title,
+  subtitle,
+  programTitle,
+  description,
+  certificateImage,
   enrollUrl = EXTERNAL_URLS.signup,
+  certMap,
 }: ProgramCertificationSectionProps) {
+  const effectiveBadge = badge || certMap?.badge || "Get Certified";
+  const effectiveTitle =
+    title ||
+    (certMap?.title_prefix
+      ? `${certMap.title_prefix} ${certMap.title_highlight || ""}`.trim()
+      : "Industry Ready Certification");
+  const effectiveSubtitle =
+    subtitle ||
+    certMap?.subtitle ||
+    certMap?.description ||
+    "Showcase your creator skills confidently with a professional completion certificate";
+  const effectiveProgramTitle =
+    programTitle ||
+    certMap?.program_title ||
+    "Earn a Professional Certification in Full Stack Digital Creator Program";
+  const effectiveDescription =
+    description ||
+    certMap?.program_description ||
+    certMap?.description ||
+    "Build credibility for freelancing, portfolio & job opportunities with recognized project-based learning";
+  const effectiveCertImage =
+    certificateImage ||
+    certMap?.certificate_image ||
+    certMap?.image ||
+    "/assets/programs/full-stack-creator/CERTIFICATE-model-2.jpg-1-2048x1448.webp";
+  const effectiveEnrollUrl = certMap?.enroll_url || enrollUrl;
+
   return (
     <section className="py-20 sm:py-28 bg-white relative z-20 overflow-hidden border-t border-neutral-100 select-none">
       {/* Soft Ambient Background Glow */}
@@ -41,7 +70,7 @@ export default function ProgramCertificationSection({
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">
                 <Sparkles size={13} className="text-[#1748BB]" />
-                {badge}
+                {effectiveBadge}
               </span>
             </div>
           </FadeUp>
@@ -51,16 +80,13 @@ export default function ProgramCertificationSection({
               className="font-display font-bold text-[#1E2026] leading-[1.08] tracking-tight mb-3"
               style={{ fontSize: "clamp(32px, 4.4vw, 54px)" }}
             >
-              Industry Ready{" "}
-              <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Certification
-              </span>
+              {effectiveTitle}
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.1}>
-            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-normal font-normal">
-              {subtitle}
+            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg leading-relaxed font-normal">
+              {effectiveSubtitle}
             </p>
           </FadeUp>
         </div>
@@ -73,7 +99,7 @@ export default function ProgramCertificationSection({
             <FadeUp delay={0.15}>
               <div className="relative aspect-[1.414/1] rounded-[24px] sm:rounded-[28px] overflow-hidden border-2 border-[#1748BB]/20 shadow-[0_16px_50px_rgba(23,72,187,0.12)] bg-white group hover:scale-[1.02] hover:shadow-[0_24px_60px_rgba(23,72,187,0.2)] transition-all duration-400">
                 <Image
-                  src={certificateImage}
+                  src={effectiveCertImage}
                   alt="Official Full Stack Digital Creator Certification"
                   fill
                   className="object-contain p-2 sm:p-3"
@@ -88,23 +114,20 @@ export default function ProgramCertificationSection({
           <div className="lg:col-span-5 space-y-5">
             <FadeUp delay={0.2}>
               <h3 className="font-display font-semibold text-2xl sm:text-[28px] text-[#1E2026] leading-[1.15] tracking-tight">
-                Earn a Professional Certification in{" "}
-                <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                  Full Stack Digital Creator Program
-                </span>
+                {effectiveProgramTitle}
               </h3>
             </FadeUp>
 
             <FadeUp delay={0.25}>
               <p className="font-sans text-neutral-600 text-sm sm:text-base leading-normal font-normal">
-                {description}
+                {effectiveDescription}
               </p>
             </FadeUp>
 
             <FadeUp delay={0.3}>
               <div className="pt-2">
                 <a
-                  href={enrollUrl}
+                  href={effectiveEnrollUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ backgroundColor: "#1748BB", color: "#FFFFFF" }}

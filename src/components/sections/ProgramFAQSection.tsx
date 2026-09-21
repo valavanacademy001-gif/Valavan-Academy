@@ -40,26 +40,59 @@ const DEFAULT_GRAPHIC_DESIGN_FAQS: FAQItem[] = [
 
 interface ProgramFAQSectionProps {
   badge?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
   title?: string;
   subtitle?: string;
   faqs?: FAQItem[];
+  faqMap?: Record<string, string>;
 }
 
 export default function ProgramFAQSection({
-  badge = "FAQ",
-  title = "Your Questions, Answered",
-  subtitle = "Have a question about our courses, career support, or community? We've gathered some of the most common questions to help you find the answers you need and get started with confidence",
-  faqs = DEFAULT_GRAPHIC_DESIGN_FAQS,
-}: ProgramFAQSectionProps) {
+  badge,
+  titlePrefix,
+  titleHighlight,
+  title,
+  subtitle,
+  faqs,
+  faqMap,
+}: ProgramFAQSectionProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const effectiveBadge = badge || faqMap?.badge || "FAQ";
+  const effectiveTitlePrefix = titlePrefix || faqMap?.title_prefix || "Your Questions,";
+  const effectiveTitleHighlight = titleHighlight || faqMap?.title_highlight || "Answered";
+  const effectiveSubtitle =
+    subtitle ||
+    faqMap?.subtitle ||
+    faqMap?.description ||
+    "Have a question about our courses, career support, or community? We've gathered some of the most common questions to help you find the answers you need and get started with confidence";
+
+  const dynamicFaqs: FAQItem[] = [];
+  if (faqMap) {
+    for (let i = 1; i <= 10; i++) {
+      const q = faqMap[`faq_${i}_question`] || faqMap[`faq_${i}_q`];
+      const a = faqMap[`faq_${i}_answer`] || faqMap[`faq_${i}_a`];
+      if (q && a) {
+        dynamicFaqs.push({ question: q, answer: a });
+      }
+    }
+  }
+
+  const effectiveFaqs =
+    faqs && faqs.length > 0
+      ? faqs
+      : dynamicFaqs.length > 0
+      ? dynamicFaqs
+      : DEFAULT_GRAPHIC_DESIGN_FAQS;
 
   const toggleFAQ = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   // Split FAQs into 2 columns for large screens (left: even index, right: odd index)
-  const col1 = faqs.filter((_, i) => i % 2 === 0);
-  const col2 = faqs.filter((_, i) => i % 2 !== 0);
+  const col1 = effectiveFaqs.filter((_, i) => i % 2 === 0);
+  const col2 = effectiveFaqs.filter((_, i) => i % 2 !== 0);
 
   return (
     <section className="py-10 sm:py-20 md:py-28 bg-white relative z-20 overflow-hidden border-t border-neutral-100 select-none">
@@ -70,7 +103,7 @@ export default function ProgramFAQSection({
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">
                 <HelpCircle size={14} className="text-[#1748BB]" />
-                {badge}
+                {effectiveBadge}
               </span>
             </div>
           </FadeUp>
@@ -80,16 +113,16 @@ export default function ProgramFAQSection({
               className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"
               style={{ fontSize: "clamp(30px, 4.2vw, 52px)" }}
             >
-              Your Questions,{" "}
+              {effectiveTitlePrefix}{" "}
               <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
-                Answered
+                {effectiveTitleHighlight}
               </span>
             </h2>
           </FadeUp>
 
           <FadeUp delay={0.1}>
             <p className="font-sans text-neutral-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto font-normal">
-              {subtitle}
+              {effectiveSubtitle}
             </p>
           </FadeUp>
         </div>

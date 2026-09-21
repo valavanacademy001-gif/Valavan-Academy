@@ -16,17 +16,34 @@ interface TemplatesWorldBonusSectionProps {
   imageSrc?: string;
   buttonText?: string;
   enrollUrl?: string;
+  bonusMap?: Record<string, string>;
 }
 
 export default function TemplatesWorldBonusSection({
-  badge = "Additional Bonuses",
-  titlePrefix = "Access To",
-  titleHighlight = "Templatesworld",
-  subtitle = "Save hours of work using ready-to-use professional creative resources",
-  imageSrc = "/assets/programs/full-stack-creator/Untitled-design-3-1-1-2048x1152-1-1024x576.webp",
-  buttonText = "Get Access Now",
+  badge,
+  titlePrefix,
+  titleHighlight,
+  subtitle,
+  imageSrc,
+  buttonText,
   enrollUrl = EXTERNAL_URLS.signup,
-}: TemplatesWorldBonusSectionProps) {
+  bonusMap,
+}: TemplatesWorldBonusSectionProps = {}) {
+  const effectiveBadge = badge || bonusMap?.badge || "Additional Bonuses";
+  const effectiveTitlePrefix = titlePrefix || bonusMap?.title_prefix || "Access To";
+  const effectiveTitleHighlight = titleHighlight || bonusMap?.title_highlight || "Templatesworld";
+  const effectiveSubtitle =
+    subtitle ||
+    bonusMap?.subtitle ||
+    bonusMap?.description ||
+    "Save hours of work using ready-to-use professional creative resources";
+  const effectiveImageSrc =
+    imageSrc ||
+    bonusMap?.image ||
+    bonusMap?.image_url ||
+    "/assets/programs/full-stack-creator/Untitled-design-3-1-1-2048x1152-1-1024x576.webp";
+  const effectiveButtonText = buttonText || bonusMap?.button_text || "Get Access Now";
+  const effectiveEnrollUrl = bonusMap?.enroll_url || enrollUrl;
   return (
     <section
       className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-14 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none border-t border-white/10 text-center flex flex-col justify-center lg:min-h-screen"
@@ -55,7 +72,7 @@ export default function TemplatesWorldBonusSection({
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-white/30 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md shadow-sm">
                 <Gift size={14} className="text-[#BACFFF]" />
-                {badge}
+                {effectiveBadge}
               </span>
             </div>
           </FadeUp>
@@ -65,9 +82,9 @@ export default function TemplatesWorldBonusSection({
               className="font-display font-bold leading-[1.08] tracking-tight mb-3.5"
               style={{ fontSize: "clamp(32px, 4.4vw, 56px)", color: "#FFFFFF" }}
             >
-              {titlePrefix}{" "}
+              {effectiveTitlePrefix}{" "}
               <span style={{ color: "#BACFFF" }} className="!text-[#BACFFF]">
-                {titleHighlight}
+                {effectiveTitleHighlight}
               </span>
             </h2>
           </FadeUp>
@@ -77,7 +94,7 @@ export default function TemplatesWorldBonusSection({
               className="font-sans text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-normal font-medium"
               style={{ color: "#BACFFF" }}
             >
-              {subtitle}
+              {effectiveSubtitle}
             </p>
           </FadeUp>
         </div>
@@ -90,7 +107,7 @@ export default function TemplatesWorldBonusSection({
             className="relative w-full aspect-[16/10] rounded-[24px] sm:rounded-[30px] overflow-hidden border border-white/20 shadow-[0_16px_50px_rgba(0,0,0,0.35)] bg-black/15 backdrop-blur-sm group hover:border-white/40 transition-all duration-400"
           >
             <Image
-              src={imageSrc}
+              src={effectiveImageSrc}
               alt="Templatesworld Complete Professional Asset Vault"
               fill
               className="object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500 ease-out"
@@ -103,14 +120,14 @@ export default function TemplatesWorldBonusSection({
         {/* ── 03 Centered White Action Button ── */}
         <FadeUp delay={0.2}>
           <a
-            href={enrollUrl}
+            href={effectiveEnrollUrl}
             target="_blank"
             rel="noopener noreferrer"
             style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
             className="inline-flex items-center gap-2.5 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-base sm:text-lg px-9 sm:px-11 py-4 sm:py-4.5 rounded-full hover:scale-105 transition-all duration-200 shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
           >
             <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
-              {buttonText}
+              {effectiveButtonText}
             </span>
             <ArrowRight size={19} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
           </a>
