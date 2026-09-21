@@ -1203,7 +1203,15 @@ export async function getThankYouPageData(slug?: string): Promise<CMSThankYouDat
   }
 
   try {
-    const map = await getSectionFieldMap(canonicalPageSlug, "thank_you");
+    let dedicatedSlug = `thank-you/${canonicalPageSlug}`;
+    if (!slug || cleanSlug === "default" || cleanSlug === "general" || cleanSlug === "thank-you") {
+      dedicatedSlug = "thank-you";
+    }
+
+    let map = await getSectionFieldMap(dedicatedSlug, "thank_you");
+    if (!map || Object.keys(map).length === 0) {
+      map = await getSectionFieldMap(canonicalPageSlug, "thank_you");
+    }
 
     const programTitle = map.program_title || defaultTitle;
     const phone = (map.course_access_phone || "+91 82205 11273").replace(/[^0-9]/g, "");
