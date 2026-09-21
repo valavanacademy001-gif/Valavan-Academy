@@ -5,6 +5,7 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { Sparkles, ArrowRight, BookOpen, Rocket, CheckCircle2, Users } from "lucide-react";
+import { EXTERNAL_URLS } from "@/data/site.config";
 
 interface ProgramDesignJourneyCTASectionProps {
   badge?: string;
@@ -21,13 +22,13 @@ interface ProgramDesignJourneyCTASectionProps {
 }
 
 export default function ProgramDesignJourneyCTASection({
-  badge,
+  badge = "START YOUR JOURNEY",
   titlePrefix = "Your Design Journey",
   titleHighlight = "Starts Today.",
   headlineSub,
   description,
   primaryBtnText = "🚀 Enroll Now",
-  primaryBtnUrl = "https://learn.valavanacademy.com/clientapp/signup",
+  primaryBtnUrl = EXTERNAL_URLS.enroll90Days,
   secondaryBtnText = "📖 View Curriculum",
   secondaryBtnUrl = "#roadmap",
   footerSubtext = "Join thousands of learners building their creative future with Valavan Academy.",

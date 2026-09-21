@@ -28,7 +28,7 @@ export default function TemplatesWorldBonusSection({
   features,
   imageSrc,
   buttonText,
-  enrollUrl = EXTERNAL_URLS.signup,
+  enrollUrl = EXTERNAL_URLS.enrollFullStack,
   bonusMap,
 }: TemplatesWorldBonusSectionProps = {}) {
   const effectiveBadge = badge || bonusMap?.badge || "WHAT YOU'LL GET";

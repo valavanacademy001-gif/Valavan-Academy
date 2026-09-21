@@ -115,7 +115,7 @@ export default async function FullStackCreatorPage() {
   const title = cmsProgram?.title || "Full Stack Digital Creator Program";
   const description = heroMap.description || cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
-  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enrollFullStack;
   const buttonText = heroMap.enroll_btn_text || "🚀 Join The Program";
   const secondaryButtonText = heroMap.secondary_btn_text || "📖 View Curriculum";
   const secondaryButtonUrl = heroMap.secondary_btn_url || "#syllabus";

@@ -782,7 +782,11 @@ export async function getProgramBySlug(slug: string): Promise<CMSProgram | null>
           thumbnail_url: fallback.image,
           banner_url: fallback.image,
           cta_text: "Enroll Now",
-          cta_url: EXTERNAL_URLS.signup,
+          cta_url: cleanSlug.includes("full-stack")
+            ? EXTERNAL_URLS.enrollFullStack
+            : cleanSlug.includes("3-hours") || cleanSlug.includes("workshop")
+            ? EXTERNAL_URLS.enroll3Hours
+            : EXTERNAL_URLS.enroll90Days,
           skills: [...fallback.skills],
           status: "published",
           is_visible: true,

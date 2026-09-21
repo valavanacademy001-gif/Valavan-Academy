@@ -63,7 +63,7 @@ export default async function GraphicDesignProgramPage() {
   const title = cmsProgram?.title || "90 Days Graphic Design Mastery Program";
   const description = heroMap.description || cmsProgram?.description || "A structured, project-driven career program covering Photoshop, Illustrator, Canva, Logo Design, Social Media Design, Branding, and AI-powered creative workflows — taught completely in practical Tamil.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
-  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.signup;
+  const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enroll90Days;
   const buttonText = heroMap.enroll_btn_text || "Enroll Now";
   const secondaryButtonText = heroMap.secondary_btn_text || "View Curriculum";
   const secondaryButtonUrl = heroMap.secondary_btn_url || "#roadmap";

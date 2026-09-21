@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { EXTERNAL_URLS } from "@/data/site.config";
 
 interface ProgramStickyBottomCTAProps {
   enrollUrl?: string;
@@ -11,7 +12,7 @@ interface ProgramStickyBottomCTAProps {
 }
 
 export default function ProgramStickyBottomCTA({
-  enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
+  enrollUrl = EXTERNAL_URLS.enroll90Days,
   text = "Limited Seats Only",
   buttonText = "ENROLL NOW",
 }: ProgramStickyBottomCTAProps) {

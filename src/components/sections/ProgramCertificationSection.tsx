@@ -25,7 +25,7 @@ export default function ProgramCertificationSection({
   programTitle,
   description,
   certificateImage,
-  enrollUrl = EXTERNAL_URLS.signup,
+  enrollUrl = EXTERNAL_URLS.enrollFullStack,
   certMap,
 }: ProgramCertificationSectionProps) {
   const effectiveBadge = badge || certMap?.badge || "Get Certified";

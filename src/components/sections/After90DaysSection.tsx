@@ -20,6 +20,7 @@ import {
   UserCheck,
   Layers,
 } from "lucide-react";
+import { EXTERNAL_URLS } from "@/data/site.config";
 
 export interface OutcomeItem {
   iconType: string;
@@ -141,7 +142,7 @@ export default function After90DaysSection({
   title = "After 90 Days You Can",
   subtitle = "Unlock real-world creative capabilities and transform from a beginner to a confident, industry-ready designer.",
   badge = "Career Outcomes",
-  enrollUrl = "https://learn.valavanacademy.com/clientapp/signup",
+  enrollUrl = EXTERNAL_URLS.enroll90Days,
   outcomes = DEFAULT_OUTCOMES,
   outcomesMap,
 }: After90DaysSectionProps) {

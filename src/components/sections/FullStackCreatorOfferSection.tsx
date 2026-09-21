@@ -18,7 +18,7 @@ interface FullStackCreatorOfferSectionProps {
 }
 
 export default function FullStackCreatorOfferSection({
-  enrollUrl = EXTERNAL_URLS.signup,
+  enrollUrl = EXTERNAL_URLS.enrollFullStack,
   durationText = "6 Months",
   badge,
   titlePrefix,

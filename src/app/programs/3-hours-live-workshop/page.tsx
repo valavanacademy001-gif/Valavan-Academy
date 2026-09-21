@@ -136,7 +136,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
   const heroTitlePrefix = heroMap.title_prefix || "3 Hours Live";
   const heroTitleHighlight = heroMap.title_highlight || "Workshop.";
   const heroDesc = heroMap.description || program?.description || "A complete beginner's roadmap to learning Graphic Design and building a profitable printing and freelancing business — taught completely in practical Tamil.";
-  const heroEnrollUrl = heroMap.enroll_url || program?.cta_url || EXTERNAL_URLS.workshop;
+  const heroEnrollUrl = heroMap.enroll_url || program?.cta_url || EXTERNAL_URLS.enroll3Hours;
 
   const discoverCards = [
     {
@@ -571,7 +571,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
 
                 <div className="pt-6 relative z-10 space-y-3">
                   <a
-                    href={program?.cta_url || EXTERNAL_URLS.workshop}
+                    href={program?.cta_url || EXTERNAL_URLS.enroll3Hours}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ backgroundColor: "#1748BB", color: "#FFFFFF" }}
@@ -623,7 +623,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
 
       {/* ── 09 Full-Width Sticky Bottom Enrollment Action Bar (Matching 90 Days & Full Stack) ── */}
       <ProgramStickyBottomCTA
-        enrollUrl={program?.cta_url || EXTERNAL_URLS.workshop}
+        enrollUrl={program?.cta_url || EXTERNAL_URLS.enroll3Hours}
         text="3 Hours Live Workshop • Special Price ₹99 (Limited Seats)"
         buttonText={program?.cta_text?.toUpperCase() || "REGISTER NOW FOR ₹99"}
       />

@@ -21,7 +21,7 @@ export default function WhoIsThisForSection({
   titlePrefix,
   titleHighlight,
   buttonText,
-  enrollUrl = EXTERNAL_URLS.signup,
+  enrollUrl = EXTERNAL_URLS.enrollFullStack,
   whoMap,
 }: WhoIsThisForSectionProps = {}) {
   const effectiveBadge = badge || whoMap?.badge || "Who Is This For";
