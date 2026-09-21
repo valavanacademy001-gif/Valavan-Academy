@@ -1158,3 +1158,89 @@ export async function getTrackingSettings(): Promise<CMSTrackingSettings> {
   }
 }
 
+export interface CMSThankYouData {
+  heading: string;
+  programTitle: string;
+  journeySubtext: string;
+  inboxNote: string;
+  activationNote: string;
+  courseAccessBtnText: string;
+  courseAccessPhone: string;
+  courseAccessUrl: string;
+  whatsappGroupBtnText: string;
+  whatsappGroupUrl: string;
+  metaEvent: string;
+  conversionValue: number;
+}
+
+/**
+ * Fetch Thank You Page content for a specific program slug (with CMS overrides & full fallbacks)
+ */
+export async function getThankYouPageData(slug?: string): Promise<CMSThankYouData> {
+  const cleanSlug = (slug || "").toLowerCase();
+
+  let canonicalPageSlug = "90-days-graphic-design";
+  let defaultTitle = "90-Day Graphic Design Mastery Program";
+  let defaultJourney = "Your Creative Design Journey Starts Now";
+  let defaultGroupUrl = "https://chat.whatsapp.com/JfBplPD1MisAt0RMgrylRj";
+  let defaultMetaEvent = "Purchase";
+  let defaultVal = 0;
+
+  if (cleanSlug.includes("full-stack") || cleanSlug.includes("fullstack") || cleanSlug.includes("creator")) {
+    canonicalPageSlug = "full-stack-creator";
+    defaultTitle = "Full Stack Digital Creator Program";
+    defaultJourney = "Your Digital Creator Journey Starts Now";
+    defaultGroupUrl = "https://chat.whatsapp.com/JfBplPD1MisAt0RMgrylRj";
+    defaultMetaEvent = "Purchase";
+    defaultVal = 0;
+  } else if (cleanSlug.includes("3-hours") || cleanSlug.includes("workshop") || cleanSlug.includes("live") || cleanSlug.includes("printing")) {
+    canonicalPageSlug = "3-hours-live-workshop";
+    defaultTitle = "3 Hours Live Workshop";
+    defaultJourney = "Your Graphic Design & Printing Business Journey Starts Now";
+    defaultGroupUrl = "https://chat.whatsapp.com/JfBplPD1MisAt0RMgrylRj";
+    defaultMetaEvent = "CompleteRegistration";
+    defaultVal = 99;
+  }
+
+  try {
+    const map = await getSectionFieldMap(canonicalPageSlug, "thank_you");
+
+    const programTitle = map.program_title || defaultTitle;
+    const phone = (map.course_access_phone || "+91 82205 11273").replace(/[^0-9]/g, "");
+    const waText = encodeURIComponent(`Hi Valavan Academy, I have enrolled in the ${programTitle} and need course access.`);
+    const computedCourseAccessUrl = `https://wa.me/${phone || "918220511273"}?text=${waText}`;
+
+    return {
+      heading: map.heading || "Thank You For Purchasing",
+      programTitle,
+      journeySubtext: map.journey_subtext || defaultJourney,
+      inboxNote: map.inbox_note || "Check Your Inbox! ✉️ We Have Sent Your Order Confirmation, Your Registered Email Address.",
+      activationNote: map.activation_note || "In Case Your Course Access Is Not Activated Instantly After Purchase, Kindly Note That It Will Be Activated Within Our Working Hours, Between 10:00 AM To 7:00 PM.",
+      courseAccessBtnText: map.course_access_btn_text || "I Need Course Access",
+      courseAccessPhone: map.course_access_phone || "+91 82205 11273",
+      courseAccessUrl: map.course_access_btn_url || computedCourseAccessUrl,
+      whatsappGroupBtnText: map.whatsapp_group_btn_text || "Join Whatsapp Community Group",
+      whatsappGroupUrl: map.whatsapp_group_url || defaultGroupUrl,
+      metaEvent: map.meta_event || defaultMetaEvent,
+      conversionValue: map.conversion_value ? Number(map.conversion_value) : defaultVal,
+    };
+  } catch (err) {
+    console.error("Error fetching thank you data:", err);
+    return {
+      heading: "Thank You For Purchasing",
+      programTitle: defaultTitle,
+      journeySubtext: defaultJourney,
+      inboxNote: "Check Your Inbox! ✉️ We Have Sent Your Order Confirmation, Your Registered Email Address.",
+      activationNote: "In Case Your Course Access Is Not Activated Instantly After Purchase, Kindly Note That It Will Be Activated Within Our Working Hours, Between 10:00 AM To 7:00 PM.",
+      courseAccessBtnText: "I Need Course Access",
+      courseAccessPhone: "+91 82205 11273",
+      courseAccessUrl: `https://wa.me/918220511273?text=${encodeURIComponent(`Hi Valavan Academy, I have enrolled in the ${defaultTitle} and need course access.`)}`,
+      whatsappGroupBtnText: "Join Whatsapp Community Group",
+      whatsappGroupUrl: defaultGroupUrl,
+      metaEvent: defaultMetaEvent,
+      conversionValue: defaultVal,
+    };
+  }
+}
+
+
