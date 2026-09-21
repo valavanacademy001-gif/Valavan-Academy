@@ -10,6 +10,28 @@ interface ThankYouViewProps {
 }
 
 /**
+ * Chat Bubble Icon matching reference design
+ */
+function ChatBubbleIcon({ className = "w-5 h-5", size = 20 }: { className?: string; size?: number }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+    </svg>
+  );
+}
+
+/**
  * Official WhatsApp Vector Icon Component
  */
 function WhatsAppIcon({ className = "w-5 h-5", size = 20 }: { className?: string; size?: number }) {
@@ -135,10 +157,10 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
             </p>
           </div>
 
-          {/* Two Green Pill Action Buttons with proper WhatsApp Icon */}
+          {/* Two Green Pill Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none">
             
-            {/* Button 1: I Need Course Access (WhatsApp direct support) */}
+            {/* Button 1: I Need Course Access (Chat Icon) */}
             <a
               href={data.courseAccessUrl}
               target="_blank"
@@ -146,11 +168,11 @@ export default function ThankYouView({ data }: ThankYouViewProps) {
               style={{ backgroundColor: "#22C55E", color: "#FFFFFF" }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[#22C55E] hover:bg-[#16A34A] !text-white font-sans font-bold text-sm sm:text-base px-7 sm:px-9 py-4 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_8px_25px_rgba(34,197,94,0.35)] cursor-pointer"
             >
-              <WhatsAppIcon size={20} className="text-white shrink-0" />
+              <ChatBubbleIcon size={20} className="text-white shrink-0" />
               <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">{data.courseAccessBtnText}</span>
             </a>
 
-            {/* Button 2: Join Whatsapp Community Group */}
+            {/* Button 2: Join Whatsapp Community Group (WhatsApp Icon) */}
             <a
               href={data.whatsappGroupUrl}
               target="_blank"
