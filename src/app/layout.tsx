@@ -105,6 +105,7 @@ import { getSiteSettings, getTrackingSettings, getPageTrackingRules } from "@/li
 import { getPageSEO, fetchLiveSEOSettings } from "@/lib/seo";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import GlobalTrackingEngine from "@/components/tracking/GlobalTrackingEngine";
+import LeadCaptureProvider from "@/components/leads/LeadCaptureProvider";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
 interface RootLayoutProps {
@@ -154,19 +155,22 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <PwaDisableProvider />
         <CustomCursor />
-        {/* Unified Global Tracking Engine (Meta Pixel, GA4, GTM dataLayer & CMS Page Rules) */}
-        <Suspense fallback={null}>
-          <GlobalTrackingEngine settings={trackingSettings} initialRules={pageRules} />
-        </Suspense>
-        <ReducedMotionProvider>
-          <SmoothScrollProvider>
-            <Navbar />
-            <main id="main-content" tabIndex={-1} className="flex-1">
-              {children}
-            </main>
-            <Footer settings={settings} />
-          </SmoothScrollProvider>
-        </ReducedMotionProvider>
+        {/* Pre-Payment Lead Capture Modal & Global Trigger Provider */}
+        <LeadCaptureProvider>
+          {/* Unified Global Tracking Engine (Meta Pixel, GA4, GTM dataLayer & CMS Page Rules) */}
+          <Suspense fallback={null}>
+            <GlobalTrackingEngine settings={trackingSettings} initialRules={pageRules} />
+          </Suspense>
+          <ReducedMotionProvider>
+            <SmoothScrollProvider>
+              <Navbar />
+              <main id="main-content" tabIndex={-1} className="flex-1">
+                {children}
+              </main>
+              <Footer settings={settings} />
+            </SmoothScrollProvider>
+          </ReducedMotionProvider>
+        </LeadCaptureProvider>
       </body>
     </html>
   );
