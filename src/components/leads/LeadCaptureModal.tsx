@@ -24,6 +24,24 @@ const OCCUPATIONS = [
   'House Wife',
 ]
 
+const DEFAULT_PROGRAM_PAYMENTS: Record<string, { url: string; name: string; price: number }> = {
+  '3-hours-live-workshop': {
+    name: '3 Hours Live Graphic Design Workshop',
+    url: 'https://rzp.io/rzp/e9OpaQTo',
+    price: 199,
+  },
+  '90-days-graphic-design': {
+    name: '90-Day Graphic Design Mastery',
+    url: 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view',
+    price: 4999,
+  },
+  'full-stack-creator': {
+    name: 'Full Stack Digital Creator Masterclass',
+    url: 'https://rzp.io/rzp/v8ykjCk',
+    price: 14999,
+  },
+}
+
 export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalProps) {
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
@@ -50,7 +68,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
     if (!name.trim()) {
       newErrors.name = 'Full Name is required'
     } else if (name.trim().length < 2) {
-      newErrors.name = 'Please enter your real full name'
+      newErrors.name = 'Please enter valid name'
     }
 
     if (!age.trim()) {
@@ -58,32 +76,32 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
     } else {
       const numAge = parseInt(age.trim(), 10)
       if (isNaN(numAge) || numAge < 10 || numAge > 90) {
-        newErrors.age = 'Please enter a valid age (10-90)'
+        newErrors.age = 'Age 10-90'
       }
     }
 
     const cleanPhone = phone.replace(/[\s\-\+]/g, '')
     if (!phone.trim()) {
-      newErrors.phone = 'Phone Number is required'
+      newErrors.phone = 'Phone required'
     } else if (cleanPhone.length < 10) {
-      newErrors.phone = 'Phone number must be at least 10 digits'
+      newErrors.phone = 'Min 10 digits'
     }
 
     if (!email.trim()) {
-      newErrors.email = 'Email Address is required'
+      newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      newErrors.email = 'Please enter a valid email address'
+      newErrors.email = 'Please enter valid email'
     }
 
     if (!occupation) {
-      newErrors.occupation = 'Please select your current occupation'
+      newErrors.occupation = 'Please select occupation'
     }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!validate()) return
@@ -91,26 +109,33 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
     setIsSubmitting(true)
 
     try {
-      // Gather attribution and telemetry context
-      const storedUtm = typeof window !== 'undefined' ? sessionStorage.getItem('va_utm_params') : null
-      const utm = storedUtm ? JSON.parse(storedUtm) : {}
+      // 1. Resolve Target Payment Link synchronously for instant redirect
+      const progKey = config.programSlug || '90-days-graphic-design'
+      const fallbackDef = DEFAULT_PROGRAM_PAYMENTS[progKey] || DEFAULT_PROGRAM_PAYMENTS['90-days-graphic-design']
+      const targetPaymentUrl = config.defaultPaymentUrl || fallbackDef.url || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
+      const cleanProgramName = config.programName || fallbackDef.name || '90-Day Graphic Design Mastery'
+      const price = config.price || fallbackDef.price || 4999
 
+      // 2. Gather attribution context
+      let utm: Record<string, string> = {}
       let vid = ''
       let sid = ''
       try {
+        const storedUtm = sessionStorage.getItem('va_utm_params')
+        if (storedUtm) utm = JSON.parse(storedUtm)
         vid = localStorage.getItem('va_vid') || ''
         sid = sessionStorage.getItem('va_sid') || ''
       } catch {}
 
       const payload = {
         name: name.trim(),
-        age: parseInt(age.trim(), 10),
+        age: parseInt(age.trim(), 10) || null,
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
         occupation: occupation,
-        program_name: config.programName || '90-Day Graphic Design Mastery',
-        program_slug: config.programSlug || '90-days-graphic-design',
-        fallback_payment_url: config.defaultPaymentUrl || '',
+        program_name: cleanProgramName,
+        program_slug: progKey,
+        fallback_payment_url: targetPaymentUrl,
         page_url: typeof window !== 'undefined' ? window.location.pathname : '',
         referrer: typeof document !== 'undefined' ? document.referrer : '',
         utm_source: utm.utm_source || 'direct',
@@ -123,108 +148,117 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         device: typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop',
       }
 
-      // Fire Meta Pixel Lead Event
-      if (typeof window !== 'undefined' && typeof (window as any).fbq === 'function') {
-        try {
+      // 3. Synchronously fire Meta Pixel & GA4 Lead tracking events
+      try {
+        if (typeof (window as any).fbq === 'function') {
           (window as any).fbq('track', 'Lead', {
-            content_name: config.programName,
+            content_name: cleanProgramName,
             content_category: 'Program Enrollment',
-            value: config.price || 4999,
+            value: price,
             currency: 'INR',
           })
-        } catch {}
-      }
+        }
+      } catch {}
 
-      // Fire GA4 generate_lead Event
-      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-        try {
+      try {
+        if (typeof (window as any).gtag === 'function') {
           (window as any).gtag('event', 'generate_lead', {
-            program_name: config.programName,
-            value: config.price || 4999,
+            program_name: cleanProgramName,
+            value: price,
             currency: 'INR',
           })
-        } catch {}
-      }
+        }
+      } catch {}
 
-      // Fire to dataLayer
-      if (typeof window !== 'undefined' && Array.isArray((window as any).dataLayer)) {
-        try {
+      try {
+        if (Array.isArray((window as any).dataLayer)) {
           (window as any).dataLayer.push({
             event: 'lead_captured',
-            program_name: config.programName,
-            program_slug: config.programSlug,
+            program_name: cleanProgramName,
+            program_slug: progKey,
           })
+        }
+      } catch {}
+
+      // 4. Non-blocking fire-and-forget lead dispatch to server
+      // Using keepalive: true / sendBeacon guarantees background delivery to /api/leads even during navigation
+      const jsonStr = JSON.stringify(payload)
+      let beaconSent = false
+      try {
+        if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+          const blob = new Blob([jsonStr], { type: 'application/json' })
+          beaconSent = navigator.sendBeacon('/api/leads', blob)
+        }
+      } catch {}
+
+      if (!beaconSent) {
+        try {
+          fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonStr,
+            keepalive: true,
+          }).catch(() => {})
         } catch {}
       }
 
-      // Post to /api/leads to persist in Supabase & retrieve payment URL
-      const res = await fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await res.json()
-      const paymentUrl = data.payment_url || config.defaultPaymentUrl || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
-
-      // Redirect user to the Razorpay Payment link
-      window.location.href = paymentUrl
+      // 5. INSTANT REDIRECTION - zero lag / zero waiting
+      window.location.href = targetPaymentUrl
     } catch (err) {
-      console.error('Error submitting lead form:', err)
-      // Fallback redirect to payment URL on network error
+      console.error('Error initiating secure redirect:', err)
       const fallbackUrl = config.defaultPaymentUrl || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
       window.location.href = fallbackUrl
     }
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-150">
       {/* Modal Card */}
       <div
-        className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
       >
         {/* Header Gradient */}
-        <div className="bg-gradient-to-br from-[#1748BB] via-blue-600 to-[#0F3590] p-6 text-white relative">
+        <div className="bg-gradient-to-br from-[#1748BB] via-blue-600 to-[#0F3590] p-4 sm:p-5 text-white relative">
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-white" />
+            <X className="w-4 h-4 text-white" />
           </button>
 
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-1.5">
             <span
               style={{ color: '#ffffff' }}
-              className="px-2.5 py-0.8 rounded-full bg-white/20 !text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-xs"
+              className="px-2 py-0.5 rounded-full bg-white/20 !text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-xs"
             >
-              <Sparkles className="w-3 h-3 text-amber-300" />
+              <Sparkles className="w-2.5 h-2.5 text-amber-300" />
               <span>Step 1 of 2 · Quick Enrollment</span>
             </span>
           </div>
 
           <h3
             style={{ color: '#ffffff' }}
-            className="text-xl sm:text-2xl font-black tracking-tight leading-snug !text-white drop-shadow-xs"
+            className="text-base sm:text-lg font-black tracking-tight leading-tight !text-white drop-shadow-xs pr-6"
           >
             {config.programName || 'Complete Your Enrollment'}
           </h3>
           <p
             style={{ color: 'rgba(255, 255, 255, 0.92)' }}
-            className="text-xs !text-white/90 mt-1.5 font-medium leading-relaxed"
+            className="text-[11px] sm:text-xs !text-white/90 mt-1 font-medium leading-tight"
           >
             Fill your details below to proceed to secure Razorpay checkout.
           </p>
         </div>
 
         {/* Body Form */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
+        <form onSubmit={handleSubmit} className="p-3.5 sm:p-5 overflow-y-auto space-y-2.5 sm:space-y-3 flex-1">
           {/* Name Field */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-[#1748BB]" />
               <span>Full Name <span className="text-red-500">*</span></span>
             </label>
@@ -236,20 +270,20 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.name) setErrors((prev) => ({ ...prev, name: '' }))
               }}
               placeholder="e.g. Vignesh Kumar"
-              className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                 errors.name
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
+                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
               }`}
             />
-            {errors.name && <p className="text-[11px] text-red-600 font-semibold">{errors.name}</p>}
+            {errors.name && <p className="text-[10px] text-red-600 font-semibold">{errors.name}</p>}
           </div>
 
-          {/* Row: Age & Phone */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          {/* Row: Age & Phone (2 columns on all devices) */}
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             {/* Age Field */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-[#1748BB]" />
                 <span>Age <span className="text-red-500">*</span></span>
               </label>
@@ -263,20 +297,20 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                   if (errors.age) setErrors((prev) => ({ ...prev, age: '' }))
                 }}
                 placeholder="e.g. 24"
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                   errors.age
                     ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
+                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
                 }`}
               />
-              {errors.age && <p className="text-[11px] text-red-600 font-semibold">{errors.age}</p>}
+              {errors.age && <p className="text-[10px] text-red-600 font-semibold">{errors.age}</p>}
             </div>
 
             {/* Phone Number Field */}
             <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-[#1748BB]" />
-                <span>Phone / WhatsApp <span className="text-red-500">*</span></span>
+                <span>WhatsApp / Phone <span className="text-red-500">*</span></span>
               </label>
               <input
                 type="tel"
@@ -285,20 +319,20 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                   setPhone(e.target.value)
                   if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }))
                 }}
-                placeholder="e.g. 9876543210"
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+                placeholder="9876543210"
+                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                   errors.phone
                     ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
+                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
                 }`}
               />
-              {errors.phone && <p className="text-[11px] text-red-600 font-semibold">{errors.phone}</p>}
+              {errors.phone && <p className="text-[10px] text-red-600 font-semibold">{errors.phone}</p>}
             </div>
           </div>
 
           {/* Email Field */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5 text-[#1748BB]" />
               <span>Email Address <span className="text-red-500">*</span></span>
             </label>
@@ -310,18 +344,18 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.email) setErrors((prev) => ({ ...prev, email: '' }))
               }}
               placeholder="e.g. yourname@gmail.com"
-              className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                 errors.email
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
+                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
               }`}
             />
-            {errors.email && <p className="text-[11px] text-red-600 font-semibold">{errors.email}</p>}
+            {errors.email && <p className="text-[10px] text-red-600 font-semibold">{errors.email}</p>}
           </div>
 
           {/* Occupation Dropdown */}
           <div className="space-y-1">
-            <label className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
               <Briefcase className="w-3.5 h-3.5 text-[#1748BB]" />
               <span>Current Occupation <span className="text-red-500">*</span></span>
             </label>
@@ -331,7 +365,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 setOccupation(e.target.value)
                 if (errors.occupation) setErrors((prev) => ({ ...prev, occupation: '' }))
               }}
-              className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all bg-white focus:outline-none focus:ring-2 ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all bg-gray-50/40 focus:bg-white focus:outline-none focus:ring-2 ${
                 errors.occupation
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                   : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
@@ -344,33 +378,24 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 </option>
               ))}
             </select>
-            {errors.occupation && <p className="text-[11px] text-red-600 font-semibold">{errors.occupation}</p>}
+            {errors.occupation && <p className="text-[10px] text-red-600 font-semibold">{errors.occupation}</p>}
           </div>
 
           {/* Submit Button */}
-          <div className="pt-2">
+          <div className="pt-1.5">
             <button
               type="submit"
               disabled={isSubmitting}
               style={{ color: '#ffffff' }}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#1748BB] to-blue-600 hover:from-[#123999] hover:to-blue-700 !text-white text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+              className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#1748BB] to-blue-600 hover:from-[#123999] hover:to-blue-700 !text-white text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-85"
             >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  <span style={{ color: '#ffffff' }} className="!text-white">Connecting to Secure Payment...</span>
-                </>
-              ) : (
-                <>
-                  <span style={{ color: '#ffffff' }} className="!text-white">Proceed to Secure Payment</span>
-                  <ArrowRight className="w-4 h-4 text-white" />
-                </>
-              )}
+              <span style={{ color: '#ffffff' }} className="!text-white">Proceed to Secure Payment</span>
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
 
           {/* Trust badges */}
-          <div className="flex items-center justify-center gap-4 text-[11px] text-gray-400 pt-1">
+          <div className="flex items-center justify-center gap-3 text-[10px] sm:text-[11px] text-gray-500 pt-0.5">
             <div className="flex items-center gap-1">
               <Lock className="w-3 h-3 text-emerald-600" />
               <span>256-Bit SSL Secured</span>

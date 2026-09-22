@@ -62,12 +62,12 @@ export async function POST(req: Request) {
       if (page) {
         const { data: sec } = await supabase.from('sections').select('id').eq('page_id', page.id).eq('slug', 'tracking_analytics').maybeSingle()
         if (sec) {
-          const { data: convField } = await supabase
+          const { data: fieldVals } = await supabase
             .from('field_values')
             .select('*, field:fields(name)')
             .eq('section_id', sec.id)
-            .eq('field.name', 'program_conversion_settings')
-            .maybeSingle()
+
+          const convField = fieldVals?.find((f: any) => f.field?.name === 'program_conversion_settings')
 
           if (convField) {
             const raw = convField.published_value_text || convField.value_text
