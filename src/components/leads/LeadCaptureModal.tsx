@@ -186,27 +186,36 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         aria-modal="true"
       >
         {/* Header Gradient */}
-        <div className="bg-gradient-to-br from-[#1748BB] via-blue-700 to-indigo-800 p-6 text-white relative">
+        <div className="bg-gradient-to-br from-[#1748BB] via-blue-600 to-[#0F3590] p-6 text-white relative">
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-white" />
           </button>
 
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold uppercase tracking-wider text-blue-100 flex items-center gap-1">
+          <div className="flex items-center gap-2 mb-2">
+            <span
+              style={{ color: '#ffffff' }}
+              className="px-2.5 py-0.8 rounded-full bg-white/20 !text-white text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-xs"
+            >
               <Sparkles className="w-3 h-3 text-amber-300" />
               <span>Step 1 of 2 · Quick Enrollment</span>
             </span>
           </div>
 
-          <h3 className="text-xl font-bold tracking-tight leading-snug">
+          <h3
+            style={{ color: '#ffffff' }}
+            className="text-xl sm:text-2xl font-black tracking-tight leading-snug !text-white drop-shadow-xs"
+          >
             {config.programName || 'Complete Your Enrollment'}
           </h3>
-          <p className="text-xs text-blue-100/90 mt-1">
+          <p
+            style={{ color: 'rgba(255, 255, 255, 0.92)' }}
+            className="text-xs !text-white/90 mt-1.5 font-medium leading-relaxed"
+          >
             Fill your details below to proceed to secure Razorpay checkout.
           </p>
         </div>
@@ -343,17 +352,18 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#1748BB] to-blue-600 hover:from-[#123999] hover:to-blue-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+              style={{ color: '#ffffff' }}
+              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#1748BB] to-blue-600 hover:from-[#123999] hover:to-blue-700 !text-white text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  <span>Connecting to Secure Payment...</span>
+                  <span style={{ color: '#ffffff' }} className="!text-white">Connecting to Secure Payment...</span>
                 </>
               ) : (
                 <>
-                  <span>Proceed to Secure Payment</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span style={{ color: '#ffffff' }} className="!text-white">Proceed to Secure Payment</span>
+                  <ArrowRight className="w-4 h-4 text-white" />
                 </>
               )}
             </button>
