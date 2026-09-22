@@ -264,30 +264,63 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     }
   }, [pathname])
 
-  // 3. Capture UTM params on landing
+  // 3. Capture UTM params and organic Referrer traffic channel on landing
   useEffect(() => {
-    if (!searchParams) return
-    const utmSource = searchParams.get('utm_source')
-    const utmMedium = searchParams.get('utm_medium')
-    const utmCampaign = searchParams.get('utm_campaign')
-    const utmTerm = searchParams.get('utm_term')
-    const utmContent = searchParams.get('utm_content')
+    if (typeof window === 'undefined') return
 
-    if (utmSource || utmMedium || utmCampaign) {
-      const utmObj = {
-        utm_source: utmSource || '',
-        utm_medium: utmMedium || '',
-        utm_campaign: utmCampaign || '',
-        utm_term: utmTerm || '',
-        utm_content: utmContent || '',
-        landing_page: window.location.pathname,
-        first_seen: new Date().toISOString(),
+    const utmSource = searchParams?.get('utm_source') || ''
+    const utmMedium = searchParams?.get('utm_medium') || ''
+    const utmCampaign = searchParams?.get('utm_campaign') || ''
+    const utmTerm = searchParams?.get('utm_term') || ''
+    const utmContent = searchParams?.get('utm_content') || ''
+    const fbclid = searchParams?.get('fbclid') || ''
+    const gclid = searchParams?.get('gclid') || ''
+    const igshid = searchParams?.get('igshid') || ''
+
+    const ref = document.referrer ? document.referrer.toLowerCase() : ''
+
+    let resolvedSource = utmSource
+    let resolvedMedium = utmMedium
+    let resolvedCampaign = utmCampaign
+
+    // Auto-detect Instagram / Meta
+    if (!resolvedSource) {
+      if (fbclid || igshid || ref.includes('instagram.com') || ref.includes('facebook.com') || ref.includes('fb.me')) {
+        resolvedSource = 'Instagram / Meta'
+        resolvedMedium = fbclid ? 'paid_social' : 'social_bio'
+      } else if (gclid || ref.includes('google.com') || ref.includes('google.co.in')) {
+        resolvedSource = 'Google / Search'
+        resolvedMedium = gclid ? 'cpc' : 'organic'
+      } else if (ref.includes('youtube.com') || ref.includes('youtu.be')) {
+        resolvedSource = 'YouTube'
+        resolvedMedium = 'social'
+      } else if (ref.includes('whatsapp.com') || ref.includes('wa.me')) {
+        resolvedSource = 'WhatsApp'
+        resolvedMedium = 'chat'
+      } else if (ref && !ref.includes(window.location.hostname)) {
+        resolvedSource = 'Referral'
+        resolvedMedium = 'web'
+      } else {
+        resolvedSource = 'Direct'
+        resolvedMedium = 'none'
       }
-      sessionStorage.setItem('va_utm_params', JSON.stringify(utmObj))
-      localStorage.setItem('va_last_touch_utm', JSON.stringify(utmObj))
-      if (!localStorage.getItem('va_first_touch_utm')) {
-        localStorage.setItem('va_first_touch_utm', JSON.stringify(utmObj))
-      }
+    }
+
+    const utmObj = {
+      utm_source: resolvedSource,
+      utm_medium: resolvedMedium || 'none',
+      utm_campaign: resolvedCampaign || 'direct',
+      utm_term: utmTerm || '',
+      utm_content: utmContent || '',
+      landing_page: window.location.pathname,
+      referrer: document.referrer || '',
+      first_seen: new Date().toISOString(),
+    }
+
+    sessionStorage.setItem('va_utm_params', JSON.stringify(utmObj))
+    localStorage.setItem('va_last_touch_utm', JSON.stringify(utmObj))
+    if (!localStorage.getItem('va_first_touch_utm')) {
+      localStorage.setItem('va_first_touch_utm', JSON.stringify(utmObj))
     }
   }, [searchParams])
 
