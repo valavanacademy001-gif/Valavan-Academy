@@ -22,13 +22,21 @@ const DEMO_VIDEOS = [
 
 export default function CourseDemoClient() {
   return (
-    <div className="min-h-screen bg-[#070D1E] text-white flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl w-full mx-auto">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-center py-10 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl w-full mx-auto space-y-8 sm:space-y-10">
+        {/* Centered Heading */}
+        <div className="text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
+            Watch demo videos
+          </h1>
+        </div>
+
+        {/* 3 Video Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {DEMO_VIDEOS.map((vid) => (
             <div
               key={vid.id}
-              className="bg-[#0B1528] rounded-2xl border border-white/10 overflow-hidden shadow-2xl flex flex-col hover:border-blue-500/40 transition-all"
+              className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl hover:border-blue-300 transition-all flex flex-col"
             >
               {/* Responsive 16:9 YouTube Video Embed */}
               <div className="relative w-full aspect-video bg-black">
@@ -43,8 +51,8 @@ export default function CourseDemoClient() {
               </div>
 
               {/* Card Label Only */}
-              <div className="p-4 flex items-center justify-center">
-                <span className="px-4 py-1.5 rounded-full bg-[#1748BB]/30 text-blue-300 border border-blue-400/30 text-sm font-bold tracking-wide">
+              <div className="p-4 flex items-center justify-center bg-gray-50/60 border-t border-gray-100">
+                <span className="px-4 py-1 rounded-full bg-blue-50 text-[#1748BB] border border-blue-200 text-sm font-bold tracking-wide">
                   {vid.label}
                 </span>
               </div>
