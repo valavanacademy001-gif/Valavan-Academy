@@ -4,11 +4,12 @@ import WorkshopSection from "@/components/sections/WorkshopSection";
 import ProgramsSection from "@/components/sections/ProgramsSection";
 import { EXTERNAL_URLS } from "@/data/site.config";
 
-export const metadata: Metadata = {
-  title: "Programs — Valavan Academy",
-  description:
-    "Explore Valavan Academy programs — 90-Day Graphic Design Mastery, Full Stack Digital Creator Program, and 3 Hours Live Workshops. Tamil-medium, project-based digital skills training.",
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/programs");
+}
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -16,10 +17,14 @@ export const revalidate = 0;
 import { getPublishedPrograms } from "@/lib/cms";
 
 export default async function ProgramsPage() {
-  const programs = await getPublishedPrograms();
+  const [programs, pageSEO] = await Promise.all([
+    getPublishedPrograms(),
+    getPageSEO("/programs"),
+  ]);
 
   return (
     <main className="min-h-screen bg-white pt-10 sm:pt-14">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Live Workshop Section ── */}
       <WorkshopSection />
 

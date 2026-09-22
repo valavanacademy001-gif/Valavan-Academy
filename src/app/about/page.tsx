@@ -22,16 +22,12 @@ import {
   Quote,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About Us — Valavan Academy | Tamil-First Creative Learning",
-  description:
-    "Learn about Valavan Academy — founded by Valavan to empower Tamil learners with high-income digital skills in Graphic Design, Video Editing, UI/UX, and AI Tools.",
-  openGraph: {
-    title: "About Valavan Academy | Empowering Creative Minds in Tamil",
-    description:
-      "From humble beginnings in Vellore to training 5,000+ students and building a 40,000+ creator community across Tamil Nadu.",
-  },
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/about");
+}
 
 
 
@@ -129,13 +125,15 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function AboutPage() {
-  const [aboutData, visibilityMap] = await Promise.all([
+  const [aboutData, visibilityMap, pageSEO] = await Promise.all([
     getAboutPageData(),
     getSectionVisibilityMap("about"),
+    getPageSEO("/about"),
   ]);
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Hero Section ── */}
       {visibilityMap.hero !== false && (
         <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">

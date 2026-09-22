@@ -27,16 +27,12 @@ import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA
 import WorkshopFAQAccordion from "./WorkshopFAQAccordion";
 import WorkshopCountdownTimer from "./WorkshopCountdownTimer";
 
-export const metadata: Metadata = {
-  title: "3 Hours Live Workshop — Graphic Design & Printing Business | Valavan Academy",
-  description:
-    "Start your Graphic Design journey and become a professional designer. Join our live 3-hour practical workshop in Tamil by Mr. Valavan.",
-  openGraph: {
-    title: "3 Hours Live Workshop — Start Your Graphic Design Journey",
-    description:
-      "A complete beginner's roadmap to learning Graphic Design and building a lucrative freelance career in Tamil. Register for ₹99.",
-  },
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/programs/3-hours-live-workshop");
+}
 
 const DISCOVER_CARDS = [
   {
@@ -111,9 +107,10 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function ThreeHoursLiveWorkshopPage() {
-  const [program, cmsData] = await Promise.all([
+  const [program, cmsData, pageSEO] = await Promise.all([
     getProgramBySlug("3-hours-live-workshop"),
     getWorkshopProgramData(),
+    getPageSEO("/programs/3-hours-live-workshop"),
   ]);
 
   const heroMap = cmsData.hero || {};
@@ -175,6 +172,7 @@ export default async function ThreeHoursLiveWorkshopPage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Signature Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
         badge={heroBadge}

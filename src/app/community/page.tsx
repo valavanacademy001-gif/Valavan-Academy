@@ -17,11 +17,12 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Our Communities & Ecosystem — TNCC & THADAM | Valavan Academy",
-  description:
-    "Explore Tamil Nadu Creators Club (TNCC) and THADAM Professional Network — two dedicated platforms built for creative collaboration, skill acceleration, and verified business growth.",
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/community");
+}
 
 const ECOSYSTEM_STEPS = [
   {
@@ -62,13 +63,15 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function CommunityPage() {
-  const [communityData, visibilityMap] = await Promise.all([
+  const [communityData, visibilityMap, pageSEO] = await Promise.all([
     getCommunityPageData(),
     getSectionVisibilityMap("community"),
+    getPageSEO("/community"),
   ]);
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Hero Section ── */}
       {visibilityMap.hero !== false && (
         <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-20 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">

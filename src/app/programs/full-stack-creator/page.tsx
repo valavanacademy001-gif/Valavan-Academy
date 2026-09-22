@@ -30,16 +30,12 @@ const FULL_STACK_TOOLS: ToolItem[] = [
   { name: "Adobe Illustrator", logo: "/assets/tools/illustrator.png" },
 ];
 
-export const metadata: Metadata = {
-  title: "Full Stack Digital Creator Program — Valavan Academy",
-  description:
-    "Become a Full Stack Digital Creator with Valavan Academy. Learn Video Editing, Web Design, UI/UX, AI Tools, and more — in Tamil.",
-  openGraph: {
-    title: "Full Stack Digital Creator Program | Valavan Academy",
-    description:
-      "Master high-income digital skills in 6 months. Practical Tamil-language program with real projects.",
-  },
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/programs/full-stack-creator");
+}
 
 const SKILLS_COVERED = [
   {
@@ -60,23 +56,23 @@ const SKILLS_COVERED = [
   {
     icon: Bot,
     title: "AI Tools & Automation",
-    desc: "ChatGPT workflows, Midjourney, Adobe Firefly, automated content repurposing, and AI productivity tools.",
+    desc: "ChatGPT for scripting, Midjourney/Firefly for graphics, ElevenLabs voice cloning, and workflow automation.",
   },
   {
     icon: Briefcase,
     title: "Freelancing & Client Acquisition",
-    desc: "Fiverr, Upwork, international client communication, proposal writing, contract drafting, and high-ticket pricing.",
+    desc: "Upwork & Fiverr mastery, cold outreach scripts, proposal writing, portfolio building, and pricing psychology.",
   },
   {
     icon: Megaphone,
-    title: "Digital Marketing & Branding",
-    desc: "Personal branding, social media distribution strategy, content funnels, and monetization blueprints.",
+    title: "Personal Branding & Growth",
+    desc: "Building a personal brand on YouTube, Instagram, LinkedIn, audience monetization, and digital products.",
   },
 ];
 
-const CAREER_PATHS = [
-  "Full Stack Creator",
-  "Professional Video Editor",
+const CAREER_ROLES = [
+  "Full Stack Digital Creator",
+  "Senior Video Editor",
   "Web Designer",
   "UI/UX Designer",
   "Freelance Consultant",
@@ -92,9 +88,10 @@ import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getFullStackCreatorProgramData } from "@/lib/cms";
 
 export default async function FullStackCreatorPage() {
-  const [cmsProgram, cmsData] = await Promise.all([
+  const [cmsProgram, cmsData, pageSEO] = await Promise.all([
     getProgramBySlug("full-stack-creator"),
     getFullStackCreatorProgramData(),
+    getPageSEO("/programs/full-stack-creator"),
   ]);
 
   const heroMap = cmsData.hero || {};
@@ -133,6 +130,7 @@ export default async function FullStackCreatorPage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Interactive Expanding Hero Section ── */}
       <ProgramHeroInteractive
         badge={heroMap.badge || `Flagship Track · ${duration} · Tamil`}

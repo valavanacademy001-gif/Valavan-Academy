@@ -15,19 +15,12 @@ const CommunitySection = dynamicImport(() => import("@/components/sections/Commu
 const StudentReviewsSection = dynamicImport(() => import("@/components/sections/StudentReviewsSection"));
 const FinalCTASection = dynamicImport(() => import("@/components/sections/FinalCTASection"));
 
-export const metadata: Metadata = {
-  title: `${SITE_CONFIG.name} — Your Career Changing Partner`,
-  description:
-    "Tamil-first creative learning platform for digital skills — Graphic Design, Video Editing, Web Design, UI/UX, and AI Tools. Learn, practice, create, and grow.",
-  openGraph: {
-    title: `${SITE_CONFIG.name} — Your Career Changing Partner`,
-    description:
-      "Tamil-first creative learning platform for digital skills. Learn practical skills, build real projects, and create your future.",
-    type: "website",
-    url: SITE_CONFIG.url,
-    siteName: SITE_CONFIG.name,
-  },
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/");
+}
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -67,6 +60,7 @@ export default async function HomePage() {
     testimonialsSectionData,
     finalCtaData,
     visibilityMap,
+    homeSEO,
   ] = await Promise.all([
     getHeroData(),
     getMarqueeRibbonData(),
@@ -83,10 +77,13 @@ export default async function HomePage() {
     getTestimonialsSectionData(),
     getFinalCTAData(),
     getSectionVisibilityMap("home"),
+    getPageSEO("/"),
   ]);
 
   return (
     <>
+      <JsonLdSchema pageSEO={homeSEO} />
+
       {/* 01 — Hero: Full-screen video + headline + CTA */}
       {visibilityMap.hero !== false && <HeroSection heroData={heroData} />}
 

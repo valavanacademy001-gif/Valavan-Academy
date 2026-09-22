@@ -102,6 +102,8 @@ export const metadata: Metadata = {
 import { Suspense } from "react";
 import Script from "next/script";
 import { getSiteSettings, getTrackingSettings, getPageTrackingRules } from "@/lib/cms";
+import { getPageSEO, fetchLiveSEOSettings } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import GlobalTrackingEngine from "@/components/tracking/GlobalTrackingEngine";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
@@ -113,13 +115,13 @@ import PwaDisableProvider from "@/components/layout/PwaDisableProvider";
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const [settings, trackingSettings, pageRules] = await Promise.all([
+  const [settings, trackingSettings, pageRules, rootSEO, seoSettings] = await Promise.all([
     getSiteSettings(),
     getTrackingSettings(),
     getPageTrackingRules(),
+    getPageSEO('/'),
+    fetchLiveSEOSettings(),
   ]);
-
-  const metaPixelId = trackingSettings.meta_pixel_id || '1773816340532641';
 
   return (
     <html
@@ -129,6 +131,13 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     >
       <head>
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.fontshare.com" />
+        <link rel="preconnect" href="https://bjktqpmtlwfsmofaaajv.supabase.co" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://bjktqpmtlwfsmofaaajv.supabase.co" />
+        
+        {/* Global Organization & WebSite JSON-LD Structured Data */}
+        <JsonLdSchema pageSEO={rootSEO} globalSEO={seoSettings.global} />
+
         {/* GA4 & GTM DataLayer Initialization */}
         <Script
           id="ga4-datalayer-base"

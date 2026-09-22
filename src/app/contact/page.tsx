@@ -5,23 +5,26 @@ import { ArrowUpRight, MessageSquare, Mail, Sparkles, Phone, MapPin, Clock } fro
 import { SOCIAL_ICON_MAP } from "@/components/ui/SocialIcons";
 import { getContactPageData, getSiteSettings } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Contact Us — Valavan Academy",
-  description:
-    "Get in touch with Valavan Academy. Reach us through social media, email, phone, or WhatsApp for program inquiries, admissions, and support.",
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/contact");
+}
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function ContactPage() {
-  const [contactData, siteSettings] = await Promise.all([
+  const [contactData, siteSettings, pageSEO] = await Promise.all([
     getContactPageData(),
     getSiteSettings(),
+    getPageSEO("/contact"),
   ]);
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Header Section ── */}
       <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-neutral-100 bg-gradient-to-b from-[#F8FAFF] via-white to-white">
         {/* Ambient Glow */}

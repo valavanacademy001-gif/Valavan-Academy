@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import DynamicSectionRenderer from '@/components/dynamic/DynamicSectionRenderer'
+import { generatePageMetadata, getPageSEO } from '@/lib/seo'
+import JsonLdSchema from '@/components/seo/JsonLdSchema'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -11,37 +13,16 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  try {
-    const { slug } = await params
-    const { data: page } = await supabase
-      .from('pages')
-      .select('title, description, seo_title, seo_description, og_title, og_description, og_image_url')
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .maybeSingle()
-
-    if (!page) {
-      return { title: 'Page Not Found — Valavan Academy' }
-    }
-
-    return {
-      title: page.seo_title || `${page.title} — Valavan Academy`,
-      description: page.seo_description || page.description || 'Valavan Academy — Tamil-first creative learning platform',
-      openGraph: {
-        title: page.og_title || page.seo_title || page.title,
-        description: page.og_description || page.seo_description || page.description,
-        images: page.og_image_url ? [page.og_image_url] : [],
-      },
-    }
-  } catch {
-    return { title: 'Valavan Academy' }
-  }
+  const { slug } = await params
+  return generatePageMetadata(`/${slug}`)
 }
 
 export default async function DynamicCMSPage({ params }: Props) {
   const { slug } = await params
 
   try {
+    const seo = await getPageSEO(`/${slug}`)
+
     // 1. Fetch published page
     const { data: page, error } = await supabase
       .from('pages')
@@ -93,6 +74,7 @@ export default async function DynamicCMSPage({ params }: Props) {
 
     return (
       <main className="min-h-screen bg-white">
+        <JsonLdSchema pageSEO={seo} />
         {(sections || []).map((section) => (
           <DynamicSectionRenderer
             key={section.id}

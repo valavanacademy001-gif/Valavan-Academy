@@ -15,16 +15,12 @@ import ProgramDesignJourneyCTASection from "@/components/sections/ProgramDesignJ
 import ProgramFAQSection from "@/components/sections/ProgramFAQSection";
 import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA";
 
-export const metadata: Metadata = {
-  title: "90-Day Graphic Design Mastery Program — Valavan Academy",
-  description:
-    "Master Graphic Design in 90 days with Valavan Academy. Learn Photoshop, Illustrator, Canva, Logo Design, Branding, and AI-powered design — in Tamil.",
-  openGraph: {
-    title: "90-Day Graphic Design Mastery | Valavan Academy",
-    description:
-      "From beginner to confident graphic designer in 90 days. Practical Tamil-language course with real project portfolio.",
-  },
-};
+import { generatePageMetadata, getPageSEO } from "@/lib/seo";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return generatePageMetadata("/programs/90-days-graphic-design");
+}
 
 const CURRICULUM = [
   { week: "Week 1–2", topic: "Design Fundamentals", desc: "Color theory, typography, composition, visual balance, and design hierarchy." },
@@ -43,10 +39,11 @@ import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getGraphicDesignProgramData, getPublishedLearnerStories } from "@/lib/cms";
 
 export default async function GraphicDesignProgramPage() {
-  const [cmsProgram, cmsData, learnerStories] = await Promise.all([
+  const [cmsProgram, cmsData, learnerStories, pageSEO] = await Promise.all([
     getProgramBySlug("90-days-graphic-design"),
     getGraphicDesignProgramData(),
     getPublishedLearnerStories(),
+    getPageSEO("/programs/90-days-graphic-design"),
   ]);
 
   const heroMap = cmsData.hero || {};
@@ -81,6 +78,7 @@ export default async function GraphicDesignProgramPage() {
 
   return (
     <main className="min-h-screen bg-white">
+      <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Interactive Expanding Hero Section with Video Playback ── */}
       <ProgramHeroInteractive
         badge={heroMap.badge || `Most Popular · ${duration} · Tamil`}
