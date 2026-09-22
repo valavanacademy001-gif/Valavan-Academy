@@ -226,38 +226,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     }
   }, [pathname])
 
-  // 3. Initialize Meta Pixel globally once
-  useEffect(() => {
-    if (typeof window === 'undefined' || !isMetaEnabled || !pixelId) return
-
-    if (!window.__va_meta_initialized) {
-      /* eslint-disable */
-      ;(function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
-        if (f.fbq) return
-        n = f.fbq = function () {
-          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        }
-        if (!f._fbq) f._fbq = n
-        n.push = n
-        n.loaded = !0
-        n.version = '2.0'
-        n.queue = []
-        t = b.createElement(e)
-        t.async = !0
-        t.src = v
-        s = b.getElementsByTagName(e)[0]
-        s.parentNode.insertBefore(t, s)
-      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js')
-      /* eslint-enable */
-
-      if (typeof window.fbq === 'function') {
-        window.fbq('init', pixelId)
-        window.__va_meta_initialized = true
-      }
-    }
-  }, [isMetaEnabled, pixelId])
-
-  // 4. Capture UTM params on landing
+  // 3. Capture UTM params on landing
   useEffect(() => {
     if (!searchParams) return
     const utmSource = searchParams.get('utm_source')
@@ -284,7 +253,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     }
   }, [searchParams])
 
-  // 5. MAIN EXECUTION ENGINE: Evaluates active rules on route changes / SPA navigation
+  // 4. MAIN EXECUTION ENGINE: Strictly executes ONLY matching active rules per page
   useEffect(() => {
     if (!pathname) return
     const currentPath = normalizePath(pathname)
@@ -304,6 +273,14 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     const activeRules = rules.filter((r) => r.is_active === true || String(r.is_active) === 'true')
     const matchedRule = findMatchingRule(activeRules, currentPath)
 
+    // IF NO ACTIVE RULE MATCHES THIS PAGE: DO NOT FIRE ANY TRACKING
+    if (!matchedRule) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[Tracking Engine] No active tracking rule for path: ${currentPath}. Tracking skipped.`)
+      }
+      return
+    }
+
     let metaEventFired = 'None'
     let ga4EventFired = 'None'
     let dlEventPushed = 'None'
@@ -311,7 +288,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
 
     // Parse dataLayer custom payload if present
     let parsedPayload: Record<string, any> = {}
-    if (matchedRule?.datalayer_payload) {
+    if (matchedRule.datalayer_payload) {
       try {
         parsedPayload = JSON.parse(matchedRule.datalayer_payload)
       } catch (err) {
@@ -323,7 +300,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     const isThankYouPage = currentPath.startsWith('/thank-you')
     let resolvedValue: number | undefined = undefined
 
-    if (matchedRule?.event_value !== undefined && matchedRule.event_value !== null && matchedRule.event_value > 0) {
+    if (matchedRule.event_value !== undefined && matchedRule.event_value !== null && matchedRule.event_value > 0) {
       resolvedValue = Number(matchedRule.event_value)
     } else if (isThankYouPage) {
       if (currentPath.includes('3-hours') || currentPath.includes('workshop')) {
@@ -335,10 +312,19 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       }
     }
 
-    const currency = matchedRule?.currency || 'INR'
+    const currency = matchedRule.currency || 'INR'
 
-    // --- A. META PIXEL AUTO EXECUTION ---
-    if (typeof window !== 'undefined' && isMetaEnabled) {
+    // --- A. META PIXEL EXECUTION (ONLY IF RULE DEFINES META EVENT) ---
+    let metaEventName = matchedRule.meta_event || 'None'
+    if (metaEventName === 'Custom' && matchedRule.meta_custom_event_name) {
+      metaEventName = matchedRule.meta_custom_event_name as any
+    }
+
+    if (
+      typeof window !== 'undefined' &&
+      isMetaEnabled &&
+      String(metaEventName).toLowerCase() !== 'none'
+    ) {
       if (typeof window.fbq !== 'function') {
         /* eslint-disable */
         ;(function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
@@ -365,13 +351,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         }
       }
 
-      let metaEventName = matchedRule?.meta_event || 'PageView'
-
-      if (metaEventName === 'Custom' && matchedRule?.meta_custom_event_name) {
-        metaEventName = matchedRule.meta_custom_event_name as any
-      }
-
-      if (metaEventName !== 'None' && typeof window.fbq === 'function') {
+      if (typeof window.fbq === 'function') {
         const metaPayload: Record<string, any> = {
           page_path: pathname,
           page_title: typeof document !== 'undefined' ? document.title : '',
@@ -387,7 +367,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
           metaPayload.currency = currency
         }
 
-        if (matchedRule?.meta_event === 'Custom') {
+        if (matchedRule.meta_event === 'Custom') {
           window.fbq('trackCustom', metaEventName, metaPayload)
         } else {
           window.fbq('track', metaEventName, metaPayload)
@@ -396,8 +376,17 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       }
     }
 
-    // --- B. GA4 EVENT AUTO EXECUTION ---
-    if (typeof window !== 'undefined') {
+    // --- B. GA4 EVENT EXECUTION (ONLY IF RULE DEFINES GA4 EVENT) ---
+    let ga4EventName = matchedRule.ga4_event || 'none'
+    if (ga4EventName === 'custom' && matchedRule.ga4_custom_event_name) {
+      ga4EventName = matchedRule.ga4_custom_event_name as any
+    }
+
+    if (
+      typeof window !== 'undefined' &&
+      isGa4Enabled &&
+      String(ga4EventName).toLowerCase() !== 'none'
+    ) {
       window.dataLayer = window.dataLayer || []
       if (!window.gtag) {
         window.gtag = function () {
@@ -405,53 +394,48 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         }
       }
 
-      let ga4EventName = matchedRule?.ga4_event || 'page_view'
-
-      if (ga4EventName === 'custom' && matchedRule?.ga4_custom_event_name) {
-        ga4EventName = matchedRule.ga4_custom_event_name as any
+      const ga4Payload: Record<string, any> = {
+        page_path: pathname,
+        page_title: typeof document !== 'undefined' ? document.title : '',
+        ...parsedPayload,
       }
 
-      if ((ga4EventName as string) !== 'none' && (ga4EventName as string) !== 'None') {
-        const ga4Payload: Record<string, any> = {
-          page_path: pathname,
-          page_title: typeof document !== 'undefined' ? document.title : '',
-          ...parsedPayload,
-        }
-
-        if (resolvedValue !== undefined && (/purchase|begin_checkout|generate_lead/i.test(ga4EventName) || isThankYouPage)) {
-          ga4Payload.value = resolvedValue
-          ga4Payload.currency = currency
-        }
-
-        if (typeof window.gtag === 'function') {
-          window.gtag('event', ga4EventName, ga4Payload)
-        }
-
-        ga4EventFired = ga4EventName
+      if (resolvedValue !== undefined && (/purchase|begin_checkout|generate_lead/i.test(ga4EventName) || isThankYouPage)) {
+        ga4Payload.value = resolvedValue
+        ga4Payload.currency = currency
       }
+
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', ga4EventName, ga4Payload)
+      }
+
+      ga4EventFired = ga4EventName
     }
 
-    // --- C. GTM / DATALAYER EVENT PUSH ---
-    if (typeof window !== 'undefined') {
+    // --- C. GTM / DATALAYER EVENT PUSH (ONLY IF RULE DEFINES DATALAYER EVENT) ---
+    const dataLayerEventName = matchedRule.gtm_datalayer_event || 'none'
+
+    if (
+      typeof window !== 'undefined' &&
+      dataLayerEventName &&
+      dataLayerEventName !== 'None' &&
+      dataLayerEventName !== 'none'
+    ) {
       window.dataLayer = window.dataLayer || []
-      const dataLayerEventName = matchedRule?.gtm_datalayer_event || (isThankYouPage ? 'conversion_success' : (currentPath === '/' ? 'homepage_viewed' : 'page_view'))
-
-      if (dataLayerEventName && dataLayerEventName !== 'None' && dataLayerEventName !== 'none') {
-        const dlPushObj: Record<string, any> = {
-          event: dataLayerEventName,
-          page_path: pathname,
-          timestamp: new Date().toISOString(),
-          ...parsedPayload,
-        }
-
-        if (resolvedValue !== undefined && (isThankYouPage || /purchase|conversion|enrollment/i.test(dataLayerEventName))) {
-          dlPushObj.value = resolvedValue
-          dlPushObj.currency = currency
-        }
-
-        window.dataLayer.push(dlPushObj)
-        dlEventPushed = dataLayerEventName
+      const dlPushObj: Record<string, any> = {
+        event: dataLayerEventName,
+        page_path: pathname,
+        timestamp: new Date().toISOString(),
+        ...parsedPayload,
       }
+
+      if (resolvedValue !== undefined && (isThankYouPage || /purchase|conversion|enrollment/i.test(dataLayerEventName))) {
+        dlPushObj.value = resolvedValue
+        dlPushObj.currency = currency
+      }
+
+      window.dataLayer.push(dlPushObj)
+      dlEventPushed = dataLayerEventName
     }
 
     // --- D. CUSTOM HEAD & BODY SCRIPT EXECUTION ---
