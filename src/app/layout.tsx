@@ -100,9 +100,9 @@ export const metadata: Metadata = {
 };
 
 import { Suspense } from "react";
-import { getSiteSettings, getTrackingSettings } from "@/lib/cms";
-import TrackingScriptsInjector from "@/components/tracking/TrackingScriptsInjector";
-import ClientTracker from "@/components/tracking/ClientTracker";
+import Script from "next/script";
+import { getSiteSettings, getTrackingSettings, getPageTrackingRules } from "@/lib/cms";
+import GlobalTrackingEngine from "@/components/tracking/GlobalTrackingEngine";
 
 // ─── Layout Props ─────────────────────────────────────────────────────────────
 interface RootLayoutProps {
@@ -113,10 +113,13 @@ import PwaDisableProvider from "@/components/layout/PwaDisableProvider";
 
 // ─── Root Layout ──────────────────────────────────────────────────────────────
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const [settings, trackingSettings] = await Promise.all([
+  const [settings, trackingSettings, pageRules] = await Promise.all([
     getSiteSettings(),
     getTrackingSettings(),
+    getPageTrackingRules(),
   ]);
+
+  const metaPixelId = trackingSettings.meta_pixel_id || '1773816340532641';
 
   return (
     <html
@@ -131,14 +134,54 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap"
         />
-        {/* Marketing Tracking Scripts & Pixels */}
-        <TrackingScriptsInjector settings={trackingSettings} />
+        {/* GA4 & GTM DataLayer Initialization */}
+        <Script
+          id="ga4-datalayer-base"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+            `,
+          }}
+        />
+        {/* Global Meta Pixel (Facebook) Initialization */}
+        <Script
+          id="meta-pixel-base"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '${metaPixelId}');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
+            alt=""
+          />
+        </noscript>
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen bg-[--color-background] text-[--color-foreground]`}>
         <PwaDisableProvider />
         <CustomCursor />
+        {/* Unified Global Tracking Engine (Meta Pixel, GA4, GTM dataLayer & CMS Page Rules) */}
         <Suspense fallback={null}>
-          <ClientTracker />
+          <GlobalTrackingEngine settings={trackingSettings} initialRules={pageRules} />
         </Suspense>
         <ReducedMotionProvider>
           <SmoothScrollProvider>

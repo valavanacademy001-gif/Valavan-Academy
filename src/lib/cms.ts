@@ -1123,6 +1123,132 @@ export async function getWorkshopProgramData() {
   }
 }
 
+export interface PageTrackingRule {
+  id: string;
+  page_title: string;
+  page_path: string;
+  is_active: boolean;
+  meta_event: 'None' | 'PageView' | 'ViewContent' | 'Lead' | 'InitiateCheckout' | 'Purchase' | 'CompleteRegistration' | 'Contact' | 'Custom';
+  meta_custom_event_name?: string;
+  ga4_event: 'page_view' | 'view_item' | 'generate_lead' | 'begin_checkout' | 'purchase' | 'sign_up' | 'custom' | 'none';
+  ga4_custom_event_name?: string;
+  gtm_datalayer_event?: string;
+  datalayer_payload?: string;
+  event_value?: number;
+  currency?: string;
+  custom_head_script?: string;
+  custom_body_script?: string;
+  trigger_on?: 'page_load' | 'button_click' | 'scroll_depth' | 'form_submit';
+}
+
+export const DEFAULT_PAGE_RULES: PageTrackingRule[] = [
+  {
+    id: 'ptr-home',
+    page_title: 'Home Page',
+    page_path: '/',
+    is_active: true,
+    meta_event: 'PageView',
+    ga4_event: 'page_view',
+    gtm_datalayer_event: 'homepage_viewed',
+    datalayer_payload: JSON.stringify({ page_type: 'home', academy: 'Valavan Academy' }, null, 2),
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-workshop',
+    page_title: '3 Hours Live Workshop',
+    page_path: '/programs/3-hours-live-workshop',
+    is_active: true,
+    meta_event: 'ViewContent',
+    ga4_event: 'view_item',
+    gtm_datalayer_event: 'workshop_landing_view',
+    datalayer_payload: JSON.stringify({ course_name: '3 Hours Graphic Design & Printing Workshop', price: 99 }, null, 2),
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-90days',
+    page_title: '90-Day Graphic Design Mastery',
+    page_path: '/programs/90-days-graphic-design',
+    is_active: true,
+    meta_event: 'ViewContent',
+    ga4_event: 'view_item',
+    gtm_datalayer_event: 'course_detail_view',
+    datalayer_payload: JSON.stringify({ program_id: '90-days-gd', program_name: '90-Day Graphic Design Mastery', category: 'Graphic Design', duration: '90 Days' }, null, 2),
+    trigger_on: 'page_load',
+    custom_head_script: '<script>\n(function () {\n  if (typeof window.fbq === "function") {\n    fbq("track", "ViewContent", {\n      content_name: "90-Day Graphic Design Mastery",\n      content_category: "Graphic Design",\n      content_type: "product",\n      content_ids: ["90-days-gd"]\n    });\n  }\n  window.dataLayer = window.dataLayer || [];\n  window.dataLayer.push({\n    event: "course_detail_view",\n    program_id: "90-days-gd",\n    program_name: "90-Day Graphic Design Mastery",\n    category: "Graphic Design",\n    duration: "90 Days",\n    page_path: window.location.pathname\n  });\n})();\n</script>',
+  },
+  {
+    id: 'ptr-fullstack',
+    page_title: 'Full Stack Digital Creator Program',
+    page_path: '/programs/full-stack-creator',
+    is_active: true,
+    meta_event: 'ViewContent',
+    ga4_event: 'view_item',
+    gtm_datalayer_event: 'fullstack_program_view',
+    datalayer_payload: JSON.stringify({ program_id: 'full-stack-creator', level: 'Comprehensive Pro', duration: '6 Months' }, null, 2),
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-contact',
+    page_title: 'Contact Us Page',
+    page_path: '/contact',
+    is_active: true,
+    meta_event: 'Contact',
+    ga4_event: 'generate_lead',
+    gtm_datalayer_event: 'contact_page_interaction',
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-thankyou-workshop',
+    page_title: 'Workshop Registration Success',
+    page_path: '/thank-you/3-hours-live-workshop',
+    is_active: true,
+    meta_event: 'CompleteRegistration',
+    ga4_event: 'purchase',
+    gtm_datalayer_event: 'conversion_success',
+    datalayer_payload: JSON.stringify({ conversion_type: 'workshop_enrollment', status: 'confirmed' }, null, 2),
+    event_value: 99,
+    currency: 'INR',
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-thankyou-90days',
+    page_title: '90-Day Graphic Design Enrollment Success',
+    page_path: '/thank-you/90-days-graphic-design',
+    is_active: true,
+    meta_event: 'Purchase',
+    ga4_event: 'purchase',
+    gtm_datalayer_event: 'conversion_success',
+    datalayer_payload: JSON.stringify({ program: '90-days-graphic-design', status: 'enrolled' }, null, 2),
+    event_value: 4999,
+    currency: 'INR',
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-thankyou-fullstack',
+    page_title: 'Full Stack Creator Enrollment Success',
+    page_path: '/thank-you/full-stack-creator',
+    is_active: true,
+    meta_event: 'Purchase',
+    ga4_event: 'purchase',
+    gtm_datalayer_event: 'conversion_success',
+    datalayer_payload: JSON.stringify({ program: 'full-stack-creator', status: 'enrolled' }, null, 2),
+    event_value: 10000,
+    currency: 'INR',
+    trigger_on: 'page_load',
+  },
+  {
+    id: 'ptr-thankyou-wildcard',
+    page_title: 'All Thank You Pages (Fallback)',
+    page_path: '/thank-you/*',
+    is_active: true,
+    meta_event: 'Purchase',
+    ga4_event: 'purchase',
+    gtm_datalayer_event: 'conversion_success',
+    datalayer_payload: JSON.stringify({ status: 'purchase_success' }, null, 2),
+    trigger_on: 'page_load',
+  },
+];
+
 export interface CMSTrackingSettings {
   meta_pixel_id?: string;
   meta_pixel_enabled?: string;
@@ -1143,6 +1269,7 @@ export interface CMSTrackingSettings {
   custom_footer_code?: string;
   cookie_consent_enabled?: string;
   conversion_goals_data?: string;
+  page_tracking_data?: string;
 }
 
 /**
@@ -1151,10 +1278,108 @@ export interface CMSTrackingSettings {
 export async function getTrackingSettings(): Promise<CMSTrackingSettings> {
   try {
     const map = await getSectionFieldMap("global_settings", "tracking_analytics");
-    return map as CMSTrackingSettings;
+    return {
+      meta_pixel_id: map.meta_pixel_id || '1773816340532641',
+      meta_pixel_enabled: map.meta_pixel_enabled !== undefined ? map.meta_pixel_enabled : 'true',
+      ga4_measurement_id: map.ga4_measurement_id || '',
+      ga4_enabled: map.ga4_enabled !== undefined ? map.ga4_enabled : 'true',
+      gtm_container_id: map.gtm_container_id || '',
+      gtm_enabled: map.gtm_enabled !== undefined ? map.gtm_enabled : 'true',
+      clarity_project_id: map.clarity_project_id || '',
+      clarity_enabled: map.clarity_enabled !== undefined ? map.clarity_enabled : 'true',
+      tiktok_pixel_id: map.tiktok_pixel_id || '',
+      tiktok_enabled: map.tiktok_enabled !== undefined ? map.tiktok_enabled : 'false',
+      linkedin_partner_id: map.linkedin_partner_id || '',
+      linkedin_enabled: map.linkedin_enabled !== undefined ? map.linkedin_enabled : 'false',
+      hotjar_site_id: map.hotjar_site_id || '',
+      hotjar_enabled: map.hotjar_enabled !== undefined ? map.hotjar_enabled : 'false',
+      custom_head_code: map.custom_head_code || '',
+      custom_body_top_code: map.custom_body_top_code || map.custom_body_code || '',
+      custom_footer_code: map.custom_footer_code || '',
+      cookie_consent_enabled: map.cookie_consent_enabled || 'false',
+      conversion_goals_data: map.conversion_goals_data || '',
+      page_tracking_data: map.page_tracking_data || '',
+      ...map,
+    };
   } catch (err) {
     console.error("Error fetching tracking settings:", err);
-    return {};
+    return {
+      meta_pixel_id: '1773816340532641',
+      meta_pixel_enabled: 'true',
+      ga4_enabled: 'true',
+    };
+  }
+}
+
+/**
+ * Fetch Page Tracking Rules from Supabase (falls back to DEFAULT_PAGE_RULES)
+ */
+export async function getPageTrackingRules(): Promise<PageTrackingRule[]> {
+  try {
+    const map = await getSectionFieldMap("global_settings", "tracking_analytics");
+    if (map.page_tracking_data) {
+      const parsed = JSON.parse(map.page_tracking_data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+    return DEFAULT_PAGE_RULES;
+  } catch (err) {
+    console.warn("Could not parse page tracking rules from CMS, using defaults:", err);
+    return DEFAULT_PAGE_RULES;
+  }
+}
+
+/**
+ * Client-side live fetcher to get updated rules from Supabase directly
+ */
+export async function fetchLivePageTrackingRules(): Promise<PageTrackingRule[]> {
+  try {
+    const { data: page } = await supabase
+      .from("pages")
+      .select("id")
+      .eq("slug", "global_settings")
+      .maybeSingle();
+
+    if (!page) return DEFAULT_PAGE_RULES;
+
+    const { data: section } = await supabase
+      .from("sections")
+      .select("id")
+      .eq("page_id", page.id)
+      .eq("slug", "tracking_analytics")
+      .maybeSingle();
+
+    if (!section) return DEFAULT_PAGE_RULES;
+
+    const { data: field } = await supabase
+      .from("fields")
+      .select("id")
+      .eq("section_id", section.id)
+      .eq("name", "page_tracking_data")
+      .maybeSingle();
+
+    if (!field) return DEFAULT_PAGE_RULES;
+
+    const { data: fieldVal } = await supabase
+      .from("field_values")
+      .select("value_text, published_value_text")
+      .eq("field_id", field.id)
+      .maybeSingle();
+
+    if (fieldVal) {
+      const raw = fieldVal.published_value_text || fieldVal.value_text;
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    }
+    return DEFAULT_PAGE_RULES;
+  } catch (err) {
+    console.warn("Live fetch page tracking rules error:", err);
+    return DEFAULT_PAGE_RULES;
   }
 }
 

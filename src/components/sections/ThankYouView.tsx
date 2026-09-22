@@ -50,32 +50,6 @@ function WhatsAppIcon({ className = "w-5 h-5", size = 20 }: { className?: string
 }
 
 export default function ThankYouView({ data }: ThankYouViewProps) {
-  useEffect(() => {
-    // 1. Meta Pixel Tracking (Client-side execution on Thank You page load)
-    if (typeof window !== "undefined") {
-      const fbq = (window as any).fbq;
-      if (typeof fbq === "function") {
-        fbq("track", data.metaEvent || "Purchase", {
-          content_name: data.programTitle,
-          currency: "INR",
-          value: data.conversionValue || 0,
-        });
-      }
-
-      // 2. Google Tag Manager / GA4 dataLayer event
-      const dataLayer = (window as any).dataLayer;
-      if (Array.isArray(dataLayer)) {
-        dataLayer.push({
-          event: "conversion_success",
-          conversion_type: data.metaEvent,
-          program_name: data.programTitle,
-          currency: "INR",
-          value: data.conversionValue || 0,
-        });
-      }
-    }
-  }, [data]);
-
   return (
     <div className="min-h-screen bg-white text-[#1E2026] flex flex-col selection:bg-[#1748BB] selection:text-white">
       
