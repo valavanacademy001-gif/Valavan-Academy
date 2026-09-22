@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import { PlaySquare } from "lucide-react";
@@ -101,9 +100,6 @@ export default function SkillsMoneyCarouselSection({
   const effectiveSubtitle = subtitle || skillsMoneyMap?.description || "Not outdated theory. Real digital skills businesses & clients are hiring for right now.";
   const effectiveImages = skillsMoneyMap ? extractSkillModulesFromMap(skillsMoneyMap, images) : images;
 
-  // Duplicate array 3 times for continuous seamless marquee
-  const allItems = [...effectiveImages, ...effectiveImages, ...effectiveImages];
-
   return (
     <section
       className="relative z-10 py-10 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none pb-12 sm:pb-24 flex flex-col justify-center border-t border-[#1748BB]"
@@ -127,7 +123,7 @@ export default function SkillsMoneyCarouselSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           <FadeUp delay={0}>
             <div className="inline-flex items-center justify-center mb-4">
               <span className="inline-flex items-center gap-2 border border-white/25 text-white font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm shadow-sm">
@@ -167,48 +163,24 @@ export default function SkillsMoneyCarouselSection({
             </p>
           </FadeUp>
         </div>
-      </Container>
 
-      {/* ── GPU-Accelerated Hardware Infinite Continuous Marquee on Deep Blue ── */}
-      <div className="relative w-full overflow-hidden py-6 sm:py-10">
-        {/* Soft edge gradient fades in Brand Blue */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-36 bg-gradient-to-r from-[#1748BB] via-[#1748BB]/80 to-transparent z-30" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-36 bg-gradient-to-l from-[#1748BB] via-[#1748BB]/80 to-transparent z-30" />
-
-        {/* Moving Track */}
-        <div className="relative w-full overflow-hidden flex items-center">
-          <motion.div
-            className="flex items-center gap-4 sm:gap-6 md:gap-8 shrink-0 cursor-grab active:cursor-grabbing"
-            animate={{
-              x: ["0%", "-33.333%"],
-            }}
-            transition={{
-              x: {
-                repeat: Infinity,
-                repeatType: "loop",
-                duration: 28,
-                ease: "linear",
-              },
-            }}
-            whileHover={{ animationPlayState: "paused" }}
-          >
-            {allItems.map((item, index) => (
-              <div
-                key={`${item.alt}-${index}`}
-                className="shrink-0 w-[260px] sm:w-[340px] md:w-[380px] aspect-[16/9] rounded-[18px] sm:rounded-[24px] overflow-hidden border-2 border-white/30 bg-white relative shadow-xl hover:scale-105 transition-transform duration-300 group"
-              >
+        {/* ── Row & Column Grid Layout (No Carousel) ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
+          {effectiveImages.map((item, index) => (
+            <FadeUp key={`${item.alt}-${index}`} delay={(index % 6) * 0.05}>
+              <div className="relative aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-white/25 hover:border-white/60 bg-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:-translate-y-1">
                 <Image
                   src={item.src}
                   alt={item.alt}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 640px) 260px, (max-width: 1024px) 340px, 380px"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
-            ))}
-          </motion.div>
+            </FadeUp>
+          ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
