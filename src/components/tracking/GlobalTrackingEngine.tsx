@@ -25,6 +25,44 @@ declare global {
 }
 
 /**
+ * Generates or retrieves a persistent unique visitor ID (stored in localStorage and 1-year cookie)
+ */
+function getOrCreateVisitorId(): string {
+  if (typeof window === 'undefined') return ''
+  let vid: string | null = null
+  try {
+    vid = localStorage.getItem('va_vid')
+    if (!vid) {
+      vid = 'vid_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9)
+      localStorage.setItem('va_vid', vid)
+      document.cookie = `va_vid=${vid};path=/;max-age=31536000;SameSite=Lax`
+    }
+  } catch {
+    vid = 'vid_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9)
+  }
+  return vid || ''
+}
+
+/**
+ * Generates or retrieves a session-scoped ID (stored in sessionStorage and session cookie)
+ */
+function getOrCreateSessionId(): string {
+  if (typeof window === 'undefined') return ''
+  let sid: string | null = null
+  try {
+    sid = sessionStorage.getItem('va_sid')
+    if (!sid) {
+      sid = 'sid_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9)
+      sessionStorage.setItem('va_sid', sid)
+      document.cookie = `va_sid=${sid};path=/;SameSite=Lax`
+    }
+  } catch {
+    sid = 'sid_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 9)
+  }
+  return sid || ''
+}
+
+/**
  * Normalizes URL path for consistent comparison
  */
 function normalizePath(p: string): string {
@@ -450,7 +488,57 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       }
     }
 
-    // --- E. DEVELOPER DEBUG MODE CONSOLE OUTPUT ---
+    // --- E. SEND TELEMETRY BEACON TO BACKEND API FOR CMS ANALYTICS STORAGE ---
+    try {
+      const vid = getOrCreateVisitorId()
+      const sid = getOrCreateSessionId()
+      const storedUtm = typeof window !== 'undefined' ? sessionStorage.getItem('va_utm_params') : null
+      const utm = storedUtm ? JSON.parse(storedUtm) : {}
+
+      const telemetryPayload = {
+        event_type: 'page_view',
+        page_path: pathname,
+        page_title: typeof document !== 'undefined' ? document.title : '',
+        visitor_id: vid,
+        session_id: sid,
+        referrer: typeof document !== 'undefined' ? document.referrer : '',
+        timestamp: new Date().toISOString(),
+        utm_source: utm.utm_source || 'direct',
+        utm_medium: utm.utm_medium || 'none',
+        utm_campaign: utm.utm_campaign || 'direct',
+        utm_term: utm.utm_term || '',
+        utm_content: utm.utm_content || '',
+        device_type:
+          typeof window !== 'undefined'
+            ? window.innerWidth < 768
+              ? 'mobile'
+              : window.innerWidth < 1024
+              ? 'tablet'
+              : 'desktop'
+            : 'desktop',
+        screen_resolution: typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height}` : '',
+        meta_event: metaEventFired,
+        ga4_event: ga4EventFired,
+        rule_matched: matchedRule ? matchedRule.page_title : 'Global Default',
+        ...parsedPayload,
+      }
+
+      if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+        const blob = new Blob([JSON.stringify(telemetryPayload)], { type: 'application/json' })
+        navigator.sendBeacon('/api/track', blob)
+      } else {
+        fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(telemetryPayload),
+          keepalive: true,
+        }).catch(() => {})
+      }
+    } catch {
+      // Telemetry error prevention
+    }
+
+    // --- F. DEVELOPER DEBUG MODE CONSOLE OUTPUT ---
     const ruleTitle = matchedRule ? matchedRule.page_title : 'Global Default Route'
     const ruleId = matchedRule ? matchedRule.id : 'default-pageview'
     const customScriptStatus = customScriptsCount > 0 ? `Yes (${customScriptsCount} script node${customScriptsCount > 1 ? 's' : ''})` : 'No'
@@ -478,6 +566,8 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
   useEffect(() => {
     const trackCustomEvent = (eventType: string, eventData: Record<string, any> = {}) => {
       try {
+        const vid = getOrCreateVisitorId()
+        const sid = getOrCreateSessionId()
         const storedUtm = typeof window !== 'undefined' ? sessionStorage.getItem('va_utm_params') : null
         const utm = storedUtm ? JSON.parse(storedUtm) : {}
 
@@ -485,6 +575,8 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
           event_type: eventType,
           page_path: pathname,
           page_title: typeof document !== 'undefined' ? document.title : '',
+          visitor_id: vid,
+          session_id: sid,
           referrer: typeof document !== 'undefined' ? document.referrer : '',
           timestamp: new Date().toISOString(),
           utm_source: utm.utm_source || 'direct',
@@ -492,6 +584,14 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
           utm_campaign: utm.utm_campaign || 'direct',
           utm_term: utm.utm_term || '',
           utm_content: utm.utm_content || '',
+          device_type:
+            typeof window !== 'undefined'
+              ? window.innerWidth < 768
+                ? 'mobile'
+                : window.innerWidth < 1024
+                ? 'tablet'
+                : 'desktop'
+              : 'desktop',
           ...eventData,
         }
 
