@@ -35,10 +35,36 @@ const nextConfig: NextConfig = {
     optimizeCss: false,
   },
 
+  compress: true,
+
   // Compiler options
   compiler: {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === "production",
+  },
+
+  // Cache lifetimes for static assets & fonts
+  async headers() {
+    return [
+      {
+        source: "/assets/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/:all*(svg|jpg|png|webp|avif|woff2|woff)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
   },
 };
 

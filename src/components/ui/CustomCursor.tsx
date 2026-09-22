@@ -27,8 +27,31 @@ export default function CustomCursor() {
     let mouseY = -100;
     let ringX = -100;
     let ringY = -100;
-    let rafId: number;
+    let rafId: number | null = null;
     let visible = false;
+
+    // Silky smooth trailing Lerp loop (0.14 for fluid trailing drag)
+    const render = () => {
+      const deltaX = mouseX - ringX;
+      const deltaY = mouseY - ringY;
+
+      ringX += deltaX * 0.14;
+      ringY += deltaY * 0.14;
+
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+
+      if (Math.abs(deltaX) > 0.1 || Math.abs(deltaY) > 0.1) {
+        rafId = requestAnimationFrame(render);
+      } else {
+        rafId = null;
+      }
+    };
+
+    const startAnimation = () => {
+      if (!rafId) {
+        rafId = requestAnimationFrame(render);
+      }
+    };
 
     const onMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
@@ -40,6 +63,7 @@ export default function CustomCursor() {
         ringX = mouseX;
         ringY = mouseY;
       }
+      startAnimation();
     };
 
     const onMouseDown = () => setIsClicking(true);
@@ -52,22 +76,8 @@ export default function CustomCursor() {
     const onMouseEnter = () => {
       visible = true;
       setIsVisible(true);
+      startAnimation();
     };
-
-    // Silky smooth trailing Lerp loop (0.14 for fluid trailing drag)
-    const render = () => {
-      const deltaX = mouseX - ringX;
-      const deltaY = mouseY - ringY;
-
-      ringX += deltaX * 0.14;
-      ringY += deltaY * 0.14;
-
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-
-      rafId = requestAnimationFrame(render);
-    };
-
-    rafId = requestAnimationFrame(render);
 
     const handleElementHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
@@ -93,7 +103,7 @@ export default function CustomCursor() {
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("mouseenter", onMouseEnter);
       document.removeEventListener("mouseover", handleElementHover);
-      cancelAnimationFrame(rafId);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 

@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
+import dynamicImport from "next/dynamic";
 import HeroSection from "@/components/sections/HeroSection";
 import MarqueeRibbon from "@/components/sections/MarqueeRibbon";
-import LearnCreateGrowSection from "@/components/sections/LearnCreateGrowSection";
-import ProgramsSection from "@/components/sections/ProgramsSection";
-import CareerJourneySection from "@/components/sections/CareerJourneySection";
-import SkillStackSection from "@/components/sections/SkillStackSection";
-import CertificationsSection from "@/components/sections/CertificationsSection";
-import VideoTestimonialCarousel from "@/components/sections/VideoTestimonialCarousel";
-import CommunitySection from "@/components/sections/CommunitySection";
-import StudentReviewsSection from "@/components/sections/StudentReviewsSection";
-import FinalCTASection from "@/components/sections/FinalCTASection";
 import { SITE_CONFIG } from "@/data/site.config";
+
+// Below-the-fold components dynamically imported for ultra-fast initial bundle & LCP
+const LearnCreateGrowSection = dynamicImport(() => import("@/components/sections/LearnCreateGrowSection"));
+const ProgramsSection = dynamicImport(() => import("@/components/sections/ProgramsSection"));
+const CareerJourneySection = dynamicImport(() => import("@/components/sections/CareerJourneySection"));
+const SkillStackSection = dynamicImport(() => import("@/components/sections/SkillStackSection"));
+const CertificationsSection = dynamicImport(() => import("@/components/sections/CertificationsSection"));
+const VideoTestimonialCarousel = dynamicImport(() => import("@/components/sections/VideoTestimonialCarousel"));
+const CommunitySection = dynamicImport(() => import("@/components/sections/CommunitySection"));
+const StudentReviewsSection = dynamicImport(() => import("@/components/sections/StudentReviewsSection"));
+const FinalCTASection = dynamicImport(() => import("@/components/sections/FinalCTASection"));
 
 export const metadata: Metadata = {
   title: `${SITE_CONFIG.name} — Your Career Changing Partner`,

@@ -85,6 +85,16 @@ export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectio
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop, { passive: true });
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
@@ -108,17 +118,20 @@ export default function HeroSection({ heroData = DEFAULT_HERO_DATA }: HeroSectio
       
       {/* ── Background Video on Desktop only; Clean cinematic background on Mobile ── */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        {/* Desktop Video (md and above) */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          key={videoSrc}
-          className="hidden md:block absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-100 brightness-[1.15] contrast-[1.04] scale-[1.08] sm:scale-105"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
+        {/* Desktop Video (only rendered when window is >= 768px to eliminate 8.1MB mobile transfer) */}
+        {isDesktop && (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            key={videoSrc}
+            className="absolute inset-0 w-full h-full object-cover object-[center_30%] opacity-100 brightness-[1.15] contrast-[1.04] scale-[1.08] sm:scale-105"
+          >
+            <source src={videoSrc} type="video/mp4" />
+          </video>
+        )}
 
         {/* Mobile Fast Dark Background with Subtle Brand Glows */}
         <div className="block md:hidden absolute inset-0 bg-[#07080D]">
