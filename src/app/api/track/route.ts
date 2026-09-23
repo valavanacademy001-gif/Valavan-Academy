@@ -173,13 +173,19 @@ export async function POST(req: Request) {
             console.log(`[Analytics Saved To DB] ${eventRecord.id} persisted to events_log_data (Total events: ${updatedEvents.length})`)
           }
 
-          // 2. If event is a lead or conversion (whatsapp_click, form_submission, contact, purchase)
-          const isLeadEvent =
-            /whatsapp|contact|form|lead|enroll/i.test(cleanEventType) ||
-            /whatsapp/i.test(cta_label || '') ||
-            cleanEventType === 'lead'
+          // 2. Only record to leads_data if explicit genuine lead contact info is submitted.
+          // Plain button clicks (CTAs, WhatsApp links, etc.) are already tracked above in events_log_data.
+          const hasGenuineContact = Boolean(
+            body.name &&
+            body.name.trim() !== '' &&
+            !/website prospect|whatsapp inquirer/i.test(body.name) &&
+            body.phone &&
+            body.phone.trim() !== '' &&
+            !body.phone.includes('9080070624') &&
+            !body.phone.includes('90800 70624')
+          )
 
-          if (isLeadEvent) {
+          if (hasGenuineContact) {
             let { data: leadField } = await supabase
               .from('fields')
               .select('id')
@@ -221,8 +227,8 @@ export async function POST(req: Request) {
 
               const newLead = {
                 id: 'lead_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 7),
-                name: body.name || (cleanEventType.includes('whatsapp') ? 'WhatsApp Inquirer' : 'Website Prospect'),
-                phone: body.phone || '+91 90800 70624',
+                name: body.name.trim(),
+                phone: body.phone.trim(),
                 email: body.email || '',
                 program_interested: cleanPath.includes('90-days')
                   ? '90 Days Graphic Design Mastery'
@@ -236,13 +242,13 @@ export async function POST(req: Request) {
                   : cleanEventType.includes('form')
                   ? 'Contact Form'
                   : 'CTA Click',
-                status: 'New',
+                status: 'New Lead',
                 utm_source: utm_source || 'direct',
                 utm_medium: utm_medium || 'none',
                 utm_campaign: utm_campaign || '',
                 landing_page: cleanPath,
                 referrer: referrer || '',
-                notes: `Auto-captured from ${cleanEventType} on ${cleanPath}`,
+                notes: `Captured from ${cleanEventType} on ${cleanPath}`,
                 created_at: new Date().toISOString(),
               }
 
