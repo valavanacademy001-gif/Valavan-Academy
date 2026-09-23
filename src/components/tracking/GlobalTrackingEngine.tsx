@@ -710,22 +710,28 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       trackCustomEvent('Form Submission', { form_id: formId, form_action: formAction })
     }
 
+    let isTicking = false
     const handleScroll = () => {
-      const winHeight = window.innerHeight
-      const docHeight = document.documentElement.scrollHeight - winHeight
-      if (docHeight <= 0) return
+      if (isTicking) return
+      isTicking = true
+      window.requestAnimationFrame(() => {
+        isTicking = false
+        const winHeight = window.innerHeight
+        const docHeight = document.documentElement.scrollHeight - winHeight
+        if (docHeight <= 0) return
 
-      const scrollPercent = Math.round((window.scrollY / docHeight) * 100)
-      const milestones = [25, 50, 75, 90]
+        const scrollPercent = Math.round((window.scrollY / docHeight) * 100)
+        const milestones = [25, 50, 75, 90]
 
-      milestones.forEach((milestone) => {
-        if (scrollPercent >= milestone && !trackedScrollDepths.current.has(milestone)) {
-          trackedScrollDepths.current.add(milestone)
-          trackCustomEvent(`Scroll Depth ${milestone}%`, {
-            depth_percentage: milestone,
-            page: pathname,
-          })
-        }
+        milestones.forEach((milestone) => {
+          if (scrollPercent >= milestone && !trackedScrollDepths.current.has(milestone)) {
+            trackedScrollDepths.current.add(milestone)
+            trackCustomEvent(`Scroll Depth ${milestone}%`, {
+              depth_percentage: milestone,
+              page: pathname,
+            })
+          }
+        })
       })
     }
 

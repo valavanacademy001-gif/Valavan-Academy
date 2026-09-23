@@ -174,7 +174,10 @@ export default function Navbar() {
 
   // Scroll listener
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => {
+      const isPast = window.scrollY > 40;
+      setScrolled((prev) => (prev !== isPast ? isPast : prev));
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

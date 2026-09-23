@@ -121,6 +121,9 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
 
     if (!pinContainerRef.current) return;
 
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop) return;
+
     const ctx = gsap.context(() => {
       const st = ScrollTrigger.create({
         trigger: pinContainerRef.current,

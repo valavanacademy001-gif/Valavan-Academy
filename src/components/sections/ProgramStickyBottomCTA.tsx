@@ -21,11 +21,8 @@ export default function ProgramStickyBottomCTA({
   useEffect(() => {
     const handleScroll = () => {
       // Show sticky CTA once scrolled past 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      const past = window.scrollY > 300;
+      setIsVisible((prev) => (prev !== past ? past : prev));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
