@@ -212,10 +212,15 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-150">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs overflow-y-auto overflow-x-hidden w-full max-w-[100vw] box-border animate-in fade-in duration-150"
+    >
       {/* Modal Card */}
       <div
-        className="relative w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in zoom-in-95 duration-150"
+        className="relative w-full max-w-[calc(100vw-24px)] sm:max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh] my-auto mx-auto shrink-0 box-border animate-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
       >
@@ -225,7 +230,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 z-10"
           >
             <X className="w-4 h-4 text-white" />
           </button>
@@ -235,31 +240,31 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
               style={{ color: '#ffffff' }}
               className="px-2 py-0.5 rounded-full bg-white/20 !text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-xs"
             >
-              <Sparkles className="w-2.5 h-2.5 text-amber-300" />
+              <Sparkles className="w-2.5 h-2.5 text-amber-300 shrink-0" />
               <span>Step 1 of 2 · Quick Enrollment</span>
             </span>
           </div>
 
           <h3
             style={{ color: '#ffffff' }}
-            className="text-base sm:text-lg font-black tracking-tight leading-tight !text-white drop-shadow-xs pr-6"
+            className="text-base sm:text-lg font-black tracking-tight leading-tight !text-white drop-shadow-xs pr-8 break-words"
           >
             {config.programName || 'Complete Your Enrollment'}
           </h3>
           <p
             style={{ color: 'rgba(255, 255, 255, 0.92)' }}
-            className="text-[11px] sm:text-xs !text-white/90 mt-1 font-medium leading-tight"
+            className="text-[11px] sm:text-xs !text-white/90 mt-1 font-medium leading-tight break-words pr-4"
           >
             Fill your details below to proceed to secure Razorpay checkout.
           </p>
         </div>
 
         {/* Body Form */}
-        <form onSubmit={handleSubmit} className="p-3.5 sm:p-5 overflow-y-auto space-y-2.5 sm:space-y-3 flex-1">
+        <form onSubmit={handleSubmit} className="p-3.5 sm:p-5 overflow-y-auto space-y-2.5 sm:space-y-3 flex-1 min-w-0">
           {/* Name Field */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-[#1748BB]" />
+              <User className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
               <span>Full Name <span className="text-red-500">*</span></span>
             </label>
             <input
@@ -270,7 +275,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.name) setErrors((prev) => ({ ...prev, name: '' }))
               }}
               placeholder="e.g. Vignesh Kumar"
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                 errors.name
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                   : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
@@ -279,12 +284,12 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
             {errors.name && <p className="text-[10px] text-red-600 font-semibold">{errors.name}</p>}
           </div>
 
-          {/* Row: Age & Phone (2 columns on all devices) */}
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-            {/* Age Field */}
-            <div className="space-y-1">
-              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-[#1748BB]" />
+          {/* Row: Age & Phone */}
+          <div className="flex gap-2 sm:gap-3 items-start min-w-0">
+            {/* Age Field: compact 76px width on mobile */}
+            <div className="space-y-1 w-20 sm:w-24 shrink-0">
+              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
                 <span>Age <span className="text-red-500">*</span></span>
               </label>
               <input
@@ -296,8 +301,8 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                   setAge(e.target.value)
                   if (errors.age) setErrors((prev) => ({ ...prev, age: '' }))
                 }}
-                placeholder="e.g. 24"
-                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+                placeholder="24"
+                className={`w-full min-w-0 px-2.5 sm:px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 text-center sm:text-left ${
                   errors.age
                     ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                     : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
@@ -306,11 +311,11 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
               {errors.age && <p className="text-[10px] text-red-600 font-semibold">{errors.age}</p>}
             </div>
 
-            {/* Phone Number Field */}
-            <div className="space-y-1">
-              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-                <Phone className="w-3.5 h-3.5 text-[#1748BB]" />
-                <span>WhatsApp / Phone <span className="text-red-500">*</span></span>
+            {/* Phone Number Field: takes all remaining width */}
+            <div className="space-y-1 flex-1 min-w-0">
+              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5 truncate">
+                <Phone className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                <span className="truncate">WhatsApp / Phone <span className="text-red-500">*</span></span>
               </label>
               <input
                 type="tel"
@@ -320,7 +325,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                   if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }))
                 }}
                 placeholder="9876543210"
-                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+                className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                   errors.phone
                     ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                     : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
@@ -331,9 +336,9 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
           </div>
 
           {/* Email Field */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-[#1748BB]" />
+              <Mail className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
               <span>Email Address <span className="text-red-500">*</span></span>
             </label>
             <input
@@ -344,7 +349,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.email) setErrors((prev) => ({ ...prev, email: '' }))
               }}
               placeholder="e.g. yourname@gmail.com"
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
                 errors.email
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                   : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
@@ -354,9 +359,9 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
           </div>
 
           {/* Occupation Dropdown */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <Briefcase className="w-3.5 h-3.5 text-[#1748BB]" />
+              <Briefcase className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
               <span>Current Occupation <span className="text-red-500">*</span></span>
             </label>
             <select
@@ -365,7 +370,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 setOccupation(e.target.value)
                 if (errors.occupation) setErrors((prev) => ({ ...prev, occupation: '' }))
               }}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all bg-gray-50/40 focus:bg-white focus:outline-none focus:ring-2 ${
+              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all bg-gray-50/40 focus:bg-white focus:outline-none focus:ring-2 ${
                 errors.occupation
                   ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
                   : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
@@ -395,14 +400,14 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
           </div>
 
           {/* Trust badges */}
-          <div className="flex items-center justify-center gap-3 text-[10px] sm:text-[11px] text-gray-500 pt-0.5">
-            <div className="flex items-center gap-1">
-              <Lock className="w-3 h-3 text-emerald-600" />
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-gray-500 pt-0.5">
+            <div className="flex items-center gap-1 shrink-0">
+              <Lock className="w-3 h-3 text-emerald-600 shrink-0" />
               <span>256-Bit SSL Secured</span>
             </div>
-            <span className="w-1 h-1 rounded-full bg-gray-300" />
-            <div className="flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-blue-600" />
+            <span className="w-1 h-1 rounded-full bg-gray-300 hidden sm:inline-block" />
+            <div className="flex items-center gap-1 shrink-0">
+              <CheckCircle2 className="w-3 h-3 text-blue-600 shrink-0" />
               <span>Instant Course Access</span>
             </div>
           </div>
