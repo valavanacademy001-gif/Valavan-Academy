@@ -71,6 +71,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
   const pinContainerRef = useRef<HTMLDivElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef<number>(0);
 
   const steps = [
     {
@@ -121,28 +122,35 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
 
     if (!pinContainerRef.current) return;
 
-    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-    if (!isDesktop) return;
+    const isMobile = window.innerWidth < 1024;
 
     const ctx = gsap.context(() => {
       const st = ScrollTrigger.create({
         trigger: pinContainerRef.current,
-        start: "top top+=75px",
-        end: "+=220%",
+        start: isMobile ? "top top+=65px" : "top top+=75px",
+        end: isMobile ? "+=180%" : "+=220%",
         pin: pinContainerRef.current,
         pinSpacing: true,
-        scrub: 0.6,
-        anticipatePin: 1,
+        scrub: isMobile ? 0.1 : 0.5,
+        anticipatePin: isMobile ? 0 : 1,
+        fastScrollEnd: true,
+        preventOverlaps: true,
         onUpdate: (self) => {
           const progress = self.progress;
+          let nextIndex = 0;
           if (progress < 0.25) {
-            setActiveIndex(0);
+            nextIndex = 0;
           } else if (progress < 0.5) {
-            setActiveIndex(1);
+            nextIndex = 1;
           } else if (progress < 0.75) {
-            setActiveIndex(2);
+            nextIndex = 2;
           } else {
-            setActiveIndex(3);
+            nextIndex = 3;
+          }
+
+          if (activeIndexRef.current !== nextIndex) {
+            activeIndexRef.current = nextIndex;
+            setActiveIndex(nextIndex);
           }
         },
       });
@@ -153,6 +161,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
   }, []);
 
   const handleTabClick = (index: number) => {
+    activeIndexRef.current = index;
     setActiveIndex(index);
     if (scrollTriggerRef.current) {
       const targetProgress = (index + 0.1) / steps.length;
@@ -173,6 +182,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
       <div
         ref={pinContainerRef}
         className="w-full min-h-screen flex flex-col justify-center items-center py-12 sm:py-20 relative overflow-hidden"
+        style={{ willChange: "transform" }}
       >
         {/* Faint watermark background word of current active step */}
         <div
@@ -185,7 +195,7 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
               initial={{ opacity: 0, scale: 0.94 }}
               animate={{ opacity: 0.85, scale: 1 }}
               exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.25 }}
               className="font-display font-black tracking-tighter uppercase select-none opacity-70"
               style={{
                 fontSize: "clamp(120px, 25vw, 340px)",
@@ -235,10 +245,10 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
             <AnimatePresence mode="wait">
               <motion.div
                 key={`label-${activeIndex}`}
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
                 className="flex items-center justify-center gap-2.5 sm:gap-3"
               >
                 <div className="w-6 sm:w-8 h-[2px] bg-[#1748BB]/40" />
@@ -253,10 +263,10 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
             <AnimatePresence mode="wait">
               <motion.h2
                 key={`headline-${activeIndex}`}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
                 className="font-display font-black text-[#1E2026] tracking-tight leading-[1.06] sm:leading-[1.04]"
                 style={{ fontSize: "clamp(26px, 4.2vw, 56px)" }}
               >
@@ -268,10 +278,10 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
             <AnimatePresence mode="wait">
               <motion.p
                 key={`tagline-${activeIndex}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3, delay: 0.05 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
                 className="font-sans text-sm sm:text-base md:text-lg font-semibold text-[#1748BB] max-w-xl mx-auto flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-4 h-4 shrink-0 text-[#1748BB]" />
@@ -284,10 +294,10 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
             <AnimatePresence mode="wait">
               <motion.p
                 key={`body-${activeIndex}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
                 className="font-sans text-sm sm:text-base md:text-lg text-neutral-600 leading-relaxed max-w-2xl mx-auto font-normal"
               >
                 {step.body}
@@ -298,10 +308,10 @@ export default function LearnCreateGrowSection({ meta }: LearnCreateGrowSectionP
             <AnimatePresence mode="wait">
               <motion.div
                 key={`chips-${activeIndex}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3, delay: 0.15 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
                 className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 sm:pt-4"
               >
                 {step.chips.map((chip) => (
