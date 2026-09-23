@@ -799,22 +799,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         </>
       )}
 
-      {/* 3. Microsoft Clarity */}
-      {settings?.clarity_enabled === 'true' && settings?.clarity_project_id && (
-        <Script
-          id="clarity-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(c,l,a,r,i,t,y){
-                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "${settings.clarity_project_id}");
-            `,
-          }}
-        />
-      )}
+
 
       {/* 4. TikTok Pixel */}
       {settings?.tiktok_enabled === 'true' && settings?.tiktok_pixel_id && (
