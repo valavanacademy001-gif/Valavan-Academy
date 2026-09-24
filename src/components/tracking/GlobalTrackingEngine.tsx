@@ -567,6 +567,17 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
           keepalive: true,
         }).catch(() => {})
       }
+
+      // Tag Microsoft Clarity session & visitor
+      if (typeof window !== 'undefined' && (window as any).clarity) {
+        try {
+          (window as any).clarity('set', 'visitor_id', vid)
+          (window as any).clarity('set', 'session_id', sid)
+          (window as any).clarity('identify', vid, sid)
+        } catch {
+          // Ignore
+        }
+      }
     } catch {
       // Telemetry error prevention
     }
