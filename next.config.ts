@@ -66,6 +66,52 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Route redirects for program aliases and tracking paths
+  async redirects() {
+    return [
+      {
+        source: "/full-stack-digital-creator-program",
+        destination: "/programs/full-stack-creator",
+        permanent: true,
+      },
+      {
+        source: "/full-stack-creator",
+        destination: "/programs/full-stack-creator",
+        permanent: true,
+      },
+      {
+        source: "/full-stack",
+        destination: "/programs/full-stack-creator",
+        permanent: true,
+      },
+      {
+        source: "/90-days-graphic-design-mentorship",
+        destination: "/programs/90-days-graphic-design",
+        permanent: true,
+      },
+      {
+        source: "/graphic-design",
+        destination: "/programs/90-days-graphic-design",
+        permanent: true,
+      },
+      {
+        source: "/workshop",
+        destination: "/programs/3-hours-live-workshop",
+        permanent: true,
+      },
+      {
+        source: "/3-hours-live-workshop",
+        destination: "/programs/3-hours-live-workshop",
+        permanent: true,
+      },
+      {
+        source: "/live-workshop",
+        destination: "/programs/3-hours-live-workshop",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
