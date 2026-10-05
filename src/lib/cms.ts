@@ -30,7 +30,7 @@ export interface CMSProgram {
   sort_order?: number;
   status?: string;
   skills?: string[] | null;
-  software_tools?: string[] | null;
+  software_tools?: (string | { name: string; image?: string; logo?: string })[] | null;
   modules?: Array<{ title: string; duration?: string; lessons?: number }> | null;
 }
 
