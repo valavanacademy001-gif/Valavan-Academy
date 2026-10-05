@@ -121,9 +121,9 @@ export default function ToolsCoveredSection({
 
             {/* Content: Single Banner Duplicated Infinite Loop vs Multi-Tool Marquee */}
             {effectiveTools.length === 1 ? (
-              <div className="relative w-full overflow-hidden flex items-center py-2">
+              <div className="relative w-full overflow-hidden flex items-center py-3 sm:py-5">
                 <motion.div
-                  className="flex items-center gap-8 sm:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
+                  className="flex items-center gap-0 shrink-0 cursor-grab active:cursor-grabbing"
                   animate={{
                     x: ["0%", "-50%"],
                   }}
@@ -145,7 +145,7 @@ export default function ToolsCoveredSection({
                       <img
                         src={effectiveTools[0].logo}
                         alt={effectiveTools[0].name}
-                        className="h-7 sm:h-8 md:h-9 w-auto max-h-[38px] object-contain max-w-none select-none pointer-events-none transition-transform duration-300"
+                        className="h-10 sm:h-12 md:h-14 lg:h-15 w-auto max-h-[54px] sm:max-h-[60px] object-contain max-w-none select-none pointer-events-none transition-transform duration-300"
                         draggable={false}
                       />
                     </div>
