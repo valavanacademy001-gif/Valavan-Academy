@@ -11,7 +11,6 @@ import SkillsMoneyCarouselSection from "@/components/sections/SkillsMoneyCarouse
 import VideoTestimonialCarousel from "@/components/sections/VideoTestimonialCarousel";
 import ProgramCertificationSection from "@/components/sections/ProgramCertificationSection";
 import CreatorEconomyBoomSection from "@/components/sections/CreatorEconomyBoomSection";
-import TemplatesWorldBonusSection from "@/components/sections/TemplatesWorldBonusSection";
 import WhoIsThisForSection from "@/components/sections/WhoIsThisForSection";
 import GuidanceMentorsSection from "@/components/sections/GuidanceMentorsSection";
 import FullStackCreatorOfferSection from "@/components/sections/FullStackCreatorOfferSection";
@@ -144,9 +143,11 @@ export default async function FullStackCreatorPage() {
     "Master Design, Video Editing, AI, Websites & Ai App Dev and Combine it all to Build A Future-Proof Creative Career In The AI Era.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enrollFullStack;
-  const buttonText = heroMap.enroll_btn_text || "Download Brochure";
-  const secondaryButtonText = heroMap.secondary_btn_text || "📖 View Curriculum";
-  const secondaryButtonUrl = heroMap.secondary_btn_url || "#framework";
+  const buttonText = "Download Brochure";
+  const buttonUrl = "/brochure/full-stack-creator-brochure.pdf";
+  const buttonDownload = "Full-Stack-Creative-Master-Brochure.pdf";
+  const secondaryButtonText = "🚀 Join The Program";
+  const secondaryButtonUrl = enrollUrl;
 
   const highlights: HighlightItem[] = [
     { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
@@ -179,6 +180,8 @@ export default async function FullStackCreatorPage() {
         altText={title}
         enrollUrl={enrollUrl}
         buttonText={buttonText}
+        buttonUrl={buttonUrl}
+        buttonDownload={buttonDownload}
         secondaryButtonText={secondaryButtonText}
         secondaryButtonUrl={secondaryButtonUrl}
       />
@@ -220,18 +223,15 @@ export default async function FullStackCreatorPage() {
         enrollUrl={enrollUrl}
       />
 
-      {/* ── 07 Creator Economy : Why is it Booming ? (Animated Growth Chart & Market Demand) ── */}
+      {/* ── 07 Creator Economy : Why Is Full Stack Creative Booming (Why Now) ── */}
       <CreatorEconomyBoomSection
+        badge="WHY NOW"
+        titlePrefix="Why Is Full Stack Creative"
+        titleHighlight="Booming?"
         economyMap={economyMap}
       />
 
-      {/* ── 08 Access To Templatesworld (Full-Width Blue Background Centered Bonus Section) ── */}
-      <TemplatesWorldBonusSection
-        bonusMap={bonusMap}
-        enrollUrl={enrollUrl}
-      />
-
-      {/* ── 09 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
+      {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
       <WhoIsThisForSection
         whoMap={whoMap}
         enrollUrl={enrollUrl}

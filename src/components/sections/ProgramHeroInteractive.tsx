@@ -24,6 +24,8 @@ interface ProgramHeroInteractiveProps {
   enrollUrl: string;
   communityUrl?: string;
   buttonText?: string;
+  buttonUrl?: string;
+  buttonDownload?: boolean | string;
   secondaryButtonText?: string;
   secondaryButtonUrl?: string;
   youtubeId?: string;
@@ -81,9 +83,11 @@ export default function ProgramHeroInteractive({
   altText,
   enrollUrl,
   communityUrl,
-  buttonText = "Enroll Now",
-  secondaryButtonText = "View Curriculum",
-  secondaryButtonUrl = "#roadmap",
+  buttonText = "Download Brochure",
+  buttonUrl,
+  buttonDownload,
+  secondaryButtonText = "🚀 Join The Program",
+  secondaryButtonUrl,
   youtubeId,
   videoUrl,
   show3DIcons = false,
@@ -274,26 +278,24 @@ export default function ProgramHeroInteractive({
 
               <div className="pt-2 flex flex-col sm:flex-row gap-4">
                 <a
-                  href={enrollUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={buttonUrl || "/brochure/full-stack-creator-brochure.pdf"}
+                  download={buttonDownload !== undefined ? (typeof buttonDownload === "string" ? buttonDownload : "Full-Stack-Creative-Master-Brochure.pdf") : "Full-Stack-Creative-Master-Brochure.pdf"}
+                  data-no-intercept="true"
                   style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
                   className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.25)] cursor-pointer"
                 >
                   <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
                     {buttonText}
                   </span>
-                  {buttonText?.toLowerCase().includes("brochure") || buttonText?.toLowerCase().includes("download") ? (
-                    <Download size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
-                  ) : (
-                    <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
-                  )}
+                  <Download size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
                 </a>
 
                 <a
-                  href={secondaryButtonUrl || communityUrl || "#roadmap"}
-                  target={secondaryButtonUrl?.startsWith("#") ? undefined : "_blank"}
-                  rel={secondaryButtonUrl?.startsWith("#") ? undefined : "noopener noreferrer"}
+                  href={secondaryButtonUrl || enrollUrl}
+                  data-enroll-btn="true"
+                  data-program-slug="full-stack-creator"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
                   className="inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
                 >

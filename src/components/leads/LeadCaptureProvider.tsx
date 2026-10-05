@@ -107,16 +107,27 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
       const text = (target.textContent || '').trim().toLowerCase()
       const dataEnroll = target.getAttribute('data-enroll-btn')
 
+      // Never intercept file downloads or brochure links
+      if (
+        target.hasAttribute('download') ||
+        target.getAttribute('data-no-intercept') === 'true' ||
+        href.includes('.pdf') ||
+        href.includes('/brochure') ||
+        text.includes('download brochure')
+      ) {
+        return
+      }
+
       // Check if this click should open the Lead Form Modal:
       // 1. Explicit data attribute
       // 2. Direct Razorpay payment link (e.g. rzp.io / pages.razorpay.com)
-      // 3. CTA button with Enroll / Register intent on program pages
+      // 3. CTA button with Enroll / Register / Join intent on program pages
       const isRazorpayLink = href.includes('rzp.io') || href.includes('razorpay.com')
       const isEnrollCta =
         dataEnroll === 'true' ||
         isRazorpayLink ||
         ((target.tagName.toLowerCase() === 'button' || href.startsWith('#') || href === '') &&
-          /enroll now|enroll today|register now|join batch|book your seat|get instant access|start learning/i.test(text))
+          /enroll now|enroll today|register now|join batch|join the program|join full stack|join program|book your seat|get instant access|start learning/i.test(text))
 
       if (isEnrollCta) {
         // Stop default direct navigation so the user fills the lead form first

@@ -21,33 +21,33 @@ export default function CreatorEconomyBoomSection({
   description,
   economyMap,
 }: CreatorEconomyBoomSectionProps = {}) {
-  const effectiveBadge = badge || economyMap?.badge || "Growth Update";
-  const effectiveTitlePrefix = titlePrefix || economyMap?.title_prefix || "Creator Economy :";
-  const effectiveTitleHighlight = titleHighlight || economyMap?.title_highlight || "Why is it Booming ?";
+  const effectiveBadge = badge || economyMap?.badge || "WHY NOW";
+  const effectiveTitlePrefix = titlePrefix || economyMap?.title_prefix || "Why Is Full Stack Creative";
+  const effectiveTitleHighlight = titleHighlight || economyMap?.title_highlight || "Booming?";
   const effectiveDescription =
     description ||
     economyMap?.description ||
-    "Graphic design blends creativity, visual storytelling, and technology to turn ideas into stunning visuals. With the rise of digital content, talented freelance designers are in high demand!";
+    "The creative market has changed permanently. Companies and clients no longer want isolated specialists — they need versatile creators who command AI, design, video, and web workflows together.";
 
-  const card1Tag = economyMap?.card_1_tag || "Market Demand";
-  const card1Rise = economyMap?.card_1_rise || "+250% Rise";
-  const card1Title = economyMap?.card_1_title || "Explosive Growth in India";
-  const card1Stat = economyMap?.card_1_stat || "250%";
-  const card1StatLabel = economyMap?.card_1_stat_label || "Industry Expansion Rate";
+  const card1Tag = economyMap?.card_1_tag || "AI Era Shift";
+  const card1Rise = economyMap?.card_1_rise || "+300% Boost";
+  const card1Title = economyMap?.card_1_title || "AI Is Changing Everything";
+  const card1Stat = economyMap?.card_1_stat || "10X";
+  const card1StatLabel = economyMap?.card_1_stat_label || "Creative Production Speed";
   const card1Desc =
     economyMap?.card_1_desc ||
-    "Between 2022–2030, India's freelancing and graphic design industry is set for massive growth driven by digital marketing, brand design demand, and AI-powered creative tools.";
-  const card1Source = economyMap?.card_1_source || "(Source: FICCI Report)";
+    "Businesses Need People Who Can Work Alongside AI, Not Compete With It.";
+  const card1Source = economyMap?.card_1_source || "(Global Creative AI Market Report)";
 
-  const card2Tag = economyMap?.card_2_tag || "Multi-Sector Adoption";
-  const card2Badge = economyMap?.card_2_badge || "Global Reach";
-  const card2Title = economyMap?.card_2_title || "Diverse Opportunities";
-  const card2Stat = economyMap?.card_2_stat || "95%";
-  const card2StatLabel = economyMap?.card_2_stat_label || "Businesses Rely on Visuals";
+  const card2Tag = economyMap?.card_2_tag || "Multi-Skill Advantage";
+  const card2Badge = economyMap?.card_2_badge || "High-Demand";
+  const card2Title = economyMap?.card_2_title || "More Opportunities Than Ever";
+  const card2Stat = economyMap?.card_2_stat || "5X";
+  const card2StatLabel = economyMap?.card_2_stat_label || "Higher Earning Potential";
   const card2Desc =
     economyMap?.card_2_desc ||
-    "From marketing and education to fashion, real estate, and e-commerce nearly every industry now depends on graphic design to build brand identity and attract customers.";
-  const card2Source = economyMap?.card_2_source || "(Source: Statista)";
+    "Creators Who Understand Multiple Skills Have More Career & Freelancing Opportunities.";
+  const card2Source = economyMap?.card_2_source || "(Creator Freelancing Trends)";
 
   const points = [
     { label: "2 LPA", x: 40, y: 260, value: "Beginner" },
