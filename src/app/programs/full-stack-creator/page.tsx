@@ -17,6 +17,7 @@ import FullStackCreatorOfferSection from "@/components/sections/FullStackCreator
 import ProgramDesignJourneyCTASection from "@/components/sections/ProgramDesignJourneyCTASection";
 import ProgramFAQSection from "@/components/sections/ProgramFAQSection";
 import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA";
+import FullStackFinalCTASection from "@/components/sections/FullStackFinalCTASection";
 
 const FULL_STACK_TOOLS: ToolItem[] = [
   { name: "Adobe Premiere Pro", logo: "/assets/tools/premiere-pro.png" },
@@ -78,6 +79,59 @@ const CAREER_ROLES = [
   "Content Strategist",
   "Brand Designer",
   "YouTube Producer",
+];
+
+const FULL_STACK_FAQS = [
+  {
+    question: "Is This Beginner Friendly?",
+    answer:
+      "Yes, 100%! We start from scratch with fundamental design principles, software basics, and step-by-step practical exercises before moving to advanced topics.",
+  },
+  {
+    question: "Do I Need Coding Knowledge?",
+    answer:
+      "No prior coding or technical knowledge is required. You will learn modern visual website builders, AI tools, and practical no-code frameworks anyone can master.",
+  },
+  {
+    question: "How Long Is The Program?",
+    answer:
+      "The curriculum is structured across 6 months of comprehensive learning, plus you receive lifetime access to all lessons, course updates, and resources.",
+  },
+  {
+    question: "Will I Build A Portfolio?",
+    answer:
+      "Yes! Throughout the program, you will complete hands-on client-ready projects in video editing, graphic design, AI content, and web development to build an industry-ready portfolio.",
+  },
+  {
+    question: "Can Students Join?",
+    answer:
+      "Absolutely! School and college students can easily follow along to build high-income creative skills early, prepare for internships, or launch freelance careers while studying.",
+  },
+  {
+    question: "Can Freelancers Join?",
+    answer:
+      "Yes! If you are a freelancer or creator, this program helps you expand beyond a single service into full-stack creative execution so you can charge premium rates for complete client solutions.",
+  },
+  {
+    question: "Do I Get Community Support?",
+    answer:
+      "Yes! You get direct access to our exclusive creators community, peer discussions, mentor feedback sessions, and continuous support to clarify your doubts.",
+  },
+  {
+    question: "How Is This Different From Other Courses?",
+    answer:
+      "Most courses teach only a single tool (like just Premiere or just Figma). Valavan Academy teaches the complete interconnected creative ecosystem — combining Design, Video, Web, and AI into one unstoppable skillset.",
+  },
+  {
+    question: "Will AI Replace Creative Professionals?",
+    answer:
+      "AI will not replace creators, but creators who use AI will replace those who don't. This program teaches you to work alongside AI to produce 10x faster and deliver higher-value creative work.",
+  },
+  {
+    question: "What Happens After Completing The Program?",
+    answer:
+      "You will receive an Industry-Recognized Certification, have a complete multi-disciplinary portfolio, and have lifetime access to the community, job opportunities, and freelancing roadmaps.",
+  },
 ];
 
 export const dynamic = "force-dynamic";
@@ -249,27 +303,40 @@ export default async function FullStackCreatorPage() {
         offerMap={offerMap}
       />
 
-      {/* ── 12 Pre-FAQ Final Call to Action ── */}
+      {/* ── 12 Pre-FAQ Future Section ── */}
       <ProgramDesignJourneyCTASection
-        badge=""
-        titlePrefix={finalCtaMap.title_prefix || "The Future Belongs To "}
-        titleHighlight={finalCtaMap.title_highlight || "Creators."}
-        headlineSub={finalCtaMap.headline_sub || "The people who can design, communicate, create content, use AI, and build audiences will have more opportunities than ever before."}
-        description={finalCtaMap.description || "Start building those skills today."}
-        primaryBtnText={finalCtaMap.primary_btn_text || "🚀 Join The Program"}
-        primaryBtnUrl={finalCtaMap.primary_btn_url || enrollUrl}
-        secondaryBtnText={finalCtaMap.secondary_btn_text || "📖 Explore Curriculum"}
-        secondaryBtnUrl={finalCtaMap.secondary_btn_url || "#syllabus"}
-        footerSubtext={finalCtaMap.footer_subtext || "Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy – Empowering The Next Generation Of Digital Creators. 🚀"}
+        badge="THE FUTURE OF CREATIVITY"
+        titlePrefix="The Future Belongs To "
+        titleHighlight="Creators."
+        headlineSub="The Advantage No Longer Belongs To People Who Know One Tool."
+        description="It Belongs To People Who Can Connect Multiple Skills And Create Results."
+        primaryBtnText="Download Brochure"
+        primaryBtnUrl="/brochure/full-stack-creator-brochure.pdf"
+        primaryBtnDownload="Full-Stack-Creative-Master-Brochure.pdf"
+        secondaryBtnText="🚀 Join The Program"
+        secondaryBtnUrl={enrollUrl}
+        footerSubtext="Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy 🚀"
         supportMap={finalCtaMap}
       />
 
-      {/* ── 13 Frequently Asked Questions (2-Column Accordion from 90-days page) ── */}
+      {/* ── 13 Frequently Asked Questions (10 Core Program FAQs) ── */}
       <ProgramFAQSection
+        badge="FAQ"
+        titlePrefix="Your Questions,"
+        titleHighlight="Answered"
+        subtitle="Everything you need to know about the Full Stack Creative Master program, learning roadmap, and career opportunities."
+        faqs={FULL_STACK_FAQS}
         faqMap={faqMap}
       />
 
-      {/* ── 13 Full-Width Sticky Bottom Enrollment Action Bar ── */}
+      {/* ── 14 Final Call to Action ── */}
+      <FullStackFinalCTASection
+        brochureUrl="/brochure/full-stack-creator-brochure.pdf"
+        brochureFileName="Full-Stack-Creative-Master-Brochure.pdf"
+        enrollUrl={enrollUrl}
+      />
+
+      {/* ── 15 Full-Width Sticky Bottom Enrollment Action Bar ── */}
       <ProgramStickyBottomCTA
         enrollUrl={stickyMap.enroll_url || enrollUrl}
         text={stickyMap.notice_text || "Limited Seats Only"}

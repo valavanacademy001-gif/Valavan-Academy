@@ -29,11 +29,11 @@ export default function CreatorEconomyBoomSection({
     economyMap?.description ||
     "The creative market has changed permanently. Companies and clients no longer want isolated specialists — they need versatile creators who command AI, design, video, and web workflows together.";
 
-  const card1Tag = economyMap?.card_1_tag || "AI Era Shift";
+  const card1Tag = economyMap?.card_1_tag || "AI ERA SHIFT";
   const card1Rise = economyMap?.card_1_rise || "+300% Boost";
   const card1Title = economyMap?.card_1_title || "AI Is Changing Everything";
   const card1Stat = economyMap?.card_1_stat || "10X";
-  const card1StatLabel = economyMap?.card_1_stat_label || "Creative Production Speed";
+  const card1StatLabel = economyMap?.card_1_stat_label || "Creative Velocity";
   const card1Desc =
     economyMap?.card_1_desc ||
     "Businesses Need People Who Can Work Alongside AI, Not Compete With It.";
@@ -61,7 +61,7 @@ export default function CreatorEconomyBoomSection({
   const areaPoints = "40,260 130,185 190,205 240,170 340,95 440,55 440,300 40,300";
 
   return (
-    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative z-20 overflow-hidden border-t border-neutral-100 select-none">
+    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] sticky top-12 sm:top-16 md:top-20 z-10 overflow-visible border-t border-neutral-100 select-none transition-all">
       {/* Soft Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"

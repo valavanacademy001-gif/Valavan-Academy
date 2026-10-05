@@ -15,6 +15,7 @@ interface ProgramDesignJourneyCTASectionProps {
   description?: string;
   primaryBtnText?: string;
   primaryBtnUrl?: string;
+  primaryBtnDownload?: string;
   secondaryBtnText?: string;
   secondaryBtnUrl?: string;
   footerSubtext?: string;
@@ -29,6 +30,7 @@ export default function ProgramDesignJourneyCTASection({
   description,
   primaryBtnText = "🚀 Enroll Now",
   primaryBtnUrl = EXTERNAL_URLS.enroll90Days,
+  primaryBtnDownload,
   secondaryBtnText = "📖 View Curriculum",
   secondaryBtnUrl = "#roadmap",
   footerSubtext = "Join thousands of learners building their creative future with Valavan Academy.",
@@ -104,8 +106,9 @@ export default function ProgramDesignJourneyCTASection({
               {/* Primary CTA */}
               <a
                 href={effectivePrimaryUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                download={primaryBtnDownload}
+                target={primaryBtnDownload ? undefined : "_blank"}
+                rel={primaryBtnDownload ? undefined : "noopener noreferrer"}
                 style={{ backgroundColor: "#1748BB", color: "#FFFFFF" }}
                 className="inline-flex items-center justify-center gap-2 bg-[#1748BB] hover:bg-[#133c9e] text-white font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_12px_32px_rgba(23,72,187,0.35)] cursor-pointer"
               >

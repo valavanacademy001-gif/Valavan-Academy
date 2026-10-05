@@ -3,7 +3,7 @@
 import React from "react";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
-import { HelpCircle, Star, ArrowRight } from "lucide-react";
+import { HelpCircle, Star, ArrowRight, CheckCircle2, ArrowDown, Sparkles } from "lucide-react";
 import { EXTERNAL_URLS } from "@/data/site.config";
 
 interface FullStackCreatorOfferSectionProps {
@@ -35,7 +35,15 @@ export default function FullStackCreatorOfferSection({
     offerMap?.description ||
     "AI is changing how creators work. Instead of fearing it, learn how to leverage AI to improve creativity, productivity, research, content creation, and workflow efficiency.";
 
-  const defaultFeatures = [
+  const studentReasons = [
+    "Future-Ready Skills",
+    "Practical Learning",
+    "Portfolio Projects",
+    "Career Growth",
+    "Freelancing Opportunities",
+  ];
+
+  const defaultAiSkills = [
     "AI Design Workflows",
     "AI Content Systems",
     "AI Research Methods",
@@ -44,25 +52,17 @@ export default function FullStackCreatorOfferSection({
     "Creative Automation",
   ];
 
-  const cmsFeatures = offerMap
-    ? [
-        offerMap.feature_1,
-        offerMap.feature_2,
-        offerMap.feature_3,
-        offerMap.feature_4,
-        offerMap.feature_5,
-        offerMap.feature_6,
-      ].filter(Boolean) as string[]
-    : [];
+  const frameworkSteps = [
+    "Design",
+    "Content",
+    "Video",
+    "AI",
+    "Website",
+    "Marketing",
+    "Results",
+  ];
 
-  const effectiveFeatures =
-    features && features.length > 0
-      ? features
-      : cmsFeatures.length > 0
-      ? cmsFeatures
-      : defaultFeatures;
-
-  const cardTitle = offerMap?.card_title || "Full Stack Creator Program";
+  const cardTitle = offerMap?.card_title || "Full Stack Creative™ Framework";
   const cardBadge = offerMap?.card_badge || durationText || "Lifetime Access";
   const buttonText = offerMap?.button_text || "Join Today";
   const cardNote = offerMap?.card_note || "For A Limited Time Only";
@@ -105,6 +105,13 @@ export default function FullStackCreatorOfferSection({
               {effectiveDescription}
             </p>
           </FadeUp>
+
+          {/* Centered Indicator Dot matching Image 2 */}
+          <div className="flex items-center justify-center mt-6">
+            <span className="w-8 h-8 rounded-full border border-[#1748BB]/30 flex items-center justify-center bg-[#1748BB]/5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1748BB]" />
+            </span>
+          </div>
         </div>
 
         {/* ── Master Offer Card ── */}
@@ -112,7 +119,7 @@ export default function FullStackCreatorOfferSection({
           <div className="max-w-5xl mx-auto rounded-[32px] sm:rounded-[40px] bg-white border-2 border-[#1748BB]/20 shadow-[0_20px_60px_rgba(23,72,187,0.08)] p-6 sm:p-10 lg:p-12 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
-              {/* Left Column: Why Students Join */}
+              {/* Left Column: Why Students Join This Program */}
               <div className="lg:col-span-6 space-y-6">
                 <div>
                   <h3 className="font-display font-bold text-xl sm:text-2xl text-[#1E2026] uppercase tracking-wide mb-3">
@@ -123,23 +130,40 @@ export default function FullStackCreatorOfferSection({
                   </div>
                 </div>
 
-                {/* Star Feature Items */}
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-                  {effectiveFeatures.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2.5 font-sans text-sm sm:text-base font-semibold text-[#1E2026]">
-                      <Star size={16} className="text-[#1748BB] fill-[#1748BB] shrink-0" />
-                      <span>{feat}</span>
+                {/* 5 Core Reasons with Checkmarks */}
+                <ul className="space-y-3 pt-1">
+                  {studentReasons.map((reason) => (
+                    <li key={reason} className="flex items-center gap-3 font-sans text-sm sm:text-base font-semibold text-[#1E2026]">
+                      <div className="w-6 h-6 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
+                        <CheckCircle2 size={15} className="text-emerald-600" />
+                      </div>
+                      <span>{reason}</span>
                     </li>
                   ))}
                 </ul>
+
+                {/* Additional AI Capabilities Badges */}
+                <div className="pt-4 border-t border-neutral-100">
+                  <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-3">
+                    Key AI Capabilities Included
+                  </p>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {defaultAiSkills.map((feat) => (
+                      <li key={feat} className="flex items-center gap-2 font-sans text-xs sm:text-sm font-medium text-neutral-700">
+                        <Star size={13} className="text-[#1748BB] fill-[#1748BB] shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               {/* Center Dotted Divider (Desktop only) */}
-              <div className="hidden lg:block lg:col-span-1 h-64 border-r-2 border-dashed border-[#1748BB]/25 mx-auto" />
+              <div className="hidden lg:block lg:col-span-1 h-96 border-r-2 border-dashed border-[#1748BB]/25 mx-auto" />
 
-              {/* Right Column: Full Stack Creator Blue Action Box */}
+              {/* Right Column: Full Stack Creative™ Framework Blue Action Box */}
               <div className="lg:col-span-5">
-                <div className="rounded-[24px] sm:rounded-[30px] bg-[#1748BB] p-8 sm:p-10 text-center text-white relative overflow-hidden shadow-[0_16px_45px_rgba(23,72,187,0.3)] border-2 border-dashed border-white/40">
+                <div className="rounded-[24px] sm:rounded-[30px] bg-[#1748BB] p-7 sm:p-9 text-center text-white relative overflow-hidden shadow-[0_16px_45px_rgba(23,72,187,0.3)] border-2 border-dashed border-white/40">
                   
                   {/* Subtle Background Pattern */}
                   <div
@@ -151,16 +175,40 @@ export default function FullStackCreatorOfferSection({
                     aria-hidden
                   />
 
-                  <div className="relative z-10 space-y-5">
+                  <div className="relative z-10 space-y-3.5">
                     <h4
-                      className="font-display font-bold text-2xl sm:text-3xl text-white leading-tight"
+                      className="font-display font-bold text-xl sm:text-2xl text-white leading-tight"
                       style={{ color: "#FFFFFF" }}
                     >
                       {cardTitle}
                     </h4>
 
+                    {/* Framework Steps Flow */}
+                    <div className="py-2 flex flex-col items-center justify-center space-y-1">
+                      {frameworkSteps.map((step, idx) => {
+                        const isLast = idx === frameworkSteps.length - 1;
+                        return (
+                          <React.Fragment key={step}>
+                            <div
+                              className={`px-5 py-1.5 rounded-full text-xs sm:text-sm font-bold tracking-wide transition-all ${
+                                isLast
+                                  ? "bg-amber-400 text-neutral-900 shadow-md scale-105 border border-amber-300 flex items-center gap-1.5"
+                                  : "bg-white/15 text-white border border-white/20 hover:bg-white/25"
+                              }`}
+                            >
+                              {isLast && <Sparkles size={13} className="text-neutral-900" />}
+                              <span>{step}</span>
+                            </div>
+                            {!isLast && (
+                              <ArrowDown size={14} className="text-white/60 my-0.5" />
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+
                     <p
-                      className="font-sans text-xs sm:text-sm font-semibold tracking-wider uppercase"
+                      className="font-sans text-[11px] sm:text-xs font-semibold tracking-wider uppercase pt-1"
                       style={{ color: "#BACFFF" }}
                     >
                       {cardBadge}
@@ -172,30 +220,25 @@ export default function FullStackCreatorOfferSection({
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
-                        className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-base px-10 py-4 rounded-full hover:scale-105 transition-all duration-200 shadow-[0_10px_30px_rgba(0,0,0,0.25)] w-full sm:w-auto"
+                        className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-3.5 rounded-full hover:scale-105 transition-all duration-200 shadow-[0_10px_30px_rgba(0,0,0,0.25)] w-full"
                       >
                         <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
                           {buttonText}
                         </span>
-                        <ArrowRight size={18} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                        <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
                       </a>
                     </div>
 
-                    <p
-                      className="font-sans text-xs font-medium pt-1"
-                      style={{ color: "#BACFFF" }}
-                    >
+                    <p className="text-[11px] text-white/70 italic">
                       {cardNote}
                     </p>
                   </div>
-
                 </div>
               </div>
 
             </div>
           </div>
         </FadeUp>
-
       </Container>
     </section>
   );
