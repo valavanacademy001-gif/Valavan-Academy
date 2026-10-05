@@ -41,13 +41,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Prompt Engineering & Creative Automation",
     description: "Master Midjourney, ChatGPT, Gemini, ElevenLabs, and creative AI workflows to 10X your output speed.",
     tools: ["ChatGPT", "Midjourney", "Gemini AI", "ElevenLabs", "Claude"],
-    pillX: 380,
+    pillX: 430,
     pillY: 125,
     pillWidth: 170,
     pillHeight: 56,
     lineStartX: 532,
     lineStartY: 228,
-    lineEndX: 465,
+    lineEndX: 505,
     lineEndY: 140,
   },
   // 2: Top Right — DESIGNING
@@ -58,13 +58,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Visual Identity, Typography & Layouts",
     description: "Commercial graphic design principles, color theory, social media creatives, thumbnails, and advertising assets.",
     tools: ["Photoshop", "Illustrator", "Canva Pro", "Typography", "Color Theory"],
-    pillX: 820,
+    pillX: 770,
     pillY: 125,
     pillWidth: 190,
     pillHeight: 56,
     lineStartX: 668,
     lineStartY: 228,
-    lineEndX: 735,
+    lineEndX: 695,
     lineEndY: 140,
   },
   // 3: Middle Left — WEB DESIGN
@@ -75,13 +75,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "High-Converting Websites & Landing Pages",
     description: "Responsive web layouts, WordPress development, Elementor Pro mastery, UI/UX systems, and speed optimization.",
     tools: ["WordPress", "Elementor Pro", "WooCommerce", "Responsive UI", "RankMath"],
-    pillX: 350,
+    pillX: 400,
     pillY: 290,
     pillWidth: 190,
     pillHeight: 56,
-    lineStartX: 508,
+    lineStartX: 505,
     lineStartY: 290,
-    lineEndX: 445,
+    lineEndX: 495,
     lineEndY: 290,
   },
   // 4: Middle Right — EDITING
@@ -92,13 +92,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Cinematic Video Editing & Motion Graphics",
     description: "Viral pacing, storytelling rhythms, Premiere Pro editing, After Effects animations, and audio mastering.",
     tools: ["Premiere Pro", "After Effects", "CapCut Pro", "Sound Design", "Media Encoder"],
-    pillX: 850,
+    pillX: 800,
     pillY: 290,
     pillWidth: 170,
     pillHeight: 56,
-    lineStartX: 692,
+    lineStartX: 695,
     lineStartY: 290,
-    lineEndX: 765,
+    lineEndX: 705,
     lineEndY: 290,
   },
   // 5: Bottom Left — APP DEV
@@ -109,13 +109,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "AI Web Apps & Modern Interactive Tools",
     description: "Building modern interactive web tools, client dashboards, API integrations, and frontend logic with AI.",
     tools: ["Next.js Foundations", "Tailwind / CSS", "AI Web Apps", "API Integration", "Vercel"],
-    pillX: 380,
+    pillX: 430,
     pillY: 455,
     pillWidth: 170,
     pillHeight: 56,
     lineStartX: 532,
     lineStartY: 352,
-    lineEndX: 465,
+    lineEndX: 505,
     lineEndY: 440,
   },
   // 6: Bottom Right — BRANDING
@@ -126,13 +126,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Brand Strategy & Freelance Systems",
     description: "Complete brand guidelines, commercial identity, client acquisition systems, proposal writing, and premium pricing.",
     tools: ["Brand Guidelines", "Client Pitching", "Freelance Systems", "Portfolio", "Pricing Strategy"],
-    pillX: 820,
+    pillX: 770,
     pillY: 455,
     pillWidth: 180,
     pillHeight: 56,
     lineStartX: 668,
     lineStartY: 352,
-    lineEndX: 735,
+    lineEndX: 695,
     lineEndY: 440,
   },
 ];
@@ -216,7 +216,7 @@ export default function ProgramSyllabusMapSection({
 
         {/* ── Connected Interactive Radial Mind-Map ── */}
         <FadeUp delay={0.15}>
-          <div className="max-w-5xl mx-auto relative p-2 sm:p-4">
+          <div className="max-w-6xl mx-auto relative p-2 sm:p-4">
             
             {/* ── Desktop SVG Radial Framework Diagram ── */}
             <div className="hidden md:block relative w-full h-[580px] select-none">
@@ -423,18 +423,18 @@ export default function ProgramSyllabusMapSection({
                     scale: 0.95,
                   }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
-                  className={`absolute z-20 w-[270px] lg:w-[290px] xl:w-[310px] rounded-2xl bg-white/95 backdrop-blur-md border-2 border-[#1748BB]/25 p-4 sm:p-5 shadow-[0_16px_40px_rgba(23,72,187,0.14)] pointer-events-auto ${
+                  className={`absolute z-20 w-[270px] lg:w-[290px] xl:w-[310px] rounded-2xl bg-white/95 backdrop-blur-md border-2 border-[#1748BB]/25 p-4 sm:p-5 shadow-[0_16px_40px_rgba(23,72,187,0.14)] pointer-events-auto transition-all duration-300 ${
                     activeIdx === 0
-                      ? "top-[3%] left-0"
+                      ? "top-[3%] -left-6 md:-left-12 lg:-left-20 xl:-left-24"
                       : activeIdx === 1
-                      ? "top-[3%] right-0"
+                      ? "top-[3%] -right-6 md:-right-12 lg:-right-20 xl:-right-24"
                       : activeIdx === 2
-                      ? "top-[30%] left-0"
+                      ? "top-[28%] -left-8 md:-left-16 lg:-left-24 xl:-left-28"
                       : activeIdx === 3
-                      ? "top-[30%] right-0"
+                      ? "top-[28%] -right-8 md:-right-16 lg:-right-24 xl:-right-28"
                       : activeIdx === 4
-                      ? "bottom-[3%] left-0"
-                      : "bottom-[3%] right-0"
+                      ? "bottom-[3%] -left-6 md:-left-12 lg:-left-20 xl:-left-24"
+                      : "bottom-[3%] -right-6 md:-right-12 lg:-right-20 xl:-right-24"
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2.5">

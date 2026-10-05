@@ -50,15 +50,15 @@ export default function CreatorEconomyBoomSection({
   const card2Source = economyMap?.card_2_source || "(Creator Freelancing Trends)";
 
   const points = [
-    { label: "1X Speed", x: 50, y: 200, value: "Manual Workflow" },
-    { label: "2X Speed", x: 150, y: 165, value: "Multi-Tool" },
-    { label: "4X Speed", x: 250, y: 125, value: "AI Assisted" },
-    { label: "8X Speed", x: 350, y: 80, value: "Workflow Automation" },
-    { label: "10X Velocity", x: 450, y: 40, value: "Full Stack Creative", highlight: "10X Velocity" },
+    { label: "1X Speed", x: 50, y: 165, value: "Manual Workflow" },
+    { label: "2X Speed", x: 150, y: 132, value: "Multi-Tool" },
+    { label: "4X Speed", x: 250, y: 98, value: "AI Assisted" },
+    { label: "8X Speed", x: 350, y: 64, value: "Workflow Automation" },
+    { label: "10X Velocity", x: 450, y: 35, value: "Full Stack Creative", highlight: "10X Velocity" },
   ];
 
-  const polylinePoints = "50,200 150,165 250,125 350,80 450,40";
-  const areaPoints = "50,200 150,165 250,125 350,80 450,40 450,240 50,240";
+  const polylinePoints = "50,165 150,132 250,98 350,64 450,35";
+  const areaPoints = "50,165 150,132 250,98 350,64 450,35 450,195 50,195";
 
   return (
     <section className="py-4 sm:py-6 md:py-8 bg-[#FBFDFF] relative overflow-visible select-none transition-all">
@@ -154,8 +154,9 @@ export default function CreatorEconomyBoomSection({
 
                   {/* SVG Chart */}
                   <svg
-                    viewBox="0 0 500 240"
-                    className="w-full h-32 sm:h-40 overflow-visible"
+                    viewBox="0 0 500 195"
+                    preserveAspectRatio="none"
+                    className="w-full aspect-[2.6/1] sm:aspect-[2.8/1] overflow-visible"
                   >
                     <defs>
                       <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
