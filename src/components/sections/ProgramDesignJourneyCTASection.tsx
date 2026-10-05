@@ -49,7 +49,7 @@ export default function ProgramDesignJourneyCTASection({
     description ||
     supportMap?.description ||
     "If you're ready to build a valuable creative skill, create an impressive portfolio, and open new opportunities, this program is designed for you.";
-  const effectivePrimaryText = primaryBtnText || supportMap?.primary_btn_text || "🚀 Enroll Now";
+  const effectivePrimaryText = primaryBtnText || supportMap?.primary_btn_text || "Enroll Now";
   const effectivePrimaryUrl = primaryBtnUrl || supportMap?.enroll_url || supportMap?.primary_btn_url || EXTERNAL_URLS.enroll90Days;
   const effectiveSecondaryText = secondaryBtnText || supportMap?.secondary_btn_text || "";
   const effectiveSecondaryUrl = secondaryBtnUrl || supportMap?.secondary_btn_url || "";

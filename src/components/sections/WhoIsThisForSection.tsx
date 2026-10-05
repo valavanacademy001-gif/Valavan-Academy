@@ -78,7 +78,7 @@ export default function WhoIsThisForSection({
   });
 
   return (
-    <section className="py-14 sm:py-20 md:py-28 bg-white relative z-20 overflow-hidden border-t border-neutral-200 select-none shadow-[0_-30px_70px_rgba(0,0,0,0.14)] rounded-t-[36px] sm:rounded-t-[50px] -mt-8 sm:-mt-12">
+    <section className="py-14 sm:py-20 md:py-28 bg-white relative z-20 overflow-hidden border-t border-neutral-200 select-none shadow-[0_-25px_60px_rgba(0,0,0,0.12)] rounded-t-[36px] sm:rounded-t-[52px]">
       {/* Soft Ambient Background Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"

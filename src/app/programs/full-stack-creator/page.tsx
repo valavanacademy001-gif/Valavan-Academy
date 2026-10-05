@@ -200,7 +200,7 @@ export default async function FullStackCreatorPage() {
   const buttonText = "Download Brochure";
   const buttonUrl = "/brochure/full-stack-creator-brochure.pdf";
   const buttonDownload = "Full-Stack-Creative-Master-Brochure.pdf";
-  const secondaryButtonText = "🚀 Join The Program";
+  const secondaryButtonText = "Join The Program";
   const secondaryButtonUrl = enrollUrl;
 
   const highlights: HighlightItem[] = [
@@ -278,8 +278,8 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 07 Creator Economy : Why Is Full Stack Creative Booming (Why Now) ── */}
-      <div className="relative min-h-[135vh] sm:min-h-[145vh] lg:min-h-[155vh]">
-        <div className="sticky top-4 sm:top-8 md:top-12 z-10">
+      <div className="relative">
+        <div className="md:sticky md:top-0 md:min-h-screen md:flex md:flex-col md:justify-center z-10 bg-[#FBFDFF] overflow-hidden">
           <CreatorEconomyBoomSection
             badge="WHY NOW"
             titlePrefix="Why Is Full Stack Creative"
@@ -287,13 +287,15 @@ export default async function FullStackCreatorPage() {
             economyMap={economyMap}
           />
         </div>
-      </div>
 
-      {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
-      <WhoIsThisForSection
-        whoMap={whoMap}
-        enrollUrl={enrollUrl}
-      />
+        {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
+        <div className="relative z-20">
+          <WhoIsThisForSection
+            whoMap={whoMap}
+            enrollUrl={enrollUrl}
+          />
+        </div>
+      </div>
 
       {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}
       <GuidanceMentorsSection
@@ -314,12 +316,12 @@ export default async function FullStackCreatorPage() {
         titleHighlight="Creators."
         headlineSub="The Advantage No Longer Belongs To People Who Know One Tool."
         description="It Belongs To People Who Can Connect Multiple Skills And Create Results."
-        primaryBtnText="🚀 Join The Program"
+        primaryBtnText="Join The Program"
         primaryBtnUrl={enrollUrl}
         secondaryBtnText="Download Brochure"
         secondaryBtnUrl="/brochure/full-stack-creator-brochure.pdf"
         secondaryBtnDownload="Full-Stack-Creative-Master-Brochure.pdf"
-        footerSubtext="Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy 🚀"
+        footerSubtext="Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy"
       />
 
       {/* ── 13 Frequently Asked Questions (10 Core Program FAQs) ── */}

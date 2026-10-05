@@ -50,18 +50,18 @@ export default function CreatorEconomyBoomSection({
   const card2Source = economyMap?.card_2_source || "(Creator Freelancing Trends)";
 
   const points = [
-    { label: "1X Speed", x: 40, y: 260, value: "Manual Workflow" },
-    { label: "2X Speed", x: 130, y: 185, value: "Multi-Tool" },
-    { label: "4X Speed", x: 240, y: 170, value: "AI Assisted" },
-    { label: "8X Speed", x: 340, y: 95, value: "Workflow Automation", highlight: "8.5X Velocity" },
-    { label: "10X Velocity", x: 440, y: 55, value: "Full Stack Creative" },
+    { label: "1X Speed", x: 50, y: 200, value: "Manual Workflow" },
+    { label: "2X Speed", x: 150, y: 165, value: "Multi-Tool" },
+    { label: "4X Speed", x: 250, y: 125, value: "AI Assisted" },
+    { label: "8X Speed", x: 350, y: 80, value: "Workflow Automation" },
+    { label: "10X Velocity", x: 450, y: 40, value: "Full Stack Creative", highlight: "10X Velocity" },
   ];
 
-  const polylinePoints = "40,260 130,185 190,205 240,170 340,95 440,55";
-  const areaPoints = "40,260 130,185 190,205 240,170 340,95 440,55 440,300 40,300";
+  const polylinePoints = "50,200 150,165 250,125 350,80 450,40";
+  const areaPoints = "50,200 150,165 250,125 350,80 450,40 450,240 50,240";
 
   return (
-    <section className="pt-6 sm:pt-10 pb-10 sm:pb-14 bg-[#FBFDFF] relative overflow-visible border-t border-neutral-100 select-none transition-all">
+    <section className="py-4 sm:py-6 md:py-8 bg-[#FBFDFF] relative overflow-visible select-none transition-all">
       {/* Soft Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
@@ -154,12 +154,12 @@ export default function CreatorEconomyBoomSection({
 
                   {/* SVG Chart */}
                   <svg
-                    viewBox="0 0 480 300"
-                    className="w-full h-36 sm:h-44 overflow-visible"
+                    viewBox="0 0 500 240"
+                    className="w-full h-32 sm:h-40 overflow-visible"
                   >
                     <defs>
                       <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#1748BB" stopOpacity="0.3" />
+                        <stop offset="0%" stopColor="#1748BB" stopOpacity="0.32" />
                         <stop offset="100%" stopColor="#1748BB" stopOpacity="0.0" />
                       </linearGradient>
                     </defs>
@@ -187,16 +187,16 @@ export default function CreatorEconomyBoomSection({
                     {/* Coordinate Milestone Dots */}
                     {points.map((pt, i) => (
                       <g key={pt.label}>
-                        {/* Glow halo on high points */}
+                        {/* Glow halo on peak point */}
                         {pt.highlight && (
                           <motion.circle
                             cx={pt.x}
                             cy={pt.y}
-                            r="28"
+                            r="22"
                             fill="#1748BB"
-                            fillOpacity="0.12"
-                            animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+                            fillOpacity="0.15"
+                            animate={{ scale: [1, 1.3, 1], opacity: [0.35, 0.7, 0.35] }}
+                            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                           />
                         )}
 
@@ -214,28 +214,27 @@ export default function CreatorEconomyBoomSection({
                           transition={{ delay: 0.3 + i * 0.15, duration: 0.4 }}
                         />
 
-                        {/* Spotlight 8.5X Velocity Badge on Peak */}
+                        {/* Spotlight 10X Velocity Badge on Peak */}
                         {pt.highlight && (
-                          <g transform={`translate(${pt.x}, ${pt.y - 42})`}>
-                            {/* Blue badge */}
+                          <g transform={`translate(${pt.x - 28}, ${pt.y - 18})`}>
                             <motion.g
-                              initial={{ y: 10, opacity: 0 }}
+                              initial={{ y: 8, opacity: 0 }}
                               whileInView={{ y: 0, opacity: 1 }}
                               viewport={{ once: true }}
-                              transition={{ delay: 1.1, duration: 0.4 }}
+                              transition={{ delay: 1, duration: 0.4 }}
                             >
                               <rect
-                                x="-48"
-                                y="-17"
-                                width="96"
-                                height="30"
-                                rx="15"
+                                x="-44"
+                                y="-13"
+                                width="88"
+                                height="26"
+                                rx="13"
                                 fill="#1748BB"
                                 filter="drop-shadow(0 4px 10px rgba(23,72,187,0.35))"
                               />
                               <text
                                 x="0"
-                                y="2"
+                                y="4"
                                 textAnchor="middle"
                                 fill="#FFFFFF"
                                 fontSize="11"
@@ -251,15 +250,20 @@ export default function CreatorEconomyBoomSection({
                     ))}
                   </svg>
 
-                  {/* 5 Milestone X-Axis Pills */}
-                  <div className="flex items-center justify-between pt-2 border-t border-[#BFDBFE]/60">
+                  {/* 5 Milestone X-Axis Pills (1:1 aligned with SVG columns) */}
+                  <div className="grid grid-cols-5 gap-1 pt-2.5 border-t border-[#BFDBFE]/60 text-center">
                     {points.map((pt) => (
-                      <span
-                        key={pt.label}
-                        className="px-2 sm:px-3 py-1 rounded-full bg-white border border-[#BFDBFE] text-[10px] sm:text-xs font-bold text-[#1748BB] shadow-sm hover:bg-[#1748BB] hover:text-white transition-colors cursor-default"
-                      >
-                        {pt.label}
-                      </span>
+                      <div key={pt.label} className="flex justify-center">
+                        <span
+                          className={`px-1.5 sm:px-2.5 py-1 rounded-full border text-[10px] sm:text-xs font-bold transition-colors cursor-default whitespace-nowrap ${
+                            pt.highlight
+                              ? "bg-[#1748BB] text-white border-[#1748BB] shadow-sm"
+                              : "bg-white border-[#BFDBFE] text-[#1748BB] shadow-xs hover:bg-[#1748BB] hover:text-white"
+                          }`}
+                        >
+                          {pt.label}
+                        </span>
+                      </div>
                     ))}
                   </div>
 

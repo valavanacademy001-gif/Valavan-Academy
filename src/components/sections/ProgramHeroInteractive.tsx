@@ -86,7 +86,7 @@ export default function ProgramHeroInteractive({
   buttonText = "Download Brochure",
   buttonUrl,
   buttonDownload,
-  secondaryButtonText = "🚀 Join The Program",
+  secondaryButtonText = "Join The Program",
   secondaryButtonUrl,
   youtubeId,
   videoUrl,

@@ -98,7 +98,7 @@ export default function WinsStatsSection() {
                   {/* Bar 4: Peak */}
                   <div className="flex-1 flex flex-col items-center gap-2">
                     <div className="w-full h-60 rounded-2xl bg-white border border-white shadow-xl flex items-center justify-center">
-                      <span className="text-[#1748BB] font-bold text-xs">🚀 3X</span>
+                      <span className="text-[#1748BB] font-bold text-xs">3X</span>
                     </div>
                     <span className="text-xs font-bold text-white">Graduate</span>
                   </div>

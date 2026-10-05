@@ -185,7 +185,7 @@ export default async function GraphicDesignProgramPage() {
         titleHighlight={supportMap.title_highlight || "Starts Today."}
         headlineSub={supportMap.headline_sub || "Every successful designer started with a blank canvas. The difference is they started."}
         description={supportMap.description || "If you're ready to build a valuable creative skill, create an impressive portfolio, and open new opportunities, this program is designed for you."}
-        primaryBtnText={supportMap.primary_btn_text || "🚀 Enroll Now"}
+        primaryBtnText={supportMap.primary_btn_text || "Enroll Now"}
         primaryBtnUrl={supportMap.enroll_url || supportMap.primary_btn_url || enrollUrl}
         secondaryBtnText={supportMap.secondary_btn_text || "📖 View Curriculum"}
         secondaryBtnUrl={supportMap.secondary_btn_url || "#roadmap"}

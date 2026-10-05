@@ -75,7 +75,7 @@ export default function TemplatesWorldBonusSection({
     bonusMap?.image ||
     bonusMap?.image_url ||
     "/assets/programs/full-stack-creator/Untitled-design-3-1-1-2048x1152-1-1024x576.webp";
-  const effectiveButtonText = buttonText || bonusMap?.button_text || "🚀 Join Full Stack Creator Program";
+  const effectiveButtonText = buttonText || bonusMap?.button_text || "Join Full Stack Creator Program";
   const effectiveEnrollUrl = bonusMap?.enroll_url || enrollUrl;
 
   return (

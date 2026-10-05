@@ -41,14 +41,14 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Prompt Engineering & Creative Automation",
     description: "Master Midjourney, ChatGPT, Gemini, ElevenLabs, and creative AI workflows to 10X your output speed.",
     tools: ["ChatGPT", "Midjourney", "Gemini AI", "ElevenLabs", "Claude"],
-    pillX: 210,
+    pillX: 380,
     pillY: 125,
     pillWidth: 170,
     pillHeight: 56,
-    lineStartX: 432,
-    lineStartY: 222,
-    lineEndX: 295,
-    lineEndY: 138,
+    lineStartX: 532,
+    lineStartY: 228,
+    lineEndX: 465,
+    lineEndY: 140,
   },
   // 2: Top Right — DESIGNING
   {
@@ -58,14 +58,14 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Visual Identity, Typography & Layouts",
     description: "Commercial graphic design principles, color theory, social media creatives, thumbnails, and advertising assets.",
     tools: ["Photoshop", "Illustrator", "Canva Pro", "Typography", "Color Theory"],
-    pillX: 790,
+    pillX: 820,
     pillY: 125,
     pillWidth: 190,
     pillHeight: 56,
-    lineStartX: 568,
-    lineStartY: 222,
-    lineEndX: 705,
-    lineEndY: 138,
+    lineStartX: 668,
+    lineStartY: 228,
+    lineEndX: 735,
+    lineEndY: 140,
   },
   // 3: Middle Left — WEB DESIGN
   {
@@ -75,13 +75,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "High-Converting Websites & Landing Pages",
     description: "Responsive web layouts, WordPress development, Elementor Pro mastery, UI/UX systems, and speed optimization.",
     tools: ["WordPress", "Elementor Pro", "WooCommerce", "Responsive UI", "RankMath"],
-    pillX: 185,
+    pillX: 350,
     pillY: 290,
-    pillWidth: 200,
+    pillWidth: 190,
     pillHeight: 56,
-    lineStartX: 404,
+    lineStartX: 508,
     lineStartY: 290,
-    lineEndX: 285,
+    lineEndX: 445,
     lineEndY: 290,
   },
   // 4: Middle Right — EDITING
@@ -92,13 +92,13 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Cinematic Video Editing & Motion Graphics",
     description: "Viral pacing, storytelling rhythms, Premiere Pro editing, After Effects animations, and audio mastering.",
     tools: ["Premiere Pro", "After Effects", "CapCut Pro", "Sound Design", "Media Encoder"],
-    pillX: 815,
+    pillX: 850,
     pillY: 290,
     pillWidth: 170,
     pillHeight: 56,
-    lineStartX: 596,
+    lineStartX: 692,
     lineStartY: 290,
-    lineEndX: 725,
+    lineEndX: 765,
     lineEndY: 290,
   },
   // 5: Bottom Left — APP DEV
@@ -109,14 +109,14 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "AI Web Apps & Modern Interactive Tools",
     description: "Building modern interactive web tools, client dashboards, API integrations, and frontend logic with AI.",
     tools: ["Next.js Foundations", "Tailwind / CSS", "AI Web Apps", "API Integration", "Vercel"],
-    pillX: 210,
+    pillX: 380,
     pillY: 455,
     pillWidth: 170,
     pillHeight: 56,
-    lineStartX: 432,
-    lineStartY: 358,
-    lineEndX: 295,
-    lineEndY: 442,
+    lineStartX: 532,
+    lineStartY: 352,
+    lineEndX: 465,
+    lineEndY: 440,
   },
   // 6: Bottom Right — BRANDING
   {
@@ -126,14 +126,14 @@ const FRAMEWORK_PILLARS: FrameworkPillar[] = [
     tagline: "Brand Strategy & Freelance Systems",
     description: "Complete brand guidelines, commercial identity, client acquisition systems, proposal writing, and premium pricing.",
     tools: ["Brand Guidelines", "Client Pitching", "Freelance Systems", "Portfolio", "Pricing Strategy"],
-    pillX: 790,
+    pillX: 820,
     pillY: 455,
     pillWidth: 180,
     pillHeight: 56,
-    lineStartX: 568,
-    lineStartY: 358,
-    lineEndX: 705,
-    lineEndY: 442,
+    lineStartX: 668,
+    lineStartY: 352,
+    lineEndX: 735,
+    lineEndY: 440,
   },
 ];
 
@@ -221,13 +221,13 @@ export default function ProgramSyllabusMapSection({
             {/* ── Desktop SVG Radial Framework Diagram ── */}
             <div className="hidden md:block relative w-full h-[580px] select-none">
               <svg
-                viewBox="0 0 1000 580"
+                viewBox="0 0 1200 580"
                 className="w-full h-full drop-shadow-sm"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 {/* 1. Background Concentric Guide Watermark Rings */}
                 <circle
-                  cx="500"
+                  cx="600"
                   cy="290"
                   r="230"
                   fill="none"
@@ -236,7 +236,7 @@ export default function ProgramSyllabusMapSection({
                   strokeOpacity="0.08"
                 />
                 <circle
-                  cx="500"
+                  cx="600"
                   cy="290"
                   r="275"
                   fill="none"
@@ -247,7 +247,7 @@ export default function ProgramSyllabusMapSection({
 
                 {/* 2. Faint Watermark "VA" in Center Background */}
                 <text
-                  x="500"
+                  x="600"
                   y="355"
                   textAnchor="middle"
                   fontFamily="system-ui, sans-serif"
@@ -320,7 +320,7 @@ export default function ProgramSyllabusMapSection({
                 <g className="cursor-pointer">
                   {/* Subtle Pulse Halo when active */}
                   <circle
-                    cx="500"
+                    cx="600"
                     cy="290"
                     r="104"
                     fill="#1748BB"
@@ -329,7 +329,7 @@ export default function ProgramSyllabusMapSection({
                   />
                   {/* Solid Center Circle */}
                   <circle
-                    cx="500"
+                    cx="600"
                     cy="290"
                     r="95"
                     fill="#1748BB"
@@ -337,7 +337,7 @@ export default function ProgramSyllabusMapSection({
                   />
                   {/* Center Text: FULL STACK */}
                   <text
-                    x="500"
+                    x="600"
                     y="298"
                     textAnchor="middle"
                     fill="#FFFFFF"
@@ -406,6 +406,72 @@ export default function ProgramSyllabusMapSection({
                   );
                 })}
               </svg>
+
+              {/* ── Dynamic Floating Detail Box Beside Active Pillar on Desktop ── */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activePillar.id}
+                  initial={{
+                    opacity: 0,
+                    x: (activeIdx === 0 || activeIdx === 2 || activeIdx === 4) ? -18 : 18,
+                    scale: 0.95,
+                  }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{
+                    opacity: 0,
+                    x: (activeIdx === 0 || activeIdx === 2 || activeIdx === 4) ? -12 : 12,
+                    scale: 0.95,
+                  }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className={`absolute z-20 w-[270px] lg:w-[290px] xl:w-[310px] rounded-2xl bg-white/95 backdrop-blur-md border-2 border-[#1748BB]/25 p-4 sm:p-5 shadow-[0_16px_40px_rgba(23,72,187,0.14)] pointer-events-auto ${
+                    activeIdx === 0
+                      ? "top-[3%] left-0"
+                      : activeIdx === 1
+                      ? "top-[3%] right-0"
+                      : activeIdx === 2
+                      ? "top-[30%] left-0"
+                      : activeIdx === 3
+                      ? "top-[30%] right-0"
+                      : activeIdx === 4
+                      ? "bottom-[3%] left-0"
+                      : "bottom-[3%] right-0"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 mb-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-[#1748BB] text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <activePillar.icon size={20} className="text-white" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-display font-bold text-base text-[#1E2026]">
+                          {activePillar.name}
+                        </span>
+                        <span className="text-[10px] font-sans font-bold text-[#1748BB] bg-[#1748BB]/10 px-2 py-0.5 rounded-full uppercase">
+                          Pillar 0{activeIdx + 1}
+                        </span>
+                      </div>
+                      <p className="font-sans text-[11px] text-[#1748BB] font-semibold leading-tight mt-0.5">
+                        {activePillar.tagline}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="font-sans text-xs text-neutral-600 mb-3 leading-relaxed">
+                    {activePillar.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-2 border-t border-neutral-100">
+                    {activePillar.tools.map((tool, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[10px] font-sans font-medium px-2 py-0.5 rounded-md bg-neutral-100 text-neutral-700 border border-neutral-200"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* ── Mobile & Tablet Layout ── */}
@@ -444,8 +510,8 @@ export default function ProgramSyllabusMapSection({
               </div>
             </div>
 
-            {/* ── Active Pillar Detailed Breakdown Card ── */}
-            <div className="mt-6 sm:mt-10 max-w-2xl mx-auto">
+            {/* ── Active Pillar Detailed Breakdown Card (Mobile Only) ── */}
+            <div className="mt-6 sm:mt-10 max-w-2xl mx-auto block md:hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activePillar.id}

@@ -91,7 +91,7 @@ export default function FullStackFinalCTASection({
                 onClick={handleJoinClick}
                 className="inline-flex items-center justify-center gap-2.5 bg-white hover:bg-[#F0F5FF] text-[#1748BB] border-2 border-[#1748BB] font-sans font-bold text-base sm:text-lg px-9 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-sm cursor-pointer"
               >
-                <span className="text-[#1748BB] font-bold">🚀 Join The Program</span>
+                <span className="text-[#1748BB] font-bold">Join The Program</span>
                 <ArrowRight size={19} className="text-[#1748BB]" />
               </button>
             </div>

@@ -41,7 +41,7 @@ const BENEFITS = [
     title: "Career-Focused Skills",
     description:
       "We teach only what the industry demands today — Photoshop, Figma, Premiere Pro, AI tools, and more.",
-    icon: "🚀",
+    icon: "📈",
   },
 ];
 
