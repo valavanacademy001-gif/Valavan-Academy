@@ -113,43 +113,59 @@ export default function ToolsCoveredSection({
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
-            {/* Infinite Horizontal Carousel Track */}
-            <div className="relative w-full overflow-hidden flex items-center py-2">
-              <motion.div
-                className="flex items-center gap-6 sm:gap-10 md:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
-                animate={{
-                  x: ["0%", "-50%"],
-                }}
-                transition={{
-                  x: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 22,
-                    ease: "linear",
-                  },
-                }}
-                whileHover={{ animationPlayState: "paused" }}
-              >
-                {marqueeItems.map((tool, index) => (
-                  <div
-                    key={`${tool.name}-${index}`}
-                    className="group shrink-0 transition-transform duration-300 hover:scale-115 flex items-center justify-center"
-                    title={tool.name}
-                  >
-                    {/* Big Square Icon Card */}
-                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 bg-white flex items-center justify-center border border-neutral-200/80 shadow-[0_8px_24px_rgba(0,0,0,0.07)] group-hover:shadow-[0_14px_35px_rgba(23,72,187,0.18)] group-hover:border-[#1748BB]/40 transition-all duration-300">
-                      <Image
-                        src={tool.logo}
-                        alt={tool.name}
-                        width={90}
-                        height={90}
-                        className="object-contain w-full h-full drop-shadow-sm group-hover:drop-shadow-md transition-all"
-                      />
+            {/* Content: Single Banner vs Multi-Tool Marquee */}
+            {effectiveTools.length === 1 ? (
+              <div className="w-full flex items-center justify-center py-2">
+                <div className="w-full max-w-4xl rounded-2xl overflow-hidden bg-white p-3 sm:p-5 flex items-center justify-center">
+                  <Image
+                    src={effectiveTools[0].logo}
+                    alt={effectiveTools[0].name}
+                    width={1800}
+                    height={240}
+                    unoptimized={effectiveTools[0].logo.startsWith('data:') || effectiveTools[0].logo.startsWith('http')}
+                    className="w-full h-auto max-h-36 sm:max-h-52 md:max-h-64 object-contain drop-shadow-sm transition-transform duration-300 hover:scale-[1.01]"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="relative w-full overflow-hidden flex items-center py-2">
+                <motion.div
+                  className="flex items-center gap-6 sm:gap-10 md:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
+                  animate={{
+                    x: ["0%", "-50%"],
+                  }}
+                  transition={{
+                    x: {
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      duration: 22,
+                      ease: "linear",
+                    },
+                  }}
+                  whileHover={{ animationPlayState: "paused" }}
+                >
+                  {marqueeItems.map((tool, index) => (
+                    <div
+                      key={`${tool.name}-${index}`}
+                      className="group shrink-0 transition-transform duration-300 hover:scale-115 flex items-center justify-center"
+                      title={tool.name}
+                    >
+                      {/* Big Square Icon Card */}
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 bg-white flex items-center justify-center border border-neutral-200/80 shadow-[0_8px_24px_rgba(0,0,0,0.07)] group-hover:shadow-[0_14px_35px_rgba(23,72,187,0.18)] group-hover:border-[#1748BB]/40 transition-all duration-300">
+                        <Image
+                          src={tool.logo}
+                          alt={tool.name}
+                          width={90}
+                          height={90}
+                          unoptimized={tool.logo.startsWith('data:') || tool.logo.startsWith('http')}
+                          className="object-contain w-full h-full drop-shadow-sm group-hover:drop-shadow-md transition-all"
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
+                  ))}
+                </motion.div>
+              </div>
+            )}
 
           </div>
         </FadeUp>

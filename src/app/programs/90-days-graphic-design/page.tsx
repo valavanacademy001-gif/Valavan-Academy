@@ -38,6 +38,33 @@ export const revalidate = 0;
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getGraphicDesignProgramData, getPublishedLearnerStories } from "@/lib/cms";
 
+function resolveProgramTools(
+  softwareTools: unknown,
+  fallbackTools: any[]
+): any[] {
+  if (!Array.isArray(softwareTools) || softwareTools.length === 0) {
+    return fallbackTools;
+  }
+  return softwareTools.map((t) => {
+    if (typeof t === "string") {
+      const match = fallbackTools.find(
+        (f) => f.name.toLowerCase() === t.toLowerCase()
+      );
+      if (match) return match;
+      const toolFile = t.toLowerCase().replace(/[^a-z0-9]/g, "-");
+      return { name: t, logo: `/assets/tools/${toolFile}.png` };
+    }
+    if (typeof t === "object" && t !== null && "name" in t) {
+      const obj = t as { name: string; image?: string; logo?: string };
+      return {
+        name: obj.name,
+        logo: obj.image || obj.logo || "/assets/tools/ps.png",
+      };
+    }
+    return { name: String(t), logo: "/assets/tools/ps.png" };
+  });
+}
+
 export default async function GraphicDesignProgramPage() {
   const [cmsProgram, cmsData, learnerStories, pageSEO] = await Promise.all([
     getProgramBySlug("90-days-graphic-design"),
@@ -55,6 +82,8 @@ export default async function GraphicDesignProgramPage() {
   const supportMap = cmsData.support || {};
   const faqMap = cmsData.faq || {};
   const stickyMap = cmsData.sticky || {};
+
+  const toolsList = resolveProgramTools(cmsProgram?.software_tools, DEFAULT_GRAPHIC_DESIGN_TOOLS);
 
   const duration = heroMap.highlight_duration || cmsProgram?.duration || "90 Days";
   const title = cmsProgram?.title || "90 Days Graphic Design Mastery Program";
@@ -105,6 +134,7 @@ export default async function GraphicDesignProgramPage() {
         titlePrefix={toolsMap.title_prefix || "Creative Tools &"}
         titleHighlight={toolsMap.title_highlight || "AI Software."}
         subtitle={toolsMap.description || "Gain practical mastery across industry-standard vector, raster, and AI design tools."}
+        tools={toolsList}
         toolsMap={toolsMap}
       />
 

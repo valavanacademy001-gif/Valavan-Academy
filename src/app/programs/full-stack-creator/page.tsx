@@ -87,6 +87,33 @@ export const revalidate = 0;
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getFullStackCreatorProgramData } from "@/lib/cms";
 
+function resolveProgramTools(
+  softwareTools: unknown,
+  fallbackTools: ToolItem[]
+): ToolItem[] {
+  if (!Array.isArray(softwareTools) || softwareTools.length === 0) {
+    return fallbackTools;
+  }
+  return softwareTools.map((t) => {
+    if (typeof t === "string") {
+      const match = fallbackTools.find(
+        (f) => f.name.toLowerCase() === t.toLowerCase()
+      );
+      if (match) return match;
+      const toolFile = t.toLowerCase().replace(/[^a-z0-9]/g, "-");
+      return { name: t, logo: `/assets/tools/${toolFile}.png` };
+    }
+    if (typeof t === "object" && t !== null && "name" in t) {
+      const obj = t as { name: string; image?: string; logo?: string };
+      return {
+        name: obj.name,
+        logo: obj.image || obj.logo || "/assets/tools/ps.png",
+      };
+    }
+    return { name: String(t), logo: "/assets/tools/ps.png" };
+  });
+}
+
 export default async function FullStackCreatorPage() {
   const [cmsProgram, cmsData, pageSEO] = await Promise.all([
     getProgramBySlug("full-stack-creator"),
@@ -107,6 +134,8 @@ export default async function FullStackCreatorPage() {
   const finalCtaMap = cmsData.finalCta || {};
   const faqMap = cmsData.faq || {};
   const stickyMap = cmsData.sticky || {};
+
+  const toolsList = resolveProgramTools(cmsProgram?.software_tools, FULL_STACK_TOOLS);
 
   const duration = heroMap.highlight_duration || cmsProgram?.duration || "6 Months";
   const title = cmsProgram?.title || "Full Stack Digital Creator Program";
@@ -152,7 +181,7 @@ export default async function FullStackCreatorPage() {
         titlePrefix={toolsMap.title_prefix || "Master the Complete"}
         titleHighlight={toolsMap.title_highlight || "Creative Arsenal."}
         subtitle={toolsMap.description || "Learn Premiere Pro, After Effects, Figma, Webflow, WordPress, and cutting-edge Generative AI."}
-        tools={FULL_STACK_TOOLS}
+        tools={toolsList}
         toolsMap={toolsMap}
       />
 
