@@ -27,6 +27,7 @@ import ProgramStickyBottomCTA from "@/components/sections/ProgramStickyBottomCTA
 import WorkshopFAQAccordion from "./WorkshopFAQAccordion";
 import WorkshopCountdownTimer from "./WorkshopCountdownTimer";
 
+import { notFound } from "next/navigation";
 import { generatePageMetadata, getPageSEO } from "@/lib/seo";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
@@ -112,6 +113,11 @@ export default async function ThreeHoursLiveWorkshopPage() {
     getWorkshopProgramData(),
     getPageSEO("/programs/3-hours-live-workshop"),
   ]);
+
+  // If program is hidden or unpublished in CMS, return 404
+  if (program && (program.is_visible === false || program.status === "draft" || program.status === "archived")) {
+    notFound();
+  }
 
   const heroMap = cmsData.hero || {};
   const discoverMap = cmsData.whatYouDiscover || {};

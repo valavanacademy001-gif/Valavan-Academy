@@ -14,19 +14,32 @@ export async function generateMetadata(): Promise<Metadata> {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { getPublishedPrograms } from "@/lib/cms";
+import { getPublishedPrograms, getSectionVisibilityMap, getSectionFieldMap } from "@/lib/cms";
 
 export default async function ProgramsPage() {
-  const [programs, pageSEO] = await Promise.all([
+  const [programs, pageSEO, visibilityMap, workshopData] = await Promise.all([
     getPublishedPrograms(),
     getPageSEO("/programs"),
+    getSectionVisibilityMap("programs"),
+    getSectionFieldMap("programs", "workshop"),
   ]);
+
+  // Determine if Workshop Section should be displayed:
+  // 1. Must NOT be hidden in CMS -> Pages -> Programs (section 'workshop' or 'live_workshop')
+  // 2. Workshop program itself must NOT be hidden / unpublished in CMS -> Programs table
+  const workshopProgram = programs.find(
+    (p) => p.slug.includes("3-hours") || p.slug.includes("workshop")
+  );
+  const showWorkshopSection =
+    visibilityMap.workshop !== false &&
+    visibilityMap.live_workshop !== false &&
+    Boolean(workshopProgram && workshopProgram.is_visible !== false);
 
   return (
     <main className="min-h-screen bg-white pt-10 sm:pt-14">
       <JsonLdSchema pageSEO={pageSEO} />
-      {/* ── 01 Live Workshop Section ── */}
-      <WorkshopSection />
+      {/* ── 01 Live Workshop Section (Controlled via CMS) ── */}
+      {showWorkshopSection && <WorkshopSection data={workshopData} />}
 
       {/* ── 02 Choose Your Learning Path (Card-Based Program Showcase) ── */}
       <ProgramsSection programs={programs} />

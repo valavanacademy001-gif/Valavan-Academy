@@ -54,16 +54,14 @@ function renderMenuLabel(label: string) {
 
 const MEGA_MENUS: Record<string, MegaMenuConfig> = {
   programs: {
-    col1Title: "PROGRAMS & WORKSHOPS",
+    col1Title: "PROGRAMS & TRACKS",
     col1Links: [
-      { label: "3 Hours Live Workshop", href: "/programs/3-hours-live-workshop" },
       { label: "Graphic Design (90 Days)", href: "/programs/90-days-graphic-design" },
       { label: "Full Stack Creator (6 Mo)", href: "/programs/full-stack-creator" },
       { label: "View All Programs", href: "/programs" },
     ],
     col2Title: "TRACKS & TOPICS",
     col2Links: [
-      { label: "Printing Business Workshop", href: "/programs/3-hours-live-workshop" },
       { label: "Design & Branding", href: "/programs/90-days-graphic-design" },
       { label: "Video & Web Creation", href: "/programs/full-stack-creator" },
       { label: "Need Guidance?", href: "/programs#community-help" },
@@ -71,11 +69,11 @@ const MEGA_MENUS: Record<string, MegaMenuConfig> = {
     overview: {
       title: "OVERVIEW",
       description:
-        "Job-ready creative programs and live business workshops designed to master high-income skills and build client-ready portfolios.",
+        "Job-ready creative programs designed to master high-income skills and build client-ready portfolios.",
       link: "/programs",
       linkLabel: "Explore All Programs",
-      image: "/assets/workshop/printing-business-workshop.webp",
-      imageCaption: "3 Hours Live Workshop & Programs",
+      image: "/assets/images/hero/ai-powered-GD.webp",
+      imageCaption: "Programs & Career Tracks",
     },
   },
   about: {

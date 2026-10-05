@@ -20,10 +20,16 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
-const PROGRAM_ITEMS = [
+interface ProgramMenuItem {
+  label: string;
+  href: string;
+  badge?: string;
+  external?: boolean;
+}
+
+const PROGRAM_ITEMS: ProgramMenuItem[] = [
   { label: "90-Day Graphic Design Mastery", href: "/programs/90-days-graphic-design", badge: "90 Days" },
   { label: "Full Stack Creator Program", href: "/programs/full-stack-creator", badge: "6 Months" },
-  { label: "Live Printing Business Workshop", href: "https://valavanacademy.in/workshop/", external: true, badge: "Live" },
   { label: "Explore All Programs →", href: "/programs#programs" },
 ];
 
