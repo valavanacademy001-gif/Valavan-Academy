@@ -108,22 +108,22 @@ export default function ToolsCoveredSection({
 
         {/* Tools Covered Card Box with Infinite Marquee Loop */}
         <FadeUp delay={0.15}>
-          <div className="max-w-5xl mx-auto rounded-[24px] sm:rounded-[36px] border border-[#1748BB]/35 bg-white p-7 sm:p-10 shadow-[0_12px_40px_rgba(23,72,187,0.06)] relative overflow-hidden">
+          <div className="max-w-5xl mx-auto rounded-[24px] sm:rounded-[32px] border border-[#1748BB]/30 bg-white p-5 sm:p-7 md:p-8 shadow-[0_10px_35px_rgba(23,72,187,0.05)] relative overflow-hidden">
             
             {/* Header inside Box */}
-            <h3 className="font-display font-bold text-center text-xl sm:text-2xl md:text-3xl text-[#1E2026] mb-8 sm:mb-10 tracking-tight">
+            <h3 className="font-display font-bold text-center text-lg sm:text-xl md:text-2xl text-[#1E2026] mb-5 sm:mb-6 tracking-tight">
               Tools Covered
             </h3>
 
             {/* Left & Right Soft Fade Gradients for Luxury Carousel Edge */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
             {/* Content: Single Banner Duplicated Infinite Loop vs Multi-Tool Marquee */}
             {effectiveTools.length === 1 ? (
-              <div className="relative w-full overflow-hidden flex items-center py-4">
+              <div className="relative w-full overflow-hidden flex items-center py-2">
                 <motion.div
-                  className="flex items-center gap-10 sm:gap-14 shrink-0 cursor-grab active:cursor-grabbing"
+                  className="flex items-center gap-8 sm:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
                   animate={{
                     x: ["0%", "-50%"],
                   }}
@@ -131,7 +131,7 @@ export default function ToolsCoveredSection({
                     x: {
                       repeat: Infinity,
                       repeatType: "loop",
-                      duration: 32,
+                      duration: 25,
                       ease: "linear",
                     },
                   }}
@@ -140,12 +140,12 @@ export default function ToolsCoveredSection({
                   {[0, 1, 2, 3].map((idx) => (
                     <div
                       key={idx}
-                      className="shrink-0 flex items-center h-12 sm:h-16 md:h-20 select-none"
+                      className="shrink-0 flex items-center select-none"
                     >
                       <img
                         src={effectiveTools[0].logo}
                         alt={effectiveTools[0].name}
-                        className="h-full w-auto object-contain max-w-none drop-shadow-sm select-none pointer-events-none transition-transform duration-300"
+                        className="h-7 sm:h-8 md:h-9 w-auto max-h-[38px] object-contain max-w-none select-none pointer-events-none transition-transform duration-300"
                         draggable={false}
                       />
                     </div>
