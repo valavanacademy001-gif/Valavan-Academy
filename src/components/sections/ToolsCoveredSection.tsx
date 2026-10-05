@@ -113,19 +113,38 @@ export default function ToolsCoveredSection({
             <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
-            {/* Content: Single Banner vs Multi-Tool Marquee */}
+            {/* Content: Single Banner Duplicated Infinite Loop vs Multi-Tool Marquee */}
             {effectiveTools.length === 1 ? (
-              <div className="w-full flex items-center justify-center py-2">
-                <div className="w-full max-w-4xl rounded-2xl overflow-hidden bg-white p-3 sm:p-5 flex items-center justify-center">
-                  <Image
-                    src={effectiveTools[0].logo}
-                    alt={effectiveTools[0].name}
-                    width={1800}
-                    height={240}
-                    unoptimized={effectiveTools[0].logo.startsWith('data:') || effectiveTools[0].logo.startsWith('http')}
-                    className="w-full h-auto max-h-36 sm:max-h-52 md:max-h-64 object-contain drop-shadow-sm transition-transform duration-300 hover:scale-[1.01]"
-                  />
-                </div>
+              <div className="relative w-full overflow-hidden flex items-center py-4">
+                <motion.div
+                  className="flex items-center gap-10 sm:gap-14 shrink-0 cursor-grab active:cursor-grabbing"
+                  animate={{
+                    x: ["0%", "-50%"],
+                  }}
+                  transition={{
+                    x: {
+                      repeat: Infinity,
+                      repeatType: "loop",
+                      duration: 32,
+                      ease: "linear",
+                    },
+                  }}
+                  whileHover={{ animationPlayState: "paused" }}
+                >
+                  {[0, 1, 2, 3].map((idx) => (
+                    <div
+                      key={idx}
+                      className="shrink-0 flex items-center h-12 sm:h-16 md:h-20 select-none"
+                    >
+                      <img
+                        src={effectiveTools[0].logo}
+                        alt={effectiveTools[0].name}
+                        className="h-full w-auto object-contain max-w-none drop-shadow-sm select-none pointer-events-none transition-transform duration-300"
+                        draggable={false}
+                      />
+                    </div>
+                  ))}
+                </motion.div>
               </div>
             ) : (
               <div className="relative w-full overflow-hidden flex items-center py-2">
