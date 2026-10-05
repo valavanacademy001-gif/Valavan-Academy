@@ -138,13 +138,15 @@ export default async function FullStackCreatorPage() {
   const toolsList = resolveProgramTools(cmsProgram?.software_tools, FULL_STACK_TOOLS);
 
   const duration = heroMap.highlight_duration || cmsProgram?.duration || "6 Months";
-  const title = cmsProgram?.title || "Full Stack Digital Creator Program";
-  const description = heroMap.description || cmsProgram?.description || "A complete 6-month career transformation program covering Video Editing, Web Design, UI/UX, WordPress, AI Tools, and Freelancing — everything you need to build high-income creative skills in Tamil.";
+  const title = cmsProgram?.title || "Full Stack Creative Master";
+  const description =
+    heroMap.description ||
+    "Master Design, Video Editing, AI, Websites & Ai App Dev and Combine it all to Build A Future-Proof Creative Career In The AI Era.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enrollFullStack;
-  const buttonText = heroMap.enroll_btn_text || "🚀 Join The Program";
+  const buttonText = heroMap.enroll_btn_text || "Download Brochure";
   const secondaryButtonText = heroMap.secondary_btn_text || "📖 View Curriculum";
-  const secondaryButtonUrl = heroMap.secondary_btn_url || "#syllabus";
+  const secondaryButtonUrl = heroMap.secondary_btn_url || "#framework";
 
   const highlights: HighlightItem[] = [
     { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
@@ -154,8 +156,14 @@ export default async function FullStackCreatorPage() {
     { iconType: "ai", value: heroMap.stat_ai || heroMap.stat_guidance || "AI Integrated Learning" },
   ];
 
-  const titlePrefix = heroMap.title_prefix || "Become A Full Stack ";
-  const titleHighlight = heroMap.title_highlight || "Digital Creator.";
+  const titlePrefix =
+    heroMap.title_prefix && heroMap.title_prefix !== "Become A Full Stack "
+      ? heroMap.title_prefix
+      : "BECOME A\nFULL STACK";
+  const titleHighlight =
+    heroMap.title_highlight && heroMap.title_highlight !== "Digital Creator."
+      ? heroMap.title_highlight
+      : "CREATIVE MASTER.";
 
   return (
     <main className="min-h-screen bg-white">
@@ -185,8 +193,11 @@ export default async function FullStackCreatorPage() {
         toolsMap={toolsMap}
       />
 
-      {/* ── 03 Syllabus Mind-Map Section (Why we are different from others) ── */}
+      {/* ── 03 The Full Stack Creative Framework (Why Fullstack) ── */}
       <ProgramSyllabusMapSection
+        badge="WHY FULLSTACK"
+        title="THE FULL STACK CREATIVE FRAMEWORK™"
+        subtitle="Master the 6 interconnected pillars that turn you into an unstoppable creative leader in the AI era."
         syllabusMap={syllabusMap}
       />
 

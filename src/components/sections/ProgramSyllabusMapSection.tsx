@@ -5,194 +5,209 @@ import { motion, AnimatePresence } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeUp from "@/components/animations/FadeUp";
 import {
-  Share2,
-  Image as ImageIcon,
-  ShieldCheck,
-  Scissors,
-  PlaySquare,
-  Briefcase,
+  Sparkles,
+  Bot,
+  Palette,
   Globe,
-  Cpu,
-  PenTool,
+  Scissors,
+  Code2,
+  ShieldCheck,
 } from "lucide-react";
 
-export interface NodeItem {
+export interface FrameworkPillar {
   id: string;
-  title: string;
-  icon: (isActive: boolean) => React.ReactNode;
-  // Position coordinates in percentage for desktop lines & cards
-  x: number; // percentage
-  y: number; // percentage
-  lineStartX: number; // percent
-  lineStartY: number; // percent
-  centerTargetX: number; // percent
-  centerTargetY: number; // percent
+  name: string;
+  icon: React.ElementType;
+  tagline: string;
+  description: string;
+  tools: string[];
+  // Desktop SVG coordinates (viewBox 0 0 1000 580)
+  pillX: number;
+  pillY: number;
+  pillWidth: number;
+  pillHeight: number;
+  lineStartX: number;
+  lineStartY: number;
+  lineEndX: number;
+  lineEndY: number;
 }
 
-const CLOCKWISE_NODES: NodeItem[] = [
-  // 0: Top Left (Social Media Design)
+const FRAMEWORK_PILLARS: FrameworkPillar[] = [
+  // 1: Top Left — GEN AI
   {
-    id: "social-media",
-    title: "Social Media Design",
-    icon: (active) => <Share2 size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 18,
-    y: 8,
-    lineStartX: 18,
-    lineStartY: 16,
-    centerTargetX: 42,
-    centerTargetY: 42,
+    id: "gen-ai",
+    name: "GEN AI",
+    icon: Bot,
+    tagline: "Prompt Engineering & Creative Automation",
+    description: "Master Midjourney, ChatGPT, Gemini, ElevenLabs, and creative AI workflows to 10X your output speed.",
+    tools: ["ChatGPT", "Midjourney", "Gemini AI", "ElevenLabs", "Claude"],
+    pillX: 210,
+    pillY: 125,
+    pillWidth: 170,
+    pillHeight: 56,
+    lineStartX: 432,
+    lineStartY: 222,
+    lineEndX: 295,
+    lineEndY: 138,
   },
-  // 1: Top Center (Thumbnail Design)
+  // 2: Top Right — DESIGNING
   {
-    id: "thumbnail",
-    title: "Thumbnail Design",
-    icon: (active) => <ImageIcon size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 50,
-    y: 6,
-    lineStartX: 50,
-    lineStartY: 15,
-    centerTargetX: 50,
-    centerTargetY: 40,
+    id: "designing",
+    name: "DESIGNING",
+    icon: Palette,
+    tagline: "Visual Identity, Typography & Layouts",
+    description: "Commercial graphic design principles, color theory, social media creatives, thumbnails, and advertising assets.",
+    tools: ["Photoshop", "Illustrator", "Canva Pro", "Typography", "Color Theory"],
+    pillX: 790,
+    pillY: 125,
+    pillWidth: 190,
+    pillHeight: 56,
+    lineStartX: 568,
+    lineStartY: 222,
+    lineEndX: 705,
+    lineEndY: 138,
   },
-  // 2: Top Right (Branding)
+  // 3: Middle Left — WEB DESIGN
+  {
+    id: "web-design",
+    name: "WEB DESIGN",
+    icon: Globe,
+    tagline: "High-Converting Websites & Landing Pages",
+    description: "Responsive web layouts, WordPress development, Elementor Pro mastery, UI/UX systems, and speed optimization.",
+    tools: ["WordPress", "Elementor Pro", "WooCommerce", "Responsive UI", "RankMath"],
+    pillX: 185,
+    pillY: 290,
+    pillWidth: 200,
+    pillHeight: 56,
+    lineStartX: 404,
+    lineStartY: 290,
+    lineEndX: 285,
+    lineEndY: 290,
+  },
+  // 4: Middle Right — EDITING
+  {
+    id: "editing",
+    name: "EDITING",
+    icon: Scissors,
+    tagline: "Cinematic Video Editing & Motion Graphics",
+    description: "Viral pacing, storytelling rhythms, Premiere Pro editing, After Effects animations, and audio mastering.",
+    tools: ["Premiere Pro", "After Effects", "CapCut Pro", "Sound Design", "Media Encoder"],
+    pillX: 815,
+    pillY: 290,
+    pillWidth: 170,
+    pillHeight: 56,
+    lineStartX: 596,
+    lineStartY: 290,
+    lineEndX: 725,
+    lineEndY: 290,
+  },
+  // 5: Bottom Left — APP DEV
+  {
+    id: "app-dev",
+    name: "APP DEV",
+    icon: Code2,
+    tagline: "AI Web Apps & Modern Interactive Tools",
+    description: "Building modern interactive web tools, client dashboards, API integrations, and frontend logic with AI.",
+    tools: ["Next.js Foundations", "Tailwind / CSS", "AI Web Apps", "API Integration", "Vercel"],
+    pillX: 210,
+    pillY: 455,
+    pillWidth: 170,
+    pillHeight: 56,
+    lineStartX: 432,
+    lineStartY: 358,
+    lineEndX: 295,
+    lineEndY: 442,
+  },
+  // 6: Bottom Right — BRANDING
   {
     id: "branding",
-    title: "Branding",
-    icon: (active) => <ShieldCheck size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 82,
-    y: 8,
-    lineStartX: 82,
-    lineStartY: 16,
-    centerTargetX: 58,
-    centerTargetY: 42,
-  },
-  // 3: Middle Right (Video Editing)
-  {
-    id: "video-editing",
-    title: "Video Editing",
-    icon: (active) => <Scissors size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 90,
-    y: 36,
-    lineStartX: 83,
-    lineStartY: 38,
-    centerTargetX: 63,
-    centerTargetY: 47,
-  },
-  // 4: Lower Right (Content Creation)
-  {
-    id: "content-creation",
-    title: "Content Creation",
-    icon: (active) => <PlaySquare size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 90,
-    y: 64,
-    lineStartX: 83,
-    lineStartY: 64,
-    centerTargetX: 63,
-    centerTargetY: 53,
-  },
-  // 5: Bottom Right (Freelancing System)
-  {
-    id: "freelancing",
-    title: "Freelancing System",
-    icon: (active) => <Briefcase size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 74,
-    y: 90,
-    lineStartX: 74,
-    lineStartY: 82,
-    centerTargetX: 58,
-    centerTargetY: 58,
-  },
-  // 6: Bottom Left (WordPress)
-  {
-    id: "wordpress",
-    title: "WordPress",
-    icon: (active) => <Globe size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 26,
-    y: 90,
-    lineStartX: 26,
-    lineStartY: 82,
-    centerTargetX: 42,
-    centerTargetY: 58,
-  },
-  // 7: Lower Left (AI Design Workflow)
-  {
-    id: "ai-workflow",
-    title: "AI Design Workflow",
-    icon: (active) => <Cpu size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 10,
-    y: 64,
-    lineStartX: 17,
-    lineStartY: 64,
-    centerTargetX: 37,
-    centerTargetY: 53,
-  },
-  // 8: Mid-Upper Left (Logo)
-  {
-    id: "logo",
-    title: "Logo",
-    icon: (active) => <PenTool size={20} className={active ? "text-[#1748BB]" : "text-white"} />,
-    x: 10,
-    y: 36,
-    lineStartX: 17,
-    lineStartY: 38,
-    centerTargetX: 37,
-    centerTargetY: 47,
+    name: "BRANDING",
+    icon: ShieldCheck,
+    tagline: "Brand Strategy & Freelance Systems",
+    description: "Complete brand guidelines, commercial identity, client acquisition systems, proposal writing, and premium pricing.",
+    tools: ["Brand Guidelines", "Client Pitching", "Freelance Systems", "Portfolio", "Pricing Strategy"],
+    pillX: 790,
+    pillY: 455,
+    pillWidth: 180,
+    pillHeight: 56,
+    lineStartX: 568,
+    lineStartY: 358,
+    lineEndX: 705,
+    lineEndY: 442,
   },
 ];
 
 interface ProgramSyllabusMapSectionProps {
+  badge?: string;
   title?: string;
   subtitle?: string;
   syllabusMap?: Record<string, string>;
 }
 
 export default function ProgramSyllabusMapSection({
-  title,
-  subtitle,
+  badge = "WHY FULLSTACK",
+  title = "THE FULL STACK CREATIVE FRAMEWORK™",
+  subtitle = "Master the 6 interconnected pillars that turn you into an unstoppable creative leader in the AI era.",
   syllabusMap,
 }: ProgramSyllabusMapSectionProps) {
   const [activeIdx, setActiveIdx] = useState(0);
 
+  const effectiveBadge = syllabusMap?.badge || badge || "WHY FULLSTACK";
   const effectiveTitle =
-    title ||
     (syllabusMap?.title_prefix
       ? `${syllabusMap.title_prefix} ${syllabusMap.title_highlight || ""}`.trim()
-      : "Why we are different from others");
+      : title) || "THE FULL STACK CREATIVE FRAMEWORK™";
   const effectiveSubtitle =
-    subtitle ||
     syllabusMap?.description ||
-    "Learn directly from our mentors and engage 24/7 within the community";
+    subtitle ||
+    "Master the 6 interconnected pillars that turn you into an unstoppable creative leader in the AI era.";
 
-  // Clockwise rotating loop every 1.5s
+  // Auto rotate through the 6 pillars smoothly
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveIdx((prev) => (prev + 1) % CLOCKWISE_NODES.length);
-    }, 1500);
-
+      setActiveIdx((prev) => (prev + 1) % FRAMEWORK_PILLARS.length);
+    }, 2800);
     return () => clearInterval(timer);
   }, []);
 
+  const activePillar = FRAMEWORK_PILLARS[activeIdx] || FRAMEWORK_PILLARS[0];
+
   return (
-    <section id="syllabus" className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] relative overflow-hidden border-b border-neutral-100 select-none scroll-mt-10">
-      {/* Soft Ambient Glow */}
+    <section
+      id="framework"
+      className="py-12 sm:py-20 md:py-28 bg-[#FAFCFF] relative overflow-hidden border-b border-neutral-100 select-none scroll-mt-10"
+    >
+      {/* Soft Ambient Radial Background Glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[520px] bg-[#1748BB]/4 rounded-full blur-[140px] pointer-events-none"
         aria-hidden
       />
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-14">
+          {/* Badge: WHY FULLSTACK */}
           <FadeUp delay={0}>
+            <div className="inline-flex items-center justify-center mb-3.5">
+              <span className="inline-flex items-center gap-2 border border-[#1748BB] text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-xs uppercase tracking-wider">
+                <Sparkles size={13} className="text-[#1748BB]" />
+                {effectiveBadge}
+              </span>
+            </div>
+          </FadeUp>
+
+          {/* Section Title: THE FULL STACK CREATIVE FRAMEWORK™ */}
+          <FadeUp delay={0.05}>
             <h2
-              className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-3"
-              style={{ fontSize: "clamp(30px, 4.2vw, 52px)" }}
+              className="font-display font-extrabold text-[#1E2026] leading-tight tracking-tight uppercase mb-3"
+              style={{ fontSize: "clamp(28px, 4vw, 48px)" }}
             >
               {effectiveTitle}
             </h2>
           </FadeUp>
 
-          <FadeUp delay={0.05}>
+          {/* Subtitle */}
+          <FadeUp delay={0.1}>
             <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
               {effectiveSubtitle}
             </p>
@@ -200,138 +215,278 @@ export default function ProgramSyllabusMapSection({
         </div>
 
         {/* ── Connected Interactive Radial Mind-Map ── */}
-        <FadeUp delay={0.1}>
-          <div className="max-w-4xl mx-auto relative p-2 sm:p-6">
+        <FadeUp delay={0.15}>
+          <div className="max-w-5xl mx-auto relative p-2 sm:p-4">
             
-            {/* Desktop Radial Layout with Rotating Glowing Connection Lines */}
-            <div className="hidden md:block relative h-[560px] w-full">
-              
-              {/* SVG Connecting Branch Lines with Dynamic Active Glow */}
+            {/* ── Desktop SVG Radial Framework Diagram ── */}
+            <div className="hidden md:block relative w-full h-[580px] select-none">
               <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                aria-hidden
+                viewBox="0 0 1000 580"
+                className="w-full h-full drop-shadow-sm"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {CLOCKWISE_NODES.map((node, i) => {
+                {/* 1. Background Concentric Guide Watermark Rings */}
+                <circle
+                  cx="500"
+                  cy="290"
+                  r="230"
+                  fill="none"
+                  stroke="#1748BB"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.08"
+                />
+                <circle
+                  cx="500"
+                  cy="290"
+                  r="275"
+                  fill="none"
+                  stroke="#1748BB"
+                  strokeWidth="1"
+                  strokeOpacity="0.04"
+                />
+
+                {/* 2. Faint Watermark "VA" in Center Background */}
+                <text
+                  x="500"
+                  y="355"
+                  textAnchor="middle"
+                  fontFamily="system-ui, sans-serif"
+                  fontWeight="900"
+                  fontSize="210"
+                  fill="#1748BB"
+                  fillOpacity="0.035"
+                  letterSpacing="-8"
+                  className="pointer-events-none select-none"
+                >
+                  VA
+                </text>
+
+                {/* 3. Connecting Radial Lines with Terminal Rings */}
+                {FRAMEWORK_PILLARS.map((pillar, i) => {
                   const isActive = i === activeIdx;
 
                   return (
-                    <line
-                      key={node.id}
-                      x1={`${node.lineStartX}%`}
-                      y1={`${node.lineStartY}%`}
-                      x2={`${node.centerTargetX}%`}
-                      y2={`${node.centerTargetY}%`}
-                      stroke={isActive ? "#1748BB" : "#CBD5E1"}
-                      strokeWidth={isActive ? 3 : 1.5}
-                      strokeDasharray={isActive ? "none" : "none"}
-                      className="transition-all duration-500"
-                    />
+                    <g key={`line-${pillar.id}`}>
+                      {/* Dynamic Background Glow for Active Line */}
+                      {isActive && (
+                        <line
+                          x1={pillar.lineStartX}
+                          y1={pillar.lineStartY}
+                          x2={pillar.lineEndX}
+                          y2={pillar.lineEndY}
+                          stroke="#1748BB"
+                          strokeWidth="7"
+                          strokeOpacity="0.25"
+                          strokeLinecap="round"
+                        />
+                      )}
+
+                      {/* Main Connecting Blue Line */}
+                      <line
+                        x1={pillar.lineStartX}
+                        y1={pillar.lineStartY}
+                        x2={pillar.lineEndX}
+                        y2={pillar.lineEndY}
+                        stroke="#1748BB"
+                        strokeWidth={isActive ? "3" : "2.5"}
+                        strokeLinecap="round"
+                        className="transition-all duration-300"
+                      />
+
+                      {/* Terminal Ring at Center Circle End */}
+                      <circle
+                        cx={pillar.lineStartX}
+                        cy={pillar.lineStartY}
+                        r="6"
+                        fill="#FFFFFF"
+                        stroke="#1748BB"
+                        strokeWidth="2.5"
+                      />
+
+                      {/* Terminal Ring at Outer Node End */}
+                      <circle
+                        cx={pillar.lineEndX}
+                        cy={pillar.lineEndY}
+                        r="6"
+                        fill="#FFFFFF"
+                        stroke="#1748BB"
+                        strokeWidth="2.5"
+                      />
+                    </g>
+                  );
+                })}
+
+                {/* 4. Center Circle Hub: FULL STACK */}
+                <g className="cursor-pointer">
+                  {/* Subtle Pulse Halo when active */}
+                  <circle
+                    cx="500"
+                    cy="290"
+                    r="104"
+                    fill="#1748BB"
+                    fillOpacity="0.12"
+                    className="animate-pulse"
+                  />
+                  {/* Solid Center Circle */}
+                  <circle
+                    cx="500"
+                    cy="290"
+                    r="95"
+                    fill="#1748BB"
+                    className="drop-shadow-[0_12px_32px_rgba(23,72,187,0.32)]"
+                  />
+                  {/* Center Text: FULL STACK */}
+                  <text
+                    x="500"
+                    y="298"
+                    textAnchor="middle"
+                    fill="#FFFFFF"
+                    fontFamily="var(--font-display), sans-serif"
+                    fontWeight="800"
+                    fontSize="22"
+                    letterSpacing="1"
+                    className="select-none pointer-events-none uppercase"
+                  >
+                    FULL STACK
+                  </text>
+                </g>
+
+                {/* 5. 6 Outer Pill Capsules */}
+                {FRAMEWORK_PILLARS.map((pillar, i) => {
+                  const isActive = i === activeIdx;
+
+                  return (
+                    <g
+                      key={`pill-${pillar.id}`}
+                      className="cursor-pointer transition-transform duration-300"
+                      onClick={() => setActiveIdx(i)}
+                      onMouseEnter={() => setActiveIdx(i)}
+                    >
+                      {/* Active Glow behind Pill */}
+                      {isActive && (
+                        <rect
+                          x={pillar.pillX - pillar.pillWidth / 2 - 4}
+                          y={pillar.pillY - pillar.pillHeight / 2 - 4}
+                          width={pillar.pillWidth + 8}
+                          height={pillar.pillHeight + 8}
+                          rx={32}
+                          fill="#1748BB"
+                          fillOpacity="0.2"
+                        />
+                      )}
+
+                      {/* Pill Capsule Body */}
+                      <rect
+                        x={pillar.pillX - pillar.pillWidth / 2}
+                        y={pillar.pillY - pillar.pillHeight / 2}
+                        width={pillar.pillWidth}
+                        height={pillar.pillHeight}
+                        rx={28}
+                        fill="#1748BB"
+                        className={`transition-all duration-300 drop-shadow-[0_6px_20px_rgba(23,72,187,0.22)] ${
+                          isActive ? "filter brightness-105 scale-105" : "hover:brightness-110"
+                        }`}
+                      />
+
+                      {/* Pill Label Text */}
+                      <text
+                        x={pillar.pillX}
+                        y={pillar.pillY + 6}
+                        textAnchor="middle"
+                        fill="#FFFFFF"
+                        fontFamily="var(--font-display), sans-serif"
+                        fontWeight="700"
+                        fontSize="15"
+                        letterSpacing="1.2"
+                        className="select-none pointer-events-none uppercase"
+                      >
+                        {pillar.name}
+                      </text>
+                    </g>
                   );
                 })}
               </svg>
+            </div>
 
-              {/* Center "Syllabus" Box */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="w-56 h-36 rounded-[24px] bg-white border-2 border-dashed border-[#1748BB] shadow-[0_16px_45px_rgba(23,72,187,0.12)] flex items-center justify-center p-6 text-center transition-all duration-300">
-                  <span
-                    className="font-serif text-3xl sm:text-4xl font-bold tracking-wide"
-                    style={{ color: "#1748BB" }}
-                  >
-                    Syllabus
+            {/* ── Mobile & Tablet Layout ── */}
+            <div className="block md:hidden space-y-6">
+              {/* Central Full Stack Hub on Mobile */}
+              <div className="relative flex justify-center items-center py-4">
+                <div className="w-40 h-40 rounded-full bg-[#1748BB] text-white flex flex-col items-center justify-center text-center p-4 shadow-[0_12px_36px_rgba(23,72,187,0.35)] border-4 border-white ring-4 ring-[#1748BB]/20">
+                  <span className="font-display font-extrabold text-xl tracking-wider uppercase">
+                    FULL STACK
+                  </span>
+                  <span className="text-[10px] text-blue-200 mt-1 uppercase font-semibold">
+                    Creative Hub
                   </span>
                 </div>
               </div>
 
-              {/* 9 Clockwise Animated Surrounding Nodes */}
-              {CLOCKWISE_NODES.map((node, i) => {
-                const isActive = i === activeIdx;
-
-                return (
-                  <div
-                    key={node.id}
-                    style={{
-                      position: "absolute",
-                      left: `${node.x}%`,
-                      top: `${node.y}%`,
-                      transform: "translate(-50%, -50%)",
-                      zIndex: isActive ? 30 : 20,
-                    }}
-                    onMouseEnter={() => setActiveIdx(i)}
-                  >
-                    <div
-                      className={`w-36 sm:w-40 p-3 sm:p-3.5 rounded-[20px] transition-all duration-500 text-center flex flex-col items-center justify-center gap-2 cursor-pointer ${
-                        isActive
-                          ? "bg-[#1748BB] text-white border-2 border-[#1748BB] scale-110 shadow-[0_16px_40px_rgba(23,72,187,0.35)] ring-4 ring-[#1748BB]/15"
-                          : "bg-white text-[#1E2026] border-2 border-[#1748BB]/30 hover:border-[#1748BB] shadow-[0_8px_25px_rgba(23,72,187,0.08)] hover:scale-105"
-                      }`}
-                    >
-                      {/* Icon Container */}
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300 shadow-sm ${
-                          isActive
-                            ? "bg-white text-[#1748BB]"
-                            : "bg-[#1748BB] text-white"
-                        }`}
-                      >
-                        {node.icon(isActive)}
-                      </div>
-
-                      {/* Title */}
-                      <span
-                        className={`font-display font-semibold text-xs sm:text-sm leading-tight transition-colors duration-300 ${
-                          isActive ? "text-white" : "text-[#1E2026]"
-                        }`}
-                      >
-                        {node.title}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Mobile / Tablet Friendly Grid Layout with Rotating Active Highlight */}
-            <div className="block md:hidden space-y-6">
-              {/* Center Badge on Mobile */}
-              <div className="w-full max-w-xs mx-auto py-4.5 rounded-[22px] bg-white border-2 border-dashed border-[#1748BB] shadow-md text-center">
-                <span className="font-serif text-3xl font-bold" style={{ color: "#1748BB" }}>
-                  Syllabus
-                </span>
-              </div>
-
-              {/* Mobile 2/3 Column Grid with Sequential Loop Highlighting */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
-                {CLOCKWISE_NODES.map((item, idx) => {
-                  const isActive = idx === activeIdx;
+              {/* 6 Blue Pill Buttons in Responsive 2-Column Grid */}
+              <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+                {FRAMEWORK_PILLARS.map((pillar, i) => {
+                  const isActive = i === activeIdx;
 
                   return (
-                    <div
-                      key={item.id}
-                      onClick={() => setActiveIdx(idx)}
-                      className={`p-3.5 rounded-[18px] text-center shadow-sm flex flex-col items-center justify-center gap-2 transition-all duration-400 cursor-pointer ${
+                    <button
+                      key={pillar.id}
+                      onClick={() => setActiveIdx(i)}
+                      className={`py-3.5 px-4 rounded-full font-display font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 shadow-md flex items-center justify-center text-center cursor-pointer ${
                         isActive
-                          ? "bg-[#1748BB] text-white border-2 border-[#1748BB] scale-105 shadow-lg"
-                          : "bg-white text-[#1E2026] border-2 border-[#1748BB]/30"
+                          ? "bg-[#1748BB] text-white ring-4 ring-[#1748BB]/25 scale-105 shadow-[0_8px_25px_rgba(23,72,187,0.35)]"
+                          : "bg-[#1748BB] text-white/90 hover:brightness-110"
                       }`}
                     >
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm ${
-                          isActive ? "bg-white text-[#1748BB]" : "bg-[#1748BB] text-white"
-                        }`}
-                      >
-                        {item.icon(isActive)}
-                      </div>
-                      <span
-                        className={`font-display font-semibold text-xs leading-tight ${
-                          isActive ? "text-white" : "text-[#1E2026]"
-                        }`}
-                      >
-                        {item.title}
-                      </span>
-                    </div>
+                      {pillar.name}
+                    </button>
                   );
                 })}
               </div>
+            </div>
+
+            {/* ── Active Pillar Detailed Breakdown Card ── */}
+            <div className="mt-6 sm:mt-10 max-w-2xl mx-auto">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activePillar.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25 }}
+                  className="rounded-2xl sm:rounded-3xl bg-white border border-[#1748BB]/20 p-5 sm:p-7 shadow-[0_12px_36px_rgba(23,72,187,0.08)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#1748BB] text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <activePillar.icon size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-display font-bold text-base sm:text-lg text-[#1E2026]">
+                          {activePillar.name}
+                        </span>
+                        <span className="text-[11px] font-sans font-semibold text-[#1748BB] bg-[#1748BB]/10 px-2.5 py-0.5 rounded-full">
+                          Pillar 0{activeIdx + 1}
+                        </span>
+                      </div>
+                      <p className="font-sans text-xs sm:text-sm text-neutral-600 mt-1 leading-snug">
+                        {activePillar.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Tool Badges */}
+                  <div className="flex flex-wrap items-center gap-1.5 shrink-0 sm:max-w-[210px]">
+                    {activePillar.tools.map((tool, idx) => (
+                      <span
+                        key={idx}
+                        className="text-[10px] sm:text-[11px] font-sans font-medium px-2.5 py-1 rounded-lg bg-neutral-100 text-neutral-700 border border-neutral-200"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
           </div>

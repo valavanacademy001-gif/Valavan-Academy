@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
-import { ArrowLeft, ArrowRight, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck, BookOpen, Bot } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck, BookOpen, Bot } from "lucide-react";
 
 export interface HighlightItem {
   iconType: "clock" | "globe" | "level" | "work" | "students" | "projects" | "lessons" | "access" | "guidance" | "skills" | "book" | "ai" | "bot" | string;
@@ -237,11 +237,11 @@ export default function ProgramHeroInteractive({
                 </div>
 
                 <h1
-                  className="font-display font-bold text-white leading-[1.04] tracking-tight uppercase"
+                  className="font-display font-bold text-white leading-[1.04] tracking-tight uppercase whitespace-pre-line"
                   style={{ fontSize: "clamp(34px, 4.4vw, 58px)" }}
                 >
-                  <span className="text-white block">{titlePrefix}</span>
-                  <span className="text-white block">{titleHighlight}</span>
+                  <span className="text-white block whitespace-pre-line">{titlePrefix}</span>
+                  <span className="text-white block whitespace-pre-line">{titleHighlight}</span>
                 </h1>
               </div>
 
@@ -283,7 +283,11 @@ export default function ProgramHeroInteractive({
                   <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
                     {buttonText}
                   </span>
-                  <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                  {buttonText?.toLowerCase().includes("brochure") || buttonText?.toLowerCase().includes("download") ? (
+                    <Download size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                  ) : (
+                    <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                  )}
                 </a>
 
                 <a
