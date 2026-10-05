@@ -173,6 +173,7 @@ export default function SkillsMoneyCarouselSection({
                   src={item.src}
                   alt={item.alt}
                   fill
+                  unoptimized={item.src.startsWith('data:') || item.src.startsWith('http')}
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
