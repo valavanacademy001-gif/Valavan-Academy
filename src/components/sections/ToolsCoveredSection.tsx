@@ -60,7 +60,13 @@ export default function ToolsCoveredSection({
   tools = DEFAULT_GRAPHIC_DESIGN_TOOLS,
   toolsMap,
 }: ToolsCoveredSectionProps) {
-  const effectiveTools = toolsMap ? extractToolsFromMap(toolsMap, tools) : tools;
+  // Prioritize explicit tools (from CMS Programs editor) over legacy toolsMap
+  const effectiveTools =
+    tools && tools.length > 0
+      ? tools
+      : toolsMap
+      ? extractToolsFromMap(toolsMap, DEFAULT_GRAPHIC_DESIGN_TOOLS)
+      : DEFAULT_GRAPHIC_DESIGN_TOOLS;
   // Duplicate tools array 4 times for a perfectly seamless, gapless infinite loop
   const marqueeItems = [...effectiveTools, ...effectiveTools, ...effectiveTools, ...effectiveTools];
 
