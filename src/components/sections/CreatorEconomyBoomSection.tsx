@@ -50,18 +50,18 @@ export default function CreatorEconomyBoomSection({
   const card2Source = economyMap?.card_2_source || "(Creator Freelancing Trends)";
 
   const points = [
-    { label: "2 LPA", x: 40, y: 260, value: "Beginner" },
-    { label: "4 LPA", x: 130, y: 185, value: "Junior Designer" },
-    { label: "6 LPA", x: 240, y: 170, value: "Full Stack Creator" },
-    { label: "8 LPA", x: 340, y: 95, value: "Lead Designer", highlight: "8.5 LPA" },
-    { label: "10 LPA", x: 440, y: 55, value: "Top Freelance Consultant" },
+    { label: "1X Speed", x: 40, y: 260, value: "Manual Workflow" },
+    { label: "2X Speed", x: 130, y: 185, value: "Multi-Tool" },
+    { label: "4X Speed", x: 240, y: 170, value: "AI Assisted" },
+    { label: "8X Speed", x: 340, y: 95, value: "Workflow Automation", highlight: "8.5X Velocity" },
+    { label: "10X Velocity", x: 440, y: 55, value: "Full Stack Creative" },
   ];
 
   const polylinePoints = "40,260 130,185 190,205 240,170 340,95 440,55";
   const areaPoints = "40,260 130,185 190,205 240,170 340,95 440,55 440,300 40,300";
 
   return (
-    <section className="py-10 sm:py-20 md:py-28 bg-[#FBFDFF] sticky top-12 sm:top-16 md:top-20 z-10 overflow-visible border-t border-neutral-100 select-none transition-all">
+    <section className="pt-6 sm:pt-10 pb-10 sm:pb-14 bg-[#FBFDFF] relative overflow-visible border-t border-neutral-100 select-none transition-all">
       {/* Soft Ambient Glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[#1748BB]/5 rounded-full blur-[140px] pointer-events-none"
@@ -70,9 +70,9 @@ export default function CreatorEconomyBoomSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
           <FadeUp delay={0}>
-            <div className="inline-flex items-center justify-center mb-4">
+            <div className="inline-flex items-center justify-center mb-3">
               <span className="inline-flex items-center gap-2 border border-[#1748BB]/30 text-[#1748BB] font-sans text-xs font-bold px-4 py-1.5 rounded-full bg-[#1748BB]/5 shadow-sm">
                 <Sparkles size={13} className="text-[#1748BB]" />
                 {effectiveBadge}
@@ -82,8 +82,8 @@ export default function CreatorEconomyBoomSection({
 
           <FadeUp delay={0.05}>
             <h2
-              className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-3.5"
-              style={{ fontSize: "clamp(30px, 4.2vw, 52px)" }}
+              className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-2.5"
+              style={{ fontSize: "clamp(26px, 3.8vw, 46px)" }}
             >
               {effectiveTitlePrefix}{" "}
               <span style={{ color: "#1748BB" }} className="!text-[#1748BB]">
@@ -93,7 +93,7 @@ export default function CreatorEconomyBoomSection({
           </FadeUp>
 
           <FadeUp delay={0.1}>
-            <p className="font-sans text-neutral-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
+            <p className="font-sans text-neutral-600 text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-normal">
               {effectiveDescription}
             </p>
           </FadeUp>
@@ -105,10 +105,10 @@ export default function CreatorEconomyBoomSection({
           {/* ── Card 1: Explosive Growth in India + Animated Interactive Line Chart ── */}
           <div className="lg:col-span-7 flex">
             <FadeUp delay={0.15} className="w-full flex">
-              <div className="w-full rounded-[28px] sm:rounded-[36px] bg-white border-2 border-[#1748BB]/25 p-7 sm:p-9 shadow-[0_16px_45px_rgba(23,72,187,0.08)] flex flex-col justify-between hover:shadow-[0_22px_55px_rgba(23,72,187,0.15)] transition-all duration-300">
+              <div className="w-full rounded-[24px] sm:rounded-[32px] bg-white border-2 border-[#1748BB]/25 p-5 sm:p-7 shadow-[0_16px_45px_rgba(23,72,187,0.08)] flex flex-col justify-between hover:shadow-[0_22px_55px_rgba(23,72,187,0.15)] transition-all duration-300">
                 
                 {/* Text Details */}
-                <div className="mb-6 space-y-3">
+                <div className="mb-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#1748BB] bg-[#F0F5FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
                       {card1Tag}
@@ -118,13 +118,13 @@ export default function CreatorEconomyBoomSection({
                     </span>
                   </div>
 
-                  <h3 className="font-display font-semibold text-2xl sm:text-3xl text-[#1E2026] leading-snug">
+                  <h3 className="font-display font-semibold text-xl sm:text-2xl text-[#1E2026] leading-snug">
                     {card1Title}
                   </h3>
 
                   <div className="flex items-baseline gap-2">
                     <span
-                      className="font-display font-bold text-4xl sm:text-5xl"
+                      className="font-display font-bold text-3xl sm:text-4xl"
                       style={{ color: "#1748BB" }}
                     >
                       {card1Stat}
@@ -143,7 +143,7 @@ export default function CreatorEconomyBoomSection({
                 </div>
 
                 {/* ── Animated SVG Line Graph ── */}
-                <div className="relative w-full rounded-2xl bg-gradient-to-b from-[#F4F8FF] to-[#EBF3FF]/60 border border-[#BFDBFE]/60 p-4 sm:p-6 overflow-hidden">
+                <div className="relative w-full rounded-2xl bg-gradient-to-b from-[#F4F8FF] to-[#EBF3FF]/60 border border-[#BFDBFE]/60 p-3 sm:p-5 overflow-hidden">
                   
                   {/* Subtle Grid Lines */}
                   <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-40 pointer-events-none">
@@ -155,7 +155,7 @@ export default function CreatorEconomyBoomSection({
                   {/* SVG Chart */}
                   <svg
                     viewBox="0 0 480 300"
-                    className="w-full h-48 sm:h-56 overflow-visible"
+                    className="w-full h-36 sm:h-44 overflow-visible"
                   >
                     <defs>
                       <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -214,7 +214,7 @@ export default function CreatorEconomyBoomSection({
                           transition={{ delay: 0.3 + i * 0.15, duration: 0.4 }}
                         />
 
-                        {/* Spotlight 8.5 LPA Badge on Peak */}
+                        {/* Spotlight 8.5X Velocity Badge on Peak */}
                         {pt.highlight && (
                           <g transform={`translate(${pt.x}, ${pt.y - 42})`}>
                             {/* Blue badge */}
@@ -225,20 +225,20 @@ export default function CreatorEconomyBoomSection({
                               transition={{ delay: 1.1, duration: 0.4 }}
                             >
                               <rect
-                                x="-36"
-                                y="-18"
-                                width="72"
-                                height="32"
-                                rx="16"
+                                x="-48"
+                                y="-17"
+                                width="96"
+                                height="30"
+                                rx="15"
                                 fill="#1748BB"
                                 filter="drop-shadow(0 4px 10px rgba(23,72,187,0.35))"
                               />
                               <text
                                 x="0"
-                                y="3"
+                                y="2"
                                 textAnchor="middle"
                                 fill="#FFFFFF"
-                                fontSize="12"
+                                fontSize="11"
                                 fontWeight="bold"
                                 fontFamily="sans-serif"
                               >
@@ -272,10 +272,10 @@ export default function CreatorEconomyBoomSection({
           {/* ── Card 2: Diverse Opportunities + Interactive Rotating Industry Hub ── */}
           <div className="lg:col-span-5 flex">
             <FadeUp delay={0.2} className="w-full flex">
-              <div className="w-full rounded-[28px] sm:rounded-[36px] bg-white border-2 border-[#1748BB]/25 p-7 sm:p-9 shadow-[0_16px_45px_rgba(23,72,187,0.08)] flex flex-col justify-between hover:shadow-[0_22px_55px_rgba(23,72,187,0.15)] transition-all duration-300">
+              <div className="w-full rounded-[24px] sm:rounded-[32px] bg-white border-2 border-[#1748BB]/25 p-5 sm:p-7 shadow-[0_16px_45px_rgba(23,72,187,0.08)] flex flex-col justify-between hover:shadow-[0_22px_55px_rgba(23,72,187,0.15)] transition-all duration-300">
                 
                 {/* Text Details */}
-                <div className="space-y-3 mb-6">
+                <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#1748BB] bg-[#F0F5FF] px-3.5 py-1 rounded-full border border-[#BFDBFE]">
                       {card2Tag}
@@ -285,13 +285,13 @@ export default function CreatorEconomyBoomSection({
                     </span>
                   </div>
 
-                  <h3 className="font-display font-semibold text-2xl sm:text-3xl text-[#1E2026] leading-snug">
+                  <h3 className="font-display font-semibold text-xl sm:text-2xl text-[#1E2026] leading-snug">
                     {card2Title}
                   </h3>
 
                   <div className="flex items-baseline gap-2">
                     <span
-                      className="font-display font-bold text-4xl sm:text-5xl"
+                      className="font-display font-bold text-3xl sm:text-4xl"
                       style={{ color: "#1748BB" }}
                     >
                       {card2Stat}
@@ -310,7 +310,7 @@ export default function CreatorEconomyBoomSection({
                 </div>
 
                 {/* ── Animated Rotating Gear with Creator Avatar Center ── */}
-                <div className="relative w-full rounded-2xl bg-gradient-to-b from-[#F4F8FF] to-[#EBF3FF]/60 border border-[#BFDBFE]/60 p-6 flex flex-col items-center justify-center text-center overflow-hidden min-h-[220px]">
+                <div className="relative w-full rounded-2xl bg-gradient-to-b from-[#F4F8FF] to-[#EBF3FF]/60 border border-[#BFDBFE]/60 p-4 sm:p-5 flex flex-col items-center justify-center text-center overflow-hidden min-h-[175px]">
                   
                   {/* Floating rotating gear graphic */}
                   <div className="relative w-28 h-28 flex items-center justify-center mb-3">

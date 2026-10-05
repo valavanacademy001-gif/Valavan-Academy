@@ -278,12 +278,16 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 07 Creator Economy : Why Is Full Stack Creative Booming (Why Now) ── */}
-      <CreatorEconomyBoomSection
-        badge="WHY NOW"
-        titlePrefix="Why Is Full Stack Creative"
-        titleHighlight="Booming?"
-        economyMap={economyMap}
-      />
+      <div className="relative min-h-[135vh] sm:min-h-[145vh] lg:min-h-[155vh]">
+        <div className="sticky top-4 sm:top-8 md:top-12 z-10">
+          <CreatorEconomyBoomSection
+            badge="WHY NOW"
+            titlePrefix="Why Is Full Stack Creative"
+            titleHighlight="Booming?"
+            economyMap={economyMap}
+          />
+        </div>
+      </div>
 
       {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
       <WhoIsThisForSection
@@ -310,13 +314,12 @@ export default async function FullStackCreatorPage() {
         titleHighlight="Creators."
         headlineSub="The Advantage No Longer Belongs To People Who Know One Tool."
         description="It Belongs To People Who Can Connect Multiple Skills And Create Results."
-        primaryBtnText="Download Brochure"
-        primaryBtnUrl="/brochure/full-stack-creator-brochure.pdf"
-        primaryBtnDownload="Full-Stack-Creative-Master-Brochure.pdf"
-        secondaryBtnText="🚀 Join The Program"
-        secondaryBtnUrl={enrollUrl}
+        primaryBtnText="🚀 Join The Program"
+        primaryBtnUrl={enrollUrl}
+        secondaryBtnText="Download Brochure"
+        secondaryBtnUrl="/brochure/full-stack-creator-brochure.pdf"
+        secondaryBtnDownload="Full-Stack-Creative-Master-Brochure.pdf"
         footerSubtext="Build Skills. Create Opportunities. Shape Your Future. — Valavan Academy 🚀"
-        supportMap={finalCtaMap}
       />
 
       {/* ── 13 Frequently Asked Questions (10 Core Program FAQs) ── */}
