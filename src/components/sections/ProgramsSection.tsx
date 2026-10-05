@@ -119,13 +119,19 @@ function resolveTools(rawTools: unknown, fallback: ToolItem[]): ToolItem[] {
     const list: ToolItem[] = [];
     for (const item of rawTools) {
       if (typeof item === "string") {
+        if (item.toLowerCase().includes("full-stack-tools") || item.toLowerCase().includes("tools-banner")) continue;
         const key = item.toLowerCase().trim();
         const img = TOOL_MAP[key] || `/assets/tools/ps.png`;
         list.push({ name: item, image: img });
       } else if (typeof item === "object" && item !== null && "name" in item) {
         const obj = item as { name: string; image?: string; logo?: string };
-        const img = obj.image || obj.logo || TOOL_MAP[obj.name.toLowerCase().trim()] || "/assets/tools/ps.png";
-        list.push({ name: obj.name, image: img });
+        const img = obj.image || obj.logo || "";
+        if (img.includes("full-stack-tools") || obj.name.toLowerCase().includes("full stack tools")) {
+          // Skip wide marquee banner meant for landing page
+          continue;
+        }
+        const resolvedImg = img || TOOL_MAP[obj.name.toLowerCase().trim()] || "/assets/tools/ps.png";
+        list.push({ name: obj.name, image: resolvedImg });
       }
     }
     if (list.length > 0) return list;
@@ -213,6 +219,7 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
 
         const customBadge = isGD ? meta?.program_1_badge : isWorkshop ? meta?.program_3_badge : meta?.program_2_badge;
         const customAccent = isGD ? meta?.program_1_accent : isWorkshop ? meta?.program_3_accent : meta?.program_2_accent;
+        const isFullStack = cmsP.slug.includes("full-stack");
         const fallbackTools = isGD ? DEFAULT_TOOLS_GD : isWorkshop ? DEFAULT_TOOLS_WS : DEFAULT_TOOLS_FS;
 
         return {
@@ -228,7 +235,7 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
           level: cmsP.level || defaultFallback.level,
           image: cmsP.thumbnail_url || cmsP.banner_url || defaultFallback.image,
           href: `/programs/${cmsP.slug.replace(/^\/programs\//, "")}`,
-          tools: resolveTools(cmsP.software_tools, fallbackTools),
+          tools: isFullStack ? DEFAULT_TOOLS_FS : resolveTools(cmsP.software_tools, fallbackTools),
           ctaLabel: cmsP.cta_text || (isWorkshop ? "Enroll in Workshop" : "View Details"),
         };
       })
