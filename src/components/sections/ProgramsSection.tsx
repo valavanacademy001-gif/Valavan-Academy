@@ -391,6 +391,7 @@ export default function ProgramsSection({ programs: cmsPrograms, meta }: Program
                             alt={tool.name}
                             width={36}
                             height={36}
+                            unoptimized={tool.image.startsWith('data:') || tool.image.startsWith('http')}
                             className="object-contain max-h-8 max-w-8 sm:max-h-9 sm:max-w-9 w-auto h-auto drop-shadow-xs"
                           />
                         </div>
