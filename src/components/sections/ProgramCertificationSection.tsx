@@ -10,6 +10,8 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 interface ProgramCertificationSectionProps {
   badge?: string;
   title?: string;
+  titlePrefix?: string;
+  titleHighlight?: string;
   subtitle?: string;
   programTitle?: string;
   description?: string;
@@ -18,9 +20,31 @@ interface ProgramCertificationSectionProps {
   certMap?: Record<string, string>;
 }
 
+function renderWithBlueCertification(text: string) {
+  if (!text) return null;
+  const regex = /(Certifications?|Certificate)/gi;
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (regex.test(part)) {
+          return (
+            <span key={i} className="!text-[#1748BB]" style={{ color: "#1748BB" }}>
+              {part}
+            </span>
+          );
+        }
+        return <React.Fragment key={i}>{part}</React.Fragment>;
+      })}
+    </>
+  );
+}
+
 export default function ProgramCertificationSection({
   badge,
   title,
+  titlePrefix: titlePrefixProp,
+  titleHighlight: titleHighlightProp,
   subtitle,
   programTitle,
   description,
@@ -29,10 +53,12 @@ export default function ProgramCertificationSection({
   certMap,
 }: ProgramCertificationSectionProps) {
   const effectiveBadge = badge || certMap?.badge || "Get Certified";
+  const titlePrefix = certMap?.title_prefix || titlePrefixProp;
+  const titleHighlight = certMap?.title_highlight || titleHighlightProp;
   const effectiveTitle =
     title ||
-    (certMap?.title_prefix
-      ? `${certMap.title_prefix} ${certMap.title_highlight || ""}`.trim()
+    (titlePrefix
+      ? `${titlePrefix} ${titleHighlight || ""}`.trim()
       : "Industry Ready Certification");
   const effectiveSubtitle =
     subtitle ||
@@ -80,7 +106,16 @@ export default function ProgramCertificationSection({
               className="font-display font-bold text-[#1E2026] leading-[1.08] tracking-tight mb-3"
               style={{ fontSize: "clamp(32px, 4.4vw, 54px)" }}
             >
-              {effectiveTitle}
+              {titlePrefix && titleHighlight ? (
+                <>
+                  {titlePrefix}{" "}
+                  <span className="!text-[#1748BB]" style={{ color: "#1748BB" }}>
+                    {titleHighlight}
+                  </span>
+                </>
+              ) : (
+                renderWithBlueCertification(effectiveTitle)
+              )}
             </h2>
           </FadeUp>
 
@@ -114,7 +149,7 @@ export default function ProgramCertificationSection({
           <div className="lg:col-span-5 space-y-5">
             <FadeUp delay={0.2}>
               <h3 className="font-display font-semibold text-2xl sm:text-[28px] text-[#1E2026] leading-[1.15] tracking-tight">
-                {effectiveProgramTitle}
+                {renderWithBlueCertification(effectiveProgramTitle)}
               </h3>
             </FadeUp>
 
