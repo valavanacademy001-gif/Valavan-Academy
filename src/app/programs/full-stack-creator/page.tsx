@@ -223,7 +223,7 @@ export default async function FullStackCreatorPage() {
   return (
     <main className="min-h-screen bg-white">
       <JsonLdSchema pageSEO={pageSEO} />
-      {/* ── 01 Interactive Expanding Hero Section ── */}
+      {/* ── 01 Interactive Expanding Hero Section with Video Playback ── */}
       <ProgramHeroInteractive
         badge={heroMap.badge || `Flagship Track · ${duration} · Tamil`}
         titlePrefix={titlePrefix}
@@ -238,6 +238,11 @@ export default async function FullStackCreatorPage() {
         buttonDownload={buttonDownload}
         secondaryButtonText={secondaryButtonText}
         secondaryButtonUrl={secondaryButtonUrl}
+        youtubeId={heroMap.youtube_video_id || heroMap.youtube_id || heroMap.video_id || "3MLpscz9Hjg"}
+        videoUrl={heroMap.video_url || "https://www.youtube.com/embed/3MLpscz9Hjg?si=2ugOaj4UP-npOPmv"}
+        show3DIcons={true}
+        topRight3DIcon={heroMap.top_right_3d_icon || "/assets/icons/illustrator-3d-sphere.png"}
+        bottomRight3DIcon={heroMap.bottom_right_3d_icon || "/assets/icons/photoshop-3d-sphere.png"}
       />
 
       {/* ── 02 Master Industry Standard Creative Tools ── */}
