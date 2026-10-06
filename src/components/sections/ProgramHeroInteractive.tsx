@@ -393,9 +393,9 @@ export default function ProgramHeroInteractive({
                       aria-hidden
                     >
                       {/* Smooth hand-drawn curve arcing from text and swooping down to video */}
-                      <path d="M 6 14 C 20 2, 42 4, 48 20 C 51 28, 46 38, 38 44" />
-                      {/* Crisp arrowhead */}
-                      <path d="M 48 36 L 38 44 L 32 34" />
+                      <path d="M 6 28 C 18 6, 46 16, 46 43" />
+                      {/* Perfectly balanced sharp doodle arrowhead */}
+                      <path d="M 52 31 L 46 43 L 40 31" />
                     </motion.svg>
                   </div>
                 </motion.div>
