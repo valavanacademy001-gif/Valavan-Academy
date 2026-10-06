@@ -8,6 +8,7 @@ import { RotateCw, Sparkles, CheckCircle2 } from "lucide-react";
 export interface TeamMember {
   name: string;
   role: string;
+  designation?: string;
   specialty: string;
   image: string;
   bio: string;
@@ -15,64 +16,130 @@ export interface TeamMember {
   experience: string;
 }
 
-export const TEAM_MEMBERS: TeamMember[] = [
+export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Valavan",
-    role: "Founder & Lead Mentor",
+    role: "FOUNDER & LEAD MENTOR",
+    designation: "Founder of Valavan Ventures Private Limited",
     specialty: "Graphic Design & Creative Strategy",
     image: "/assets/about/valavan.webp",
-    bio: "Founder of Valavan Academy and Pixel Panther. Over 8+ years of industry expertise empowering 5,000+ students to turn creative design into high-income careers.",
+    bio: "Founder of Valavan Academy & Designee. Trained 10,000+ students with project-driven Graphic Design mentorship and established the TNCC community across Tamil Nadu.",
     skills: ["Branding", "Creative Direction", "Typography", "Visual Identity"],
-    experience: "8+ Years",
+    experience: "15+ Years",
   },
   {
-    name: "Nandha Kumar",
-    role: "Video Editing Mentor",
-    specialty: "Premiere Pro, DaVinci & Motion Graphics",
+    name: "RP Kiran Kumar",
+    role: "CREATIVE DIRECTOR | BRAND STRATEGIST",
+    designation: "Creative Director | Brand Strategist",
+    specialty: "Brand Strategy, UI/UX & Creative Direction",
+    image: "/assets/about/Kiran.webp",
+    bio: "Spent over a decade guiding Tamil creative professionals to evolve into authoritative Full Stack Creative Directors who command high value and build future-proof brand systems.",
+    skills: ["Brand Strategy", "Creative Direction", "Design Systems", "UI/UX"],
+    experience: "10+ Years",
+  },
+  {
+    name: "Ganapathi R",
+    role: "SENIOR VIDEO EDITOR | CEO",
+    designation: "Senior Video Editor | CEO",
+    specialty: "Short-Form Video Editing & Viral Content",
+    image: "/assets/about/gana.webp",
+    bio: "Senior Video Editor with 5+ years experience. Generated 10M+ views and trained 1,000+ creators and brands to produce viral, high-performing short-form video content.",
+    skills: ["Premiere Pro", "After Effects", "Viral Pacing", "Short-Form Content"],
+    experience: "5+ Years",
+  },
+  {
+    name: "Sundhar",
+    role: "STUDENTS SUPPORT MANAGER | SENIOR GRAPHIC DESIGNER",
+    designation: "Students Support Manager | Senior Graphic Designer",
+    specialty: "Graphic Design & Practical Mentorship",
     image: "/assets/about/Nandha.webp",
-    bio: "Professional video editor and colorist specializing in cinematic YouTube storytelling, viral reels pacing, and advanced color grading workflows.",
-    skills: ["Premiere Pro", "DaVinci Resolve", "Color Grading", "Sound Design"],
+    bio: "Senior Graphic Designer with 5+ years of industry experience. Guided and mentored 10,000+ students through hands-on project-based design training and continuous doubt clearing.",
+    skills: ["Graphic Design", "Student Mentoring", "Portfolio Reviews", "Client Projects"],
+    experience: "5+ Years",
+  },
+  {
+    name: "Suganesh",
+    role: "FULLSTACK CREATIVE MASTER | PORTFOLIO HEAD",
+    designation: "Fullstack Creative Master | Student Portfolio Division Head",
+    specialty: "Fullstack Creation, Web, Video & AI Design",
+    image: "/assets/about/soban.webp",
+    bio: "Student Portfolio Division Head with 5+ years of creative experience. Delivered 10,000+ designs and trained 10,000+ students across design, web, editing, branding, and AI.",
+    skills: ["Fullstack Design", "Web Design", "Video Editing", "AI Creative Tools"],
     experience: "5+ Years",
   },
   {
     name: "Dhanush",
-    role: "Design & AI Tools Mentor",
-    specialty: "Photoshop, Illustrator & Midjourney",
+    role: "PROFESSIONAL THUMBNAIL DESIGNER",
+    designation: "Professional Thumbnail Designer",
+    specialty: "High-CTR Thumbnail Design & Visual Retention",
     image: "/assets/about/Dhanush.webp",
-    bio: "Commercial poster designer and GenAI specialist guiding creators to blend classic graphic craftsmanship with modern AI-assisted productivity.",
-    skills: ["Photoshop", "Illustrator", "Midjourney", "Prompt Design"],
-    experience: "4+ Years",
-  },
-  {
-    name: "Kiran",
-    role: "UI/UX & Web Mentor",
-    specialty: "Figma, WordPress & Responsive Web",
-    image: "/assets/about/Kiran.webp",
-    bio: "Product & web designer crafting conversion-focused landing pages, intuitive UI prototypes, and clean WordPress client deployments.",
-    skills: ["Figma", "UI/UX Design", "WordPress", "Web Strategy"],
+    bio: "Specialized in high-converting thumbnail design with 600M+ views generated across top creators in Tamil Nadu. Master in creating thumb-stopping commercial visuals using Photoshop.",
+    skills: ["Photoshop", "Thumbnail Design", "CTR Optimization", "Visual Storytelling"],
     experience: "5+ Years",
-  },
-  {
-    name: "Soban",
-    role: "Community Lead",
-    specialty: "Student Success & TNCC Operations",
-    image: "/assets/about/soban.webp",
-    bio: "Directs TNCC community growth, organizes portfolio review meetups, and coordinates daily 1-on-1 student doubt clearing sessions.",
-    skills: ["Community Growth", "Student Success", "Event Ops", "Networking"],
-    experience: "4+ Years",
-  },
-  {
-    name: "Gana",
-    role: "Creative Support",
-    specialty: "Technical Operations & Production",
-    image: "/assets/about/gana.webp",
-    bio: "Manages live training cohort systems, curriculum assets, and technical infrastructure ensuring every workshop runs seamlessly.",
-    skills: ["Studio Production", "Live Streaming", "Technical Ops", "Media Management"],
-    experience: "3+ Years",
   },
 ];
 
-export default function TeamSection() {
+export function extractTeamMembersFromMap(
+  teamMap: Record<string, string> | undefined,
+  fallback: TeamMember[]
+): TeamMember[] {
+  if (!teamMap || Object.keys(teamMap).length === 0) return fallback;
+
+  const mentorIndices = new Set<number>();
+  for (const key of Object.keys(teamMap)) {
+    const match = key.match(/^mentor_(\d+)_(?:name|role|designation|image|bio)$/);
+    if (match) {
+      mentorIndices.add(parseInt(match[1], 10));
+    }
+  }
+
+  const sortedIndices = Array.from(mentorIndices).sort((a, b) => a - b);
+  const members: TeamMember[] = [];
+
+  for (const idx of sortedIndices) {
+    const name = teamMap[`mentor_${idx}_name`];
+    if (name && name.trim()) {
+      const fallbackItem = fallback[idx - 1];
+      const role = teamMap[`mentor_${idx}_role`] || teamMap[`mentor_${idx}_designation`] || fallbackItem?.role || "Mentor";
+      const designation = teamMap[`mentor_${idx}_designation`] || fallbackItem?.designation || role;
+      const specialty = teamMap[`mentor_${idx}_specialty`] || teamMap[`mentor_${idx}_specialization`] || fallbackItem?.specialty || "";
+      const bio = teamMap[`mentor_${idx}_bio`] || teamMap[`mentor_${idx}_about`] || fallbackItem?.bio || "";
+      const experience = teamMap[`mentor_${idx}_experience`] || fallbackItem?.experience || "5+ Years";
+      const image = teamMap[`mentor_${idx}_image`] || fallbackItem?.image || "/assets/about/valavan.webp";
+      const skillsRaw = teamMap[`mentor_${idx}_skills`] || "";
+      const skills = skillsRaw
+        ? skillsRaw.split(",").map((s) => s.trim()).filter(Boolean)
+        : fallbackItem?.skills || [];
+
+      members.push({
+        name: name.trim(),
+        role: role.trim(),
+        designation: designation.trim(),
+        specialty: specialty.trim(),
+        bio: bio.trim(),
+        experience: experience.trim(),
+        skills,
+        image: image.trim(),
+      });
+    }
+  }
+
+  return members.length > 0 ? members : fallback;
+}
+
+interface TeamSectionProps {
+  teamMap?: Record<string, string>;
+  members?: TeamMember[];
+}
+
+export default function TeamSection({ teamMap, members = DEFAULT_TEAM_MEMBERS }: TeamSectionProps = {}) {
+  const effectiveMembers = teamMap ? extractTeamMembersFromMap(teamMap, members) : members;
+  const eyebrow = teamMap?.eyebrow || "Expert Instructors";
+  const heading = teamMap?.heading || "The Core of Valavan Academy.";
+  const description =
+    teamMap?.description ||
+    "Learn directly from experienced practitioners dedicated to your creative and commercial growth.";
+
   return (
     <section id="mentors" className="py-20 sm:py-28 bg-[#F8FAFF] border-t border-[#E8EFFE] relative scroll-mt-24">
       <Container>
@@ -81,7 +148,7 @@ export default function TeamSection() {
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
             <span className="font-sans text-xs tracking-[0.25em] uppercase text-[#1748BB] font-bold">
-              Expert Instructors
+              {eyebrow}
             </span>
             <div className="w-8 h-[2px] bg-[#1748BB] opacity-40" />
           </div>
@@ -90,17 +157,24 @@ export default function TeamSection() {
             className="font-display font-bold text-[#1E2026] leading-tight tracking-tight mb-4"
             style={{ fontSize: "clamp(28px, 4vw, 46px)" }}
           >
-            The Core of <span className="text-[#1748BB]">Valavan Academy.</span>
+            {heading.includes("Valavan Academy") ? (
+              <>
+                {heading.replace(/Valavan Academy\.?/i, "").trim()}{" "}
+                <span className="text-[#1748BB]">Valavan Academy.</span>
+              </>
+            ) : (
+              heading
+            )}
           </h2>
           <p className="font-sans text-neutral-600 text-sm sm:text-base max-w-xl mx-auto">
-            Learn directly from experienced practitioners dedicated to your creative and commercial growth.
+            {description}
           </p>
         </div>
 
         {/* 3D Flip Mentors Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {TEAM_MEMBERS.map((member, i) => (
-            <MentorFlipCard key={i} member={member} />
+          {effectiveMembers.map((member, i) => (
+            <MentorFlipCard key={`${member.name}-${i}`} member={member} />
           ))}
         </div>
       </Container>
@@ -110,6 +184,7 @@ export default function TeamSection() {
 
 function MentorFlipCard({ member }: { member: TeamMember }) {
   const [isFlippedMobile, setIsFlippedMobile] = useState(false);
+  const isImageUnoptimized = member.image.startsWith("data:") || member.image.startsWith("http");
 
   return (
     <div
@@ -131,6 +206,7 @@ function MentorFlipCard({ member }: { member: TeamMember }) {
               src={member.image}
               alt={member.name}
               fill
+              unoptimized={isImageUnoptimized}
               className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
@@ -145,8 +221,6 @@ function MentorFlipCard({ member }: { member: TeamMember }) {
                 {member.name}
               </h3>
             </div>
-
-
           </div>
 
           {/* Bottom Specialization Banner */}
@@ -177,6 +251,7 @@ function MentorFlipCard({ member }: { member: TeamMember }) {
                   alt={member.name}
                   fill
                   sizes="48px"
+                  unoptimized={isImageUnoptimized}
                   className="object-cover object-top"
                 />
               </div>
@@ -185,7 +260,7 @@ function MentorFlipCard({ member }: { member: TeamMember }) {
                   {member.name}
                 </h4>
                 <p style={{ color: "#BACFFF" }} className="font-sans text-xs font-medium truncate mt-0.5">
-                  {member.role}
+                  {member.designation || member.role}
                 </p>
               </div>
               <div className="text-right shrink-0">
@@ -203,7 +278,7 @@ function MentorFlipCard({ member }: { member: TeamMember }) {
               </p>
               <p
                 style={{ color: "#BACFFF" }}
-                className="font-sans text-xs sm:text-sm leading-relaxed font-normal"
+                className="font-sans text-xs sm:text-sm leading-relaxed font-normal line-clamp-5 sm:line-clamp-6"
               >
                 {member.bio}
               </p>

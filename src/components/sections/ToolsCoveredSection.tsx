@@ -108,20 +108,20 @@ export default function ToolsCoveredSection({
 
         {/* Tools Covered Card Box with Infinite Marquee Loop */}
         <FadeUp delay={0.15}>
-          <div className="max-w-6xl mx-auto rounded-[24px] sm:rounded-[36px] border border-[#1748BB]/30 bg-white p-6 sm:p-9 md:p-11 shadow-[0_12px_40px_rgba(23,72,187,0.06)] relative overflow-hidden">
+          <div className="max-w-6xl mx-auto rounded-[20px] sm:rounded-[36px] border border-[#1748BB]/30 bg-white p-4 sm:p-9 md:p-11 shadow-[0_12px_40px_rgba(23,72,187,0.06)] relative overflow-hidden">
             
             {/* Header inside Box */}
-            <h3 className="font-display font-bold text-center text-xl sm:text-2xl md:text-3xl text-[#1E2026] mb-6 sm:mb-8 tracking-tight">
+            <h3 className="font-display font-bold text-center text-lg sm:text-2xl md:text-3xl text-[#1E2026] mb-3 sm:mb-8 tracking-tight leading-snug sm:leading-tight">
               Tools Covered
             </h3>
 
             {/* Left & Right Soft Fade Gradients for Luxury Carousel Edge */}
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-28 md:w-36 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-28 md:w-36 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-28 md:w-36 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-28 md:w-36 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
             {/* Content: Single Banner Duplicated Infinite Loop vs Multi-Tool Marquee */}
             {effectiveTools.length === 1 ? (
-              <div className="relative w-full overflow-hidden flex items-center py-6 sm:py-9">
+              <div className="relative w-full overflow-hidden flex items-center py-2 sm:py-9">
                 <motion.div
                   className="flex items-center gap-0 shrink-0 cursor-grab active:cursor-grabbing"
                   animate={{
@@ -140,12 +140,12 @@ export default function ToolsCoveredSection({
                   {[0, 1, 2, 3].map((idx) => (
                     <div
                       key={idx}
-                      className="shrink-0 flex items-center -mx-4 sm:-mx-6 md:-mx-7 lg:-mx-[31px] select-none"
+                      className="shrink-0 flex items-center -mx-3 sm:-mx-6 md:-mx-7 lg:-mx-[31px] select-none"
                     >
                       <img
                         src={effectiveTools[0].logo}
                         alt={effectiveTools[0].name}
-                        className="h-24 sm:h-32 md:h-38 lg:h-[165px] xl:h-[175px] w-auto max-h-[175px] object-contain max-w-none select-none pointer-events-none transition-transform duration-300"
+                        className="h-16 sm:h-32 md:h-38 lg:h-[165px] xl:h-[175px] w-auto max-h-[175px] object-contain max-w-none select-none pointer-events-none transition-transform duration-300"
                         draggable={false}
                       />
                     </div>
@@ -153,9 +153,9 @@ export default function ToolsCoveredSection({
                 </motion.div>
               </div>
             ) : (
-              <div className="relative w-full overflow-hidden flex items-center py-2">
+              <div className="relative w-full overflow-hidden flex items-center py-1 sm:py-2">
                 <motion.div
-                  className="flex items-center gap-6 sm:gap-10 md:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
+                  className="flex items-center gap-3.5 sm:gap-10 md:gap-12 shrink-0 cursor-grab active:cursor-grabbing"
                   animate={{
                     x: ["0%", "-50%"],
                   }}
@@ -175,8 +175,8 @@ export default function ToolsCoveredSection({
                       className="group shrink-0 transition-transform duration-300 hover:scale-115 flex items-center justify-center"
                       title={tool.name}
                     >
-                      {/* Big Square Icon Card */}
-                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 bg-white flex items-center justify-center border border-neutral-200/80 shadow-[0_8px_24px_rgba(0,0,0,0.07)] group-hover:shadow-[0_14px_35px_rgba(23,72,187,0.18)] group-hover:border-[#1748BB]/40 transition-all duration-300">
+                      {/* Square Icon Card (minimized on mobile, original size on desktop) */}
+                      <div className="relative w-14 h-14 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-xl sm:rounded-3xl p-2 sm:p-3.5 bg-white flex items-center justify-center border border-neutral-200/80 shadow-[0_4px_16px_rgba(0,0,0,0.06)] sm:shadow-[0_8px_24px_rgba(0,0,0,0.07)] group-hover:shadow-[0_14px_35px_rgba(23,72,187,0.18)] group-hover:border-[#1748BB]/40 transition-all duration-300">
                         <Image
                           src={tool.logo}
                           alt={tool.name}

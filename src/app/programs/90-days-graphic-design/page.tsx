@@ -5,7 +5,7 @@ import { EXTERNAL_URLS } from "@/data/site.config";
 import Container from "@/components/ui/Container";
 import { ArrowLeft, ArrowRight, Award, CheckCircle2, Sparkles, Layers, Clock, Globe, BarChart } from "lucide-react";
 import ProgramHeroInteractive from "@/components/sections/ProgramHeroInteractive";
-import ToolsCoveredSection, { DEFAULT_GRAPHIC_DESIGN_TOOLS, extractToolsFromMap } from "@/components/sections/ToolsCoveredSection";
+import ToolsCoveredSection from "@/components/sections/ToolsCoveredSection";
 import ProgramRoadmapSection from "@/components/sections/ProgramRoadmapSection";
 import PracticalProjectsSection from "@/components/sections/PracticalProjectsSection";
 import After90DaysSection from "@/components/sections/After90DaysSection";
@@ -21,6 +21,17 @@ import JsonLdSchema from "@/components/seo/JsonLdSchema";
 export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata("/programs/90-days-graphic-design");
 }
+
+const GRAPHIC_DESIGN_TOOLS = [
+  { name: "Adobe InDesign", logo: "/assets/tools/indesign.png" },
+  { name: "Adobe Illustrator", logo: "/assets/tools/illustrator.png" },
+  { name: "Adobe Photoshop", logo: "/assets/tools/ps.png" },
+  { name: "ChatGPT 4o", logo: "/assets/tools/chatgpt.png" },
+  { name: "Google Gemini AI", logo: "/assets/tools/gemini-ai.png" },
+  { name: "Canva Pro", logo: "/assets/tools/canva.png" },
+  { name: "CorelDraw", logo: "/assets/tools/coreldraw.png" },
+  { name: "Color Palette & Theory", logo: "/assets/tools/color wheel.png" },
+];
 
 const CURRICULUM = [
   { week: "Week 1–2", topic: "Design Fundamentals", desc: "Color theory, typography, composition, visual balance, and design hierarchy." },
@@ -40,18 +51,40 @@ import { getProgramBySlug, getGraphicDesignProgramData, getPublishedLearnerStori
 
 function resolveProgramTools(
   softwareTools: unknown,
-  fallbackTools: any[]
+  fallbackTools: any[] = GRAPHIC_DESIGN_TOOLS
 ): any[] {
+  const safeFallback = Array.isArray(fallbackTools) ? fallbackTools : GRAPHIC_DESIGN_TOOLS;
   if (!Array.isArray(softwareTools) || softwareTools.length === 0) {
-    return fallbackTools;
+    return safeFallback;
   }
   return softwareTools.map((t) => {
     if (typeof t === "string") {
-      const match = fallbackTools.find(
-        (f) => f.name.toLowerCase() === t.toLowerCase()
+      const match = safeFallback.find(
+        (f) => f.name.toLowerCase() === t.toLowerCase() || f.name.toLowerCase().includes(t.toLowerCase())
       );
       if (match) return match;
       const toolFile = t.toLowerCase().replace(/[^a-z0-9]/g, "-");
+      if (toolFile.includes("photoshop") || toolFile === "ps") {
+        return { name: t, logo: "/assets/tools/ps.png" };
+      }
+      if (toolFile.includes("illustrator")) {
+        return { name: t, logo: "/assets/tools/illustrator.png" };
+      }
+      if (toolFile.includes("canva")) {
+        return { name: t, logo: "/assets/tools/canva.png" };
+      }
+      if (toolFile.includes("corel")) {
+        return { name: t, logo: "/assets/tools/coreldraw.png" };
+      }
+      if (toolFile.includes("indesign")) {
+        return { name: t, logo: "/assets/tools/indesign.png" };
+      }
+      if (toolFile.includes("chatgpt")) {
+        return { name: t, logo: "/assets/tools/chatgpt.png" };
+      }
+      if (toolFile.includes("gemini")) {
+        return { name: t, logo: "/assets/tools/gemini-ai.png" };
+      }
       return { name: t, logo: `/assets/tools/${toolFile}.png` };
     }
     if (typeof t === "object" && t !== null && "name" in t) {
@@ -83,7 +116,7 @@ export default async function GraphicDesignProgramPage() {
   const faqMap = cmsData.faq || {};
   const stickyMap = cmsData.sticky || {};
 
-  const toolsList = resolveProgramTools(cmsProgram?.software_tools, DEFAULT_GRAPHIC_DESIGN_TOOLS);
+  const toolsList = resolveProgramTools(cmsProgram?.software_tools, GRAPHIC_DESIGN_TOOLS);
 
   const duration = heroMap.highlight_duration || cmsProgram?.duration || "90 Days";
   const title = cmsProgram?.title || "90 Days Graphic Design Mastery Program";

@@ -64,14 +64,37 @@ export function extractSkillModulesFromMap(
 ): SkillModuleImage[] {
   if (!map || Object.keys(map).length === 0) return fallback;
 
+  // Dynamically find all indices from keys like card_1_image, module_1_image, etc.
+  const cardIndices = new Set<number>();
+  for (const key of Object.keys(map)) {
+    const match = key.match(/^(?:card|module)_(\d+)_(?:image|title)$/);
+    if (match) {
+      cardIndices.add(parseInt(match[1], 10));
+    }
+  }
+
+  const sortedIndices = Array.from(cardIndices).sort((a, b) => a - b);
   const items: SkillModuleImage[] = [];
-  for (let i = 1; i <= 20; i++) {
+
+  for (const i of sortedIndices) {
     const src = map[`card_${i}_image`] || map[`module_${i}_image`];
     const alt = map[`card_${i}_title`] || map[`module_${i}_title`] || `Skill Module ${i}`;
     if (src && src.trim() !== "") {
       items.push({ src: src.trim(), alt: alt.trim() });
     }
   }
+
+  // Fallback check up to 50 if keys didn't match the regex pattern
+  if (items.length === 0) {
+    for (let i = 1; i <= 50; i++) {
+      const src = map[`card_${i}_image`] || map[`module_${i}_image`];
+      const alt = map[`card_${i}_title`] || map[`module_${i}_title`] || `Skill Module ${i}`;
+      if (src && src.trim() !== "") {
+        items.push({ src: src.trim(), alt: alt.trim() });
+      }
+    }
+  }
+
   return items.length > 0 ? items : fallback;
 }
 
@@ -102,7 +125,7 @@ export default function SkillsMoneyCarouselSection({
 
   return (
     <section
-      className="relative z-10 py-10 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none pb-12 sm:pb-24 flex flex-col justify-center border-t border-[#1748BB]"
+      className="relative z-10 py-10 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-x-clip select-none pb-12 sm:pb-24 flex flex-col justify-center border-t border-[#1748BB]"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
@@ -164,8 +187,38 @@ export default function SkillsMoneyCarouselSection({
           </FadeUp>
         </div>
 
-        {/* ── Row & Column Grid Layout (No Carousel) ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
+        {/* ── MOBILE STICKY CARD STACKING DECK EFFECT (sm:hidden) ── */}
+        <div className="sm:hidden flex flex-col max-w-md mx-auto relative pb-6 space-y-0">
+          {effectiveImages.map((item, index) => {
+            const topOffset = 85 + (index % 5) * 12;
+            const zIndex = 10 + index;
+            return (
+              <div
+                key={`mobile-stack-${item.alt}-${index}`}
+                style={{
+                  position: "sticky",
+                  top: `${topOffset}px`,
+                  zIndex: zIndex,
+                }}
+                className="mb-6 last:mb-0"
+              >
+                <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border-2 border-white/35 bg-[#0E3BB0] shadow-[0_16px_36px_rgba(0,0,0,0.4)] transition-all duration-300">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    unoptimized={item.src.startsWith("data:") || item.src.startsWith("http")}
+                    className="object-cover"
+                    sizes="100vw"
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── DESKTOP & TABLET GRID LAYOUT (hidden sm:grid) ── */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-7">
           {effectiveImages.map((item, index) => (
             <FadeUp key={`${item.alt}-${index}`} delay={(index % 6) * 0.05}>
               <div className="relative aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-white/25 hover:border-white/60 bg-white/10 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:-translate-y-1">
@@ -173,9 +226,9 @@ export default function SkillsMoneyCarouselSection({
                   src={item.src}
                   alt={item.alt}
                   fill
-                  unoptimized={item.src.startsWith('data:') || item.src.startsWith('http')}
+                  unoptimized={item.src.startsWith("data:") || item.src.startsWith("http")}
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                 />
               </div>
             </FadeUp>

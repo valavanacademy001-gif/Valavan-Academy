@@ -406,7 +406,7 @@ export default async function AboutPage() {
       </section>
 
       {/* ── 06 Meet Our Mentors & Team ── */}
-      <TeamSection />
+      {visibilityMap.team !== false && <TeamSection teamMap={aboutData.team} />}
 
       {/* ── 07 Why Choose Valavan Academy (4 Pillars) ── */}
       <section id="advantage" className="py-20 sm:py-28 bg-white relative scroll-mt-24">

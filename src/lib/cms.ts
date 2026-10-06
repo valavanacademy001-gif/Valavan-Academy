@@ -920,6 +920,7 @@ export async function getAboutPageData() {
     const heroMap = await getSectionFieldMap("about", "hero");
     const storyMap = await getSectionFieldMap("about", "story");
     const pillarsMap = await getSectionFieldMap("about", "pillars");
+    const teamMap = await getSectionFieldMap("about", "team");
 
     return {
       hero: {
@@ -936,7 +937,8 @@ export async function getAboutPageData() {
         mission_desc: pillarsMap.mission_desc || "To empower Tamil-speaking learners with practical, industry-aligned skills in Graphic Design, Video Editing, UI/UX, and AI Tools that lead to real freelance careers and financial independence.",
         vision_title: pillarsMap.vision_title || "Our Vision",
         vision_desc: pillarsMap.vision_desc || "To build the world's largest Tamil creative ecosystem — empowering 100,000+ skilled creators, designers, and entrepreneurs to compete on a global stage.",
-      }
+      },
+      team: teamMap,
     };
   } catch {
     return {
@@ -954,7 +956,8 @@ export async function getAboutPageData() {
         mission_desc: "To empower Tamil-speaking learners with practical, industry-aligned skills in Graphic Design, Video Editing, UI/UX, and AI Tools that lead to real freelance careers and financial independence.",
         vision_title: "Our Vision",
         vision_desc: "To build the world's largest Tamil creative ecosystem — empowering 100,000+ skilled creators, designers, and entrepreneurs to compete on a global stage.",
-      }
+      },
+      team: {},
     };
   }
 }
