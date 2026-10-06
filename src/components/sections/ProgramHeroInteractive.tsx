@@ -131,12 +131,12 @@ export default function ProgramHeroInteractive({
     restDelta: 0.001,
   });
 
-  // Switch to playing video automatically when expanded on scroll
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
+  // Switch to playing video only when user actively scrolls down past hero threshold
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (effectiveYoutubeId) {
-      if (latest > 0.22 && !isPlayingVideo) {
+      if (typeof window !== "undefined" && window.scrollY > 120 && latest > 0.22 && !isPlayingVideo) {
         setIsPlayingVideo(true);
-      } else if (latest <= 0.12 && isPlayingVideo) {
+      } else if (typeof window !== "undefined" && (window.scrollY < 60 || latest <= 0.08) && isPlayingVideo) {
         setIsPlayingVideo(false);
       }
     }
@@ -165,9 +165,9 @@ export default function ProgramHeroInteractive({
     }
   };
 
-  // Banner Heading + Arrow opacity (fades in as card expands to center stage)
-  const bannerHeadingOpacity = useTransform(smoothProgress, [0.18, 0.42], [0, 1]);
-  const bannerHeadingY = useTransform(smoothProgress, [0.18, 0.42], [12, 0]);
+  // Banner Heading + Arrow opacity (strictly 0 at page top, only fades in when scrolling down past 0.18)
+  const bannerHeadingOpacity = useTransform(scrollYProgress, [0.18, 0.38], [0, 1], { clamp: true });
+  const bannerHeadingY = useTransform(scrollYProgress, [0.18, 0.38], [16, 0], { clamp: true });
 
   // Floating 3D Spheres fade out as video card expands to full stage
   const sphereOpacity = useTransform(smoothProgress, [0, 0.16], [1, 0]);
@@ -190,9 +190,7 @@ export default function ProgramHeroInteractive({
   return (
     <div
       ref={containerRef}
-      className={`relative bg-[#1748BB] text-white w-full pb-12 pt-24 sm:pt-28 lg:pb-0 lg:pt-0 ${
-        isDesktop ? "h-[180vh]" : "lg:h-[180vh]"
-      }`}
+      className="relative bg-[#1748BB] text-white w-full pb-12 pt-24 sm:pt-28 lg:pb-0 lg:pt-0 lg:h-[180vh]"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
@@ -360,8 +358,8 @@ export default function ProgramHeroInteractive({
               >
                 {/* Top Callout Question (Single tight text with ultra-low line-height + Clean Doodle Downward Arrow) */}
                 <motion.div
-                  style={isDesktop ? { opacity: bannerHeadingOpacity, y: bannerHeadingY } : {}}
-                  className="absolute -top-[52px] sm:-top-[62px] left-0 right-0 hidden sm:flex items-center justify-center pointer-events-none text-center z-30"
+                  style={{ opacity: bannerHeadingOpacity, y: bannerHeadingY }}
+                  className="absolute -top-[52px] sm:-top-[62px] left-0 right-0 hidden lg:flex items-center justify-center pointer-events-none text-center z-30"
                 >
                   <div className="inline-flex items-center justify-center gap-2">
                     <p
@@ -403,15 +401,13 @@ export default function ProgramHeroInteractive({
                 {/* Inner Video/Image Card */}
                 <div className="relative aspect-[16/9] w-full rounded-[18px] sm:rounded-[26px] overflow-hidden bg-black">
                   {/* 1. YouTube Video with Normal-Sized Desktop Controls on Hover */}
-                  {effectiveYoutubeId && (
+                  {effectiveYoutubeId && isPlayingVideo && (
                     <div
-                      className={`absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-500 ${
-                        isPlayingVideo ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-                      }`}
+                      className="absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-500 opacity-100 pointer-events-auto"
                     >
                       <iframe
                         ref={iframeRef}
-                        src={`https://www.youtube-nocookie.com/embed/${effectiveYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${effectiveYoutubeId}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1${startSeconds ? `&start=${startSeconds}` : ""}`}
+                        src={`https://www.youtube-nocookie.com/embed/${effectiveYoutubeId}?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=${effectiveYoutubeId}&controls=1&modestbranding=1&rel=0&playsinline=1&enablejsapi=1${startSeconds ? `&start=${startSeconds}` : ""}`}
                         title={altText}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowFullScreen
