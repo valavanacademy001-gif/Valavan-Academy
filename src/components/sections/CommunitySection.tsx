@@ -73,7 +73,7 @@ export default function CommunitySection({ meta }: CommunitySectionProps = {}) {
   return (
     <section
       ref={ref}
-      className="relative lg:sticky lg:top-0 z-0 lg:z-10 bg-[#1748BB] py-14 sm:py-20 lg:py-28 overflow-hidden flex items-center justify-center border-t border-[#1748BB] lg:min-h-screen"
+      className="relative z-10 bg-[#1748BB] py-14 sm:py-20 lg:py-28 overflow-hidden flex items-center justify-center border-t border-[#1748BB]"
     >
       {/* Background pattern */}
       <div

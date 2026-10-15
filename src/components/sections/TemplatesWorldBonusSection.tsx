@@ -80,7 +80,7 @@ export default function TemplatesWorldBonusSection({
 
   return (
     <section
-      className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-14 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none border-t border-white/10 text-center flex flex-col justify-center lg:min-h-screen"
+      className="relative z-10 py-14 sm:py-20 md:py-28 bg-[#1748BB] text-white overflow-hidden select-none border-t border-white/10 text-center flex flex-col justify-center"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
