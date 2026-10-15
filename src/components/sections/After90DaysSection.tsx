@@ -150,7 +150,7 @@ export default function After90DaysSection({
 
   return (
     <section
-      className="relative z-10 py-14 sm:py-20 md:py-24 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB]"
+      className="relative lg:sticky lg:top-0 z-0 lg:z-10 py-10 sm:py-14 md:py-18 lg:py-6 bg-[#1748BB] text-white overflow-hidden flex flex-col justify-center select-none border-t border-[#1748BB] lg:min-h-screen lg:pb-28"
       style={{
         backgroundImage: `
           repeating-linear-gradient(
@@ -175,11 +175,11 @@ export default function After90DaysSection({
 
       <Container className="relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-4 sm:mb-6 lg:mb-5">
           <FadeUp delay={0}>
-            <div className="flex items-center justify-center gap-3 mb-2.5">
+            <div className="flex items-center justify-center gap-3 mb-1.5 sm:mb-2">
               <div className="w-8 h-[2px] bg-white" />
-              <span className="font-sans text-xs tracking-[0.25em] uppercase text-white font-bold">
+              <span className="font-sans text-[11px] sm:text-xs tracking-[0.25em] uppercase text-white font-bold">
                 {badge}
               </span>
               <div className="w-8 h-[2px] bg-white" />
@@ -188,8 +188,8 @@ export default function After90DaysSection({
 
           <FadeUp delay={0.05}>
             <h2
-              className="font-display font-bold text-white leading-tight tracking-tight mb-2.5"
-              style={{ fontSize: "clamp(30px, 4.2vw, 50px)", color: "#FFFFFF" }}
+              className="font-display font-bold text-white leading-tight tracking-tight mb-1.5 sm:mb-2"
+              style={{ fontSize: "clamp(24px, 3.2vw, 42px)", color: "#FFFFFF" }}
             >
               After <span style={{ color: "#BACFFF" }}>90 Days</span> You Can.
             </h2>
@@ -197,7 +197,7 @@ export default function After90DaysSection({
 
           <FadeUp delay={0.1}>
             <p
-              className="font-sans text-xs sm:text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-normal"
+              className="font-sans text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed font-normal"
               style={{ color: "#BACFFF" }}
             >
               {subtitle}
@@ -206,31 +206,31 @@ export default function After90DaysSection({
         </div>
 
         {/* 10 Modern Glass Outcome Cards in Balanced 5-column Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5 lg:gap-2.5 max-w-7xl mx-auto">
           {effectiveOutcomes.map((item, index) => (
             <FadeUp key={item.title} delay={index * 0.04} className="h-full">
-              <div className="group h-full p-4 sm:p-5 rounded-[22px] bg-white/10 hover:bg-white border border-white/20 hover:border-white transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)] hover:-translate-y-1.5 flex flex-col justify-between gap-4 backdrop-blur-md cursor-default">
+              <div className="group h-full p-3 sm:p-3.5 lg:p-3 rounded-[18px] bg-white/10 hover:bg-white border border-white/20 hover:border-white transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)] hover:-translate-y-1 flex flex-col justify-between gap-2.5 backdrop-blur-md cursor-default">
                 {/* Top Icon & Tag */}
                 <div className="flex items-center justify-between gap-2">
-                  <div className="w-10 h-10 rounded-xl bg-white/15 group-hover:bg-[#1748BB] text-white group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm">
+                  <div className="w-8 h-8 rounded-lg bg-white/15 group-hover:bg-[#1748BB] text-white group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm shrink-0">
                     {renderOutcomeIcon(item.iconType)}
                   </div>
-                  <span className="font-sans text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/10 group-hover:bg-[#1748BB]/10 text-white group-hover:text-[#1748BB] transition-colors">
+                  <span className="font-sans text-[8.5px] sm:text-[9.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 group-hover:bg-[#1748BB]/10 text-white group-hover:text-[#1748BB] transition-colors truncate">
                     {item.tag}
                   </span>
                 </div>
 
                 {/* Outcome Title */}
-                <div>
-                  <h3 className="font-display font-semibold text-sm sm:text-base text-white group-hover:text-[#1748BB] leading-snug tracking-normal transition-colors duration-300">
+                <div className="my-0.5">
+                  <h3 className="font-display font-semibold text-xs sm:text-sm lg:text-[13px] text-white group-hover:text-[#1748BB] leading-snug tracking-normal transition-colors duration-300 line-clamp-2">
                     {item.title}
                   </h3>
                 </div>
 
                 {/* Subtle verified checkmark */}
                 <div className="flex items-center gap-1.5 pt-1.5 border-t border-white/10 group-hover:border-neutral-100 transition-colors">
-                  <CheckCircle2 size={13} className="text-[#BACFFF] group-hover:text-[#1748BB] transition-colors" />
-                  <span className="font-sans text-[11px] sm:text-xs text-[#BACFFF] group-hover:text-[#1748BB] font-medium transition-colors">
+                  <CheckCircle2 size={12} className="text-[#BACFFF] group-hover:text-[#1748BB] transition-colors shrink-0" />
+                  <span className="font-sans text-[10px] sm:text-[11px] text-[#BACFFF] group-hover:text-[#1748BB] font-medium transition-colors">
                     Guaranteed Skill
                   </span>
                 </div>

@@ -284,21 +284,23 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 07 Creator Economy : Why Is Full Stack Creative Booming (Why Now) ── */}
-      <div className="relative z-10 bg-[#FBFDFF] py-10 sm:py-16 border-b border-neutral-100">
-        <CreatorEconomyBoomSection
-          badge="WHY NOW"
-          titlePrefix="Why Is Full Stack Creative"
-          titleHighlight="Booming?"
-          economyMap={economyMap}
-        />
-      </div>
+      <div className="relative">
+        <div className="md:sticky md:top-0 md:min-h-screen md:flex md:flex-col md:justify-center z-10 bg-[#FBFDFF] overflow-hidden py-10 sm:py-14 lg:py-8 lg:pb-28">
+          <CreatorEconomyBoomSection
+            badge="WHY NOW"
+            titlePrefix="Why Is Full Stack Creative"
+            titleHighlight="Booming?"
+            economyMap={economyMap}
+          />
+        </div>
 
-      {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
-      <div className="relative z-10 bg-white">
-        <WhoIsThisForSection
-          whoMap={whoMap}
-          enrollUrl={enrollUrl}
-        />
+        {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
+        <div className="relative z-20 bg-white lg:shadow-[0_-30px_60px_rgba(0,0,0,0.12)] lg:rounded-t-[48px] lg:-mt-8">
+          <WhoIsThisForSection
+            whoMap={whoMap}
+            enrollUrl={enrollUrl}
+          />
+        </div>
       </div>
 
       {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}
