@@ -59,8 +59,7 @@ const ECOSYSTEM_STEPS = [
 
 import { getCommunityPageData, getSectionVisibilityMap } from "@/lib/cms";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function CommunityPage() {
   const [communityData, visibilityMap, pageSEO] = await Promise.all([

@@ -104,8 +104,7 @@ const MENTOR_ACCOMPLISHMENTS = [
 
 import { getProgramBySlug, getWorkshopProgramData } from "@/lib/cms";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function ThreeHoursLiveWorkshopPage() {
   const [program, cmsData, pageSEO] = await Promise.all([
@@ -189,6 +188,9 @@ export default async function ThreeHoursLiveWorkshopPage() {
         imageSrc={program?.thumbnail_url || "/assets/workshop/printing-business-workshop.webp"}
         altText="3 Hours Live Workshop on Starting Your Printing Business with Graphic Design Skill"
         enrollUrl={heroEnrollUrl}
+        buttonUrl={heroEnrollUrl}
+        programSlug="3-hours-live-workshop"
+        programName="3 Hours Live Graphic Design Workshop"
         communityUrl={EXTERNAL_URLS.community}
         buttonText={program?.cta_text || "Register Now for ₹99"}
         youtubeId="nWlzU8ol7uY"

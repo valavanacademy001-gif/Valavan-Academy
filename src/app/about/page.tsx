@@ -121,8 +121,7 @@ const WHY_CHOOSE = [
 
 import { getAboutPageData, getSectionVisibilityMap } from "@/lib/cms";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function AboutPage() {
   const [aboutData, visibilityMap, pageSEO] = await Promise.all([

@@ -342,6 +342,7 @@ export default function Navbar() {
                                       ) : (
                                         <Link
                                           href={item.href}
+                                          prefetch={true}
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
@@ -382,6 +383,7 @@ export default function Navbar() {
                                       ) : (
                                         <Link
                                           href={item.href}
+                                          prefetch={true}
                                           onClick={() => setActiveDropdown(null)}
                                           className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#1E2026] hover:text-[#1748BB] transition-colors"
                                         >
@@ -409,6 +411,7 @@ export default function Navbar() {
 
                                 <Link
                                   href={menuData.overview.link}
+                                  prefetch={true}
                                   onClick={() => setActiveDropdown(null)}
                                   className="group inline-flex items-center gap-1 text-xs font-bold text-[#1748BB] hover:underline"
                                 >
@@ -422,6 +425,7 @@ export default function Navbar() {
                                 {/* Visual Image Banner Card */}
                                 <Link
                                   href={menuData.overview.link}
+                                  prefetch={true}
                                   onClick={() => setActiveDropdown(null)}
                                   className="block relative aspect-[16/8] w-full rounded-2xl overflow-hidden border border-neutral-200 shadow-sm group hover:shadow-md transition-shadow cursor-pointer mt-2"
                                 >
@@ -457,6 +461,7 @@ export default function Navbar() {
                   <Link
                     key={link.id}
                     href={link.href}
+                    prefetch={true}
                     onClick={(e) => {
                       if (link.href === "/" && pathname === "/") {
                         e.preventDefault();

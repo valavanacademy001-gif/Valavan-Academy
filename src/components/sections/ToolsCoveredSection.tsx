@@ -27,6 +27,7 @@ export const DEFAULT_GRAPHIC_DESIGN_TOOLS: ToolItem[] = [
   { name: "Adobe Illustrator", logo: "/assets/tools/illustrator.png" },
   { name: "Adobe Photoshop", logo: "/assets/tools/ps.png" },
   { name: "ChatGPT 4o", logo: "/assets/tools/chatgpt.png" },
+  { name: "Midjourney", logo: "/assets/tools/midjourney.png" },
   { name: "Google Gemini AI", logo: "/assets/tools/gemini-ai.png" },
   { name: "Canva Pro", logo: "/assets/tools/canva.png" },
   { name: "CorelDraw", logo: "/assets/tools/coreldraw.png" },

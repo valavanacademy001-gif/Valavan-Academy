@@ -5,8 +5,7 @@ import DynamicSectionRenderer from '@/components/dynamic/DynamicSectionRenderer'
 import { generatePageMetadata, getPageSEO } from '@/lib/seo'
 import JsonLdSchema from '@/components/seo/JsonLdSchema'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 60
 
 type Props = {
   params: Promise<{ slug: string }>

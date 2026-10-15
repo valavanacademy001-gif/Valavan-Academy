@@ -12,8 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata("/contact");
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function ContactPage() {
   const [contactData, siteSettings, pageSEO] = await Promise.all([

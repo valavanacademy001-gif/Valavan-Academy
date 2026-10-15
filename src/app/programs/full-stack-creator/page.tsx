@@ -134,8 +134,7 @@ const FULL_STACK_FAQS = [
   },
 ];
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getFullStackCreatorProgramData } from "@/lib/cms";
@@ -197,11 +196,11 @@ export default async function FullStackCreatorPage() {
     "Master Design, Video Editing, AI, Websites & Ai App Dev and Combine it all to Build A Future-Proof Creative Career In The AI Era.";
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/full-stack-.jpg-1.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enrollFullStack;
-  const buttonText = "Download Brochure";
-  const buttonUrl = "/brochure/full-stack-creator-brochure.pdf";
-  const buttonDownload = "Full-Stack-Creative-Master-Brochure.pdf";
-  const secondaryButtonText = "Join The Program";
-  const secondaryButtonUrl = enrollUrl;
+  const buttonText = "Enroll Now";
+  const buttonUrl = enrollUrl;
+  const secondaryButtonText = "Download Brochure";
+  const secondaryButtonUrl = "/brochure/full-stack-creator-brochure.pdf";
+  const secondaryButtonDownload = "Full-Stack-Creative-Master-Brochure.pdf";
 
   const highlights: HighlightItem[] = [
     { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
@@ -221,7 +220,7 @@ export default async function FullStackCreatorPage() {
       : "CREATIVE MASTER.";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white pb-16 sm:pb-24">
       <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Interactive Expanding Hero Section with Video Playback ── */}
       <ProgramHeroInteractive
@@ -232,12 +231,14 @@ export default async function FullStackCreatorPage() {
         highlights={highlights}
         imageSrc={imageSrc}
         altText={title}
+        programSlug="full-stack-creator"
+        programName="Full Stack Digital Creator Masterclass"
         enrollUrl={enrollUrl}
         buttonText={buttonText}
         buttonUrl={buttonUrl}
-        buttonDownload={buttonDownload}
         secondaryButtonText={secondaryButtonText}
         secondaryButtonUrl={secondaryButtonUrl}
+        secondaryButtonDownload={secondaryButtonDownload}
         youtubeId={heroMap.youtube_video_id || heroMap.youtube_id || heroMap.video_id || "3MLpscz9Hjg"}
         videoUrl={heroMap.video_url || "https://www.youtube.com/embed/3MLpscz9Hjg?si=2ugOaj4UP-npOPmv"}
         show3DIcons={true}
@@ -283,23 +284,21 @@ export default async function FullStackCreatorPage() {
       />
 
       {/* ── 07 Creator Economy : Why Is Full Stack Creative Booming (Why Now) ── */}
-      <div className="relative">
-        <div className="md:sticky md:top-0 md:min-h-screen md:flex md:flex-col md:justify-center z-10 bg-[#FBFDFF] overflow-hidden">
-          <CreatorEconomyBoomSection
-            badge="WHY NOW"
-            titlePrefix="Why Is Full Stack Creative"
-            titleHighlight="Booming?"
-            economyMap={economyMap}
-          />
-        </div>
+      <div className="relative z-10 bg-[#FBFDFF] py-10 sm:py-16 border-b border-neutral-100">
+        <CreatorEconomyBoomSection
+          badge="WHY NOW"
+          titlePrefix="Why Is Full Stack Creative"
+          titleHighlight="Booming?"
+          economyMap={economyMap}
+        />
+      </div>
 
-        {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
-        <div className="relative z-20">
-          <WhoIsThisForSection
-            whoMap={whoMap}
-            enrollUrl={enrollUrl}
-          />
-        </div>
+      {/* ── 08 Who Is This For (5 Persona Blue Cards with Enroll CTA) ── */}
+      <div className="relative z-10 bg-white">
+        <WhoIsThisForSection
+          whoMap={whoMap}
+          enrollUrl={enrollUrl}
+        />
       </div>
 
       {/* ── 10 Guidance From Experienced Mentors (Why Choose Valavan Academy + Team Photo) ── */}

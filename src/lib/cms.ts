@@ -271,12 +271,23 @@ export const DEFAULT_TESTIMONIALS: CMSTestimonial[] = [
   },
 ];
 
+// ─── HIGH-SPEED IN-MEMORY CACHE FOR INSTANT PAGE LOAD & TRANSITIONS ─────────
+const sectionFieldCache = new Map<string, { data: Record<string, string>; expiry: number }>();
+const genericCmsCache = new Map<string, { data: any; expiry: number }>();
+const CACHE_TTL_MS = 60_000; // 60 seconds
+
 // ─── HELPER FUNCTIONS ────────────────────────────────────────────────────────
 
 /**
  * Generic helper to fetch all key-value field pairs for a page & section
  */
 export async function getSectionFieldMap(pageSlug: string, sectionSlug: string): Promise<Record<string, string>> {
+  const cacheKey = `sec:${pageSlug}:${sectionSlug}`;
+  const cached = sectionFieldCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
     const { data: page } = await supabase
       .from("pages")
@@ -310,6 +321,7 @@ export async function getSectionFieldMap(pageSlug: string, sectionSlug: string):
       }
     }
 
+    sectionFieldCache.set(cacheKey, { data: map, expiry: Date.now() + CACHE_TTL_MS });
     return map;
   } catch {
     return {};
@@ -320,6 +332,12 @@ export async function getSectionFieldMap(pageSlug: string, sectionSlug: string):
  * Get map of section visibility by section slug for any given page
  */
 export async function getSectionVisibilityMap(pageSlug: string = "home"): Promise<Record<string, boolean>> {
+  const cacheKey = `vis:${pageSlug}`;
+  const cached = genericCmsCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
     const { data: page } = await supabase
       .from("pages")
@@ -327,20 +345,27 @@ export async function getSectionVisibilityMap(pageSlug: string = "home"): Promis
       .eq("slug", pageSlug)
       .maybeSingle();
 
-    if (!page) return {};
+    if (!page) {
+      genericCmsCache.set(cacheKey, { data: {}, expiry: Date.now() + CACHE_TTL_MS });
+      return {};
+    }
 
     const { data: sections } = await supabase
       .from("sections")
       .select("slug, is_visible")
       .eq("page_id", page.id);
 
-    if (!sections) return {};
+    if (!sections) {
+      genericCmsCache.set(cacheKey, { data: {}, expiry: Date.now() + CACHE_TTL_MS });
+      return {};
+    }
 
     const visibilityMap: Record<string, boolean> = {};
     sections.forEach((s) => {
       visibilityMap[s.slug] = s.is_visible !== false;
     });
 
+    genericCmsCache.set(cacheKey, { data: visibilityMap, expiry: Date.now() + CACHE_TTL_MS });
     return visibilityMap;
   } catch {
     return {};
@@ -709,6 +734,12 @@ export async function getCertificationsSectionData(): Promise<{ meta: CMSSection
  * Fetch published programs from Supabase (falls back to DEFAULT_PROGRAMS)
  */
 export async function getPublishedPrograms(): Promise<CMSProgram[]> {
+  const cacheKey = "published_programs";
+  const cached = genericCmsCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
     const { data, error } = await supabase
       .from("programs")
@@ -718,7 +749,7 @@ export async function getPublishedPrograms(): Promise<CMSProgram[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return DEFAULT_PROGRAMS.map((p, idx) => ({
+      const fallback = DEFAULT_PROGRAMS.map((p, idx) => ({
         slug: p.slug.replace("/programs/", ""),
         title: p.title,
         subtitle: p.subtitle,
@@ -734,11 +765,15 @@ export async function getPublishedPrograms(): Promise<CMSProgram[]> {
         status: "published",
         is_visible: true,
       }));
+      genericCmsCache.set(cacheKey, { data: fallback, expiry: Date.now() + CACHE_TTL_MS });
+      return fallback;
     }
 
-    return data as CMSProgram[];
+    const result = data as CMSProgram[];
+    genericCmsCache.set(cacheKey, { data: result, expiry: Date.now() + CACHE_TTL_MS });
+    return result;
   } catch {
-    return DEFAULT_PROGRAMS.map((p, idx) => ({
+    const fallback = DEFAULT_PROGRAMS.map((p, idx) => ({
       slug: p.slug.replace("/programs/", ""),
       title: p.title,
       subtitle: p.subtitle,
@@ -754,6 +789,7 @@ export async function getPublishedPrograms(): Promise<CMSProgram[]> {
       status: "published",
       is_visible: true,
     }));
+    return fallback;
   }
 }
 
@@ -761,8 +797,14 @@ export async function getPublishedPrograms(): Promise<CMSProgram[]> {
  * Fetch a single program by its slug from Supabase
  */
 export async function getProgramBySlug(slug: string): Promise<CMSProgram | null> {
+  const cleanSlug = slug.replace("/programs/", "").replace(/^\//, "");
+  const cacheKey = `prog:${cleanSlug}`;
+  const cached = genericCmsCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
-    const cleanSlug = slug.replace("/programs/", "").replace(/^\//, "");
     const { data, error } = await supabase
       .from("programs")
       .select("*")
@@ -772,7 +814,7 @@ export async function getProgramBySlug(slug: string): Promise<CMSProgram | null>
     if (error || !data) {
       const fallback = DEFAULT_PROGRAMS.find((p) => p.slug.includes(cleanSlug));
       if (fallback) {
-        return {
+        const result: CMSProgram = {
           slug: cleanSlug,
           title: fallback.title,
           subtitle: fallback.subtitle,
@@ -791,10 +833,13 @@ export async function getProgramBySlug(slug: string): Promise<CMSProgram | null>
           status: "published",
           is_visible: true,
         };
+        genericCmsCache.set(cacheKey, { data: result, expiry: Date.now() + CACHE_TTL_MS });
+        return result;
       }
       return null;
     }
 
+    genericCmsCache.set(cacheKey, { data: data as CMSProgram, expiry: Date.now() + CACHE_TTL_MS });
     return data as CMSProgram;
   } catch {
     return null;
@@ -805,6 +850,12 @@ export async function getProgramBySlug(slug: string): Promise<CMSProgram | null>
  * Fetch published learner stories from Supabase (falls back to DEFAULT_LEARNER_STORIES)
  */
 export async function getPublishedLearnerStories(): Promise<CMSLearnerStory[]> {
+  const cacheKey = "published_stories";
+  const cached = genericCmsCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
     const { data, error } = await supabase
       .from("learner_stories")
@@ -813,10 +864,13 @@ export async function getPublishedLearnerStories(): Promise<CMSLearnerStory[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
+      genericCmsCache.set(cacheKey, { data: DEFAULT_LEARNER_STORIES, expiry: Date.now() + CACHE_TTL_MS });
       return DEFAULT_LEARNER_STORIES;
     }
 
-    return data as CMSLearnerStory[];
+    const result = data as CMSLearnerStory[];
+    genericCmsCache.set(cacheKey, { data: result, expiry: Date.now() + CACHE_TTL_MS });
+    return result;
   } catch {
     return DEFAULT_LEARNER_STORIES;
   }
@@ -826,6 +880,12 @@ export async function getPublishedLearnerStories(): Promise<CMSLearnerStory[]> {
  * Fetch published testimonials from Supabase (falls back to DEFAULT_TESTIMONIALS)
  */
 export async function getPublishedTestimonials(): Promise<CMSTestimonial[]> {
+  const cacheKey = "published_testimonials";
+  const cached = genericCmsCache.get(cacheKey);
+  if (cached && cached.expiry > Date.now()) {
+    return cached.data;
+  }
+
   try {
     const { data, error } = await supabase
       .from("testimonials")
@@ -834,10 +894,13 @@ export async function getPublishedTestimonials(): Promise<CMSTestimonial[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
+      genericCmsCache.set(cacheKey, { data: DEFAULT_TESTIMONIALS, expiry: Date.now() + CACHE_TTL_MS });
       return DEFAULT_TESTIMONIALS;
     }
 
-    return data as CMSTestimonial[];
+    const result = data as CMSTestimonial[];
+    genericCmsCache.set(cacheKey, { data: result, expiry: Date.now() + CACHE_TTL_MS });
+    return result;
   } catch {
     return DEFAULT_TESTIMONIALS;
   }

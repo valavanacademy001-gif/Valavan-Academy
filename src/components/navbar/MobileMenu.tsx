@@ -140,6 +140,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {/* Home Link */}
                 <Link
                   href="/"
+                  prefetch={true}
                   onClick={(e) => {
                     onClose();
                     if (pathname === "/") {
@@ -199,6 +200,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                           <Link
                             key={prog.label}
                             href={prog.href}
+                            prefetch={true}
                             onClick={onClose}
                             className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-neutral-600 hover:text-[#1748BB] hover:bg-white transition-colors"
                           >
@@ -218,6 +220,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {/* About Link */}
                 <Link
                   href="/about"
+                  prefetch={true}
                   onClick={onClose}
                   className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
                 >
@@ -231,6 +234,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {/* Community Link */}
                 <Link
                   href="/community"
+                  prefetch={true}
                   onClick={onClose}
                   className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
                 >
@@ -244,6 +248,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 {/* Contact Link */}
                 <Link
                   href="/contact"
+                  prefetch={true}
                   onClick={onClose}
                   className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-neutral-800 font-semibold text-sm hover:bg-[#F0F5FF] hover:text-[#1748BB] transition-colors"
                 >

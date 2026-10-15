@@ -36,7 +36,7 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
   const [modalConfig, setModalConfig] = useState<LeadModalConfig>({
     isOpen: false,
     programSlug: '90-days-graphic-design',
-    programName: '90-Day Graphic Design Mastery',
+    programName: '90 Days Graphic Design Mastery Program',
     defaultPaymentUrl: 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view',
     price: 4999,
   })
@@ -47,31 +47,37 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
     let paymentUrl = options?.defaultPaymentUrl || ''
     let price = options?.price
 
-    // Auto-detect program from pathname if not explicitly passed
+    // Auto-detect program from payment URL if provided
+    if (!slug && paymentUrl) {
+      if (paymentUrl.includes('v8ykjCk') || paymentUrl.includes('full-stack')) {
+        slug = 'full-stack-creator'
+      } else if (paymentUrl.includes('e9OpaQTo') || paymentUrl.includes('workshop')) {
+        slug = '3-hours-live-workshop'
+      } else if (paymentUrl.includes('4ydecO7') || paymentUrl.includes('pl_SuHNtUTy7rhIe0') || paymentUrl.includes('90-days')) {
+        slug = '90-days-graphic-design'
+      }
+    }
+
+    // Auto-detect program from pathname if still not set
     if (!slug && typeof window !== 'undefined') {
       const path = window.location.pathname
       if (path.includes('3-hours') || path.includes('workshop')) {
         slug = '3-hours-live-workshop'
-        name = name || '3 Hours Live Graphic Design Workshop'
-        paymentUrl = paymentUrl || 'https://rzp.io/rzp/e9OpaQTo'
-        price = price || 199
       } else if (path.includes('full-stack') || path.includes('creator')) {
         slug = 'full-stack-creator'
-        name = name || 'Full Stack Digital Creator Masterclass'
-        paymentUrl = paymentUrl || 'https://rzp.io/rzp/v8ykjCk'
-        price = price || 14999
       } else {
         slug = '90-days-graphic-design'
-        name = name || '90-Day Graphic Design Mastery'
-        paymentUrl = paymentUrl || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
-        price = price || 4999
       }
+    }
+
+    if (!slug) {
+      slug = '90-days-graphic-design'
     }
 
     if (!name) {
       if (slug === '3-hours-live-workshop') name = '3 Hours Live Graphic Design Workshop'
       else if (slug === 'full-stack-creator') name = 'Full Stack Digital Creator Masterclass'
-      else name = '90-Day Graphic Design Mastery'
+      else name = '90 Days Graphic Design Mastery Program'
     }
 
     if (!paymentUrl) {
@@ -80,12 +86,18 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
       else paymentUrl = 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
     }
 
+    if (!price) {
+      if (slug === '3-hours-live-workshop') price = 199
+      else if (slug === 'full-stack-creator') price = 14999
+      else price = 4999
+    }
+
     setModalConfig({
       isOpen: true,
       programSlug: slug,
       programName: name,
       defaultPaymentUrl: paymentUrl,
-      price: price || 4999,
+      price,
     })
   }
 
@@ -119,7 +131,7 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
       }
 
       // Check if this click should open the Lead Form Modal:
-      // 1. Explicit data attribute
+      // 1. Explicit data attribute data-enroll-btn="true"
       // 2. Direct Razorpay payment link (e.g. rzp.io / pages.razorpay.com)
       // 3. CTA button with Enroll / Register / Join intent on program pages
       const isRazorpayLink = href.includes('rzp.io') || href.includes('razorpay.com')
@@ -134,14 +146,26 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
         e.preventDefault()
         e.stopPropagation()
 
-        // Extract program slug if passed in attributes or detect from page
-        const programSlug =
-          target.getAttribute('data-program-slug') ||
-          (href.includes('workshop') || href.includes('e9OpaQTo')
-            ? '3-hours-live-workshop'
-            : href.includes('full-stack') || href.includes('v8ykjCk')
-            ? 'full-stack-creator'
-            : '')
+        // Extract program slug if passed in attributes or detect from href/pathname
+        let programSlug = target.getAttribute('data-program-slug') || ''
+        if (!programSlug) {
+          if (href.includes('full-stack') || href.includes('v8ykjCk')) {
+            programSlug = 'full-stack-creator'
+          } else if (href.includes('workshop') || href.includes('e9OpaQTo')) {
+            programSlug = '3-hours-live-workshop'
+          } else if (href.includes('90-days') || href.includes('4ydecO7') || href.includes('pl_SuHNtUTy7rhIe0')) {
+            programSlug = '90-days-graphic-design'
+          } else if (typeof window !== 'undefined') {
+            const path = window.location.pathname
+            if (path.includes('full-stack') || path.includes('creator')) {
+              programSlug = 'full-stack-creator'
+            } else if (path.includes('3-hours') || path.includes('workshop')) {
+              programSlug = '3-hours-live-workshop'
+            } else if (path.includes('90-days') || path.includes('graphic-design')) {
+              programSlug = '90-days-graphic-design'
+            }
+          }
+        }
 
         openEnrollModal({
           programSlug: programSlug || undefined,

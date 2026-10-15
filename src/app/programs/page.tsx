@@ -11,8 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generatePageMetadata("/programs");
 }
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 import { getPublishedPrograms, getSectionVisibilityMap, getSectionFieldMap } from "@/lib/cms";
 

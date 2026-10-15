@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, Lock, CheckCircle2, ArrowRight, Sparkles, Phone, Mail, User, Briefcase, Calendar } from 'lucide-react'
+import { X, Lock, CheckCircle2, ArrowRight, ShieldCheck, Phone, Mail, User, Briefcase, Calendar, ChevronDown } from 'lucide-react'
 
 export interface LeadModalConfig {
   isOpen: boolean
@@ -17,11 +17,12 @@ interface LeadCaptureModalProps {
 }
 
 const OCCUPATIONS = [
-  'Student',
-  'Working Professional',
-  'Business Owner',
-  'Freelancer',
-  'House Wife',
+  'Student (College / School)',
+  'Working Professional / Employee',
+  'Freelancer / Content Creator',
+  'Business Owner / Entrepreneur',
+  'Homemaker / Housewife',
+  'Job Seeker / Career Switcher',
 ]
 
 const DEFAULT_PROGRAM_PAYMENTS: Record<string, { url: string; name: string; price: number }> = {
@@ -31,7 +32,7 @@ const DEFAULT_PROGRAM_PAYMENTS: Record<string, { url: string; name: string; pric
     price: 199,
   },
   '90-days-graphic-design': {
-    name: '90-Day Graphic Design Mastery',
+    name: '90 Days Graphic Design Mastery Program',
     url: 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view',
     price: 4999,
   },
@@ -61,6 +62,11 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
   }, [config.isOpen, config.programSlug])
 
   if (!config.isOpen) return null
+
+  const progKey = config.programSlug || '90-days-graphic-design'
+  const fallbackDef = DEFAULT_PROGRAM_PAYMENTS[progKey] || DEFAULT_PROGRAM_PAYMENTS['90-days-graphic-design']
+  const displayProgramName = config.programName || fallbackDef.name
+  const displayPrice = config.price || fallbackDef.price
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {}
@@ -109,14 +115,9 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
     setIsSubmitting(true)
 
     try {
-      // 1. Resolve Target Payment Link synchronously for instant redirect
-      const progKey = config.programSlug || '90-days-graphic-design'
-      const fallbackDef = DEFAULT_PROGRAM_PAYMENTS[progKey] || DEFAULT_PROGRAM_PAYMENTS['90-days-graphic-design']
       const targetPaymentUrl = config.defaultPaymentUrl || fallbackDef.url || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
-      const cleanProgramName = config.programName || fallbackDef.name || '90-Day Graphic Design Mastery'
-      const price = config.price || fallbackDef.price || 4999
 
-      // 2. Gather attribution context
+      // Gather attribution context
       let utm: Record<string, string> = {}
       let vid = ''
       let sid = ''
@@ -133,7 +134,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
         occupation: occupation,
-        program_name: cleanProgramName,
+        program_name: displayProgramName,
         program_slug: progKey,
         fallback_payment_url: targetPaymentUrl,
         page_url: typeof window !== 'undefined' ? window.location.pathname : '',
@@ -148,13 +149,13 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         device: typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop',
       }
 
-      // 3. Synchronously fire Meta Pixel & GA4 Lead tracking events
+      // Synchronously fire Meta Pixel & GA4 Lead tracking events
       try {
         if (typeof (window as any).fbq === 'function') {
           (window as any).fbq('track', 'Lead', {
-            content_name: cleanProgramName,
+            content_name: displayProgramName,
             content_category: 'Program Enrollment',
-            value: price,
+            value: displayPrice,
             currency: 'INR',
           })
         }
@@ -163,8 +164,8 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
       try {
         if (typeof (window as any).gtag === 'function') {
           (window as any).gtag('event', 'generate_lead', {
-            program_name: cleanProgramName,
-            value: price,
+            program_name: displayProgramName,
+            value: displayPrice,
             currency: 'INR',
           })
         }
@@ -174,14 +175,13 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         if (Array.isArray((window as any).dataLayer)) {
           (window as any).dataLayer.push({
             event: 'lead_captured',
-            program_name: cleanProgramName,
+            program_name: displayProgramName,
             program_slug: progKey,
           })
         }
       } catch {}
 
-      // 4. Non-blocking fire-and-forget lead dispatch to server
-      // Using keepalive: true / sendBeacon guarantees background delivery to /api/leads even during navigation
+      // Fire-and-forget lead dispatch to server
       const jsonStr = JSON.stringify(payload)
       let beaconSent = false
       try {
@@ -202,11 +202,11 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         } catch {}
       }
 
-      // 5. INSTANT REDIRECTION - zero lag / zero waiting
+      // Direct redirection to secure Razorpay checkout
       window.location.href = targetPaymentUrl
     } catch (err) {
       console.error('Error initiating secure redirect:', err)
-      const fallbackUrl = config.defaultPaymentUrl || 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
+      const fallbackUrl = config.defaultPaymentUrl || fallbackDef.url
       window.location.href = fallbackUrl
     }
   }
@@ -216,56 +216,43 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-xs overflow-y-auto overflow-x-hidden w-full max-w-[100vw] box-border animate-in fade-in duration-150"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm overflow-y-auto overflow-x-hidden w-full max-w-[100vw] box-border animate-in fade-in duration-150"
     >
-      {/* Modal Card */}
+      {/* Minimal Light Corporate Modal Card */}
       <div
-        className="relative w-full max-w-[calc(100vw-24px)] sm:max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh] my-auto mx-auto shrink-0 box-border animate-in zoom-in-95 duration-150"
+        className="relative w-full max-w-[calc(100vw-24px)] sm:max-w-[460px] bg-white rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] border border-slate-200/90 overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[88vh] my-auto mx-auto shrink-0 box-border animate-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
       >
-        {/* Header Gradient */}
-        <div className="bg-gradient-to-br from-[#1748BB] via-blue-600 to-[#0F3590] p-4 sm:p-5 text-white relative">
+        {/* Minimal Light Theme Header - Heading Only */}
+        <div className="bg-white px-5 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-5 border-b border-slate-100 relative">
+          {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
-            className="absolute top-3.5 right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 z-10"
+            aria-label="Close modal"
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer shrink-0 z-10"
           >
-            <X className="w-4 h-4 text-white" />
+            <X className="w-4 h-4" />
           </button>
 
-          <div className="flex items-center gap-2 mb-1.5">
-            <span
-              style={{ color: '#ffffff' }}
-              className="px-2 py-0.5 rounded-full bg-white/20 !text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 backdrop-blur-xs"
-            >
-              <Sparkles className="w-2.5 h-2.5 text-amber-300 shrink-0" />
-              <span>Step 1 of 2 · Quick Enrollment</span>
-            </span>
-          </div>
-
-          <h3
-            style={{ color: '#ffffff' }}
-            className="text-base sm:text-lg font-black tracking-tight leading-tight !text-white drop-shadow-xs pr-8 break-words"
-          >
-            {config.programName || 'Complete Your Enrollment'}
+          {/* Heading Only in Brand Blue */}
+          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-[#1748BB] font-display pr-8 break-words leading-snug">
+            {displayProgramName}
           </h3>
-          <p
-            style={{ color: 'rgba(255, 255, 255, 0.92)' }}
-            className="text-[11px] sm:text-xs !text-white/90 mt-1 font-medium leading-tight break-words pr-4"
-          >
-            Fill your details below to proceed to secure Razorpay checkout.
-          </p>
         </div>
 
-        {/* Body Form */}
-        <form onSubmit={handleSubmit} className="p-3.5 sm:p-5 overflow-y-auto space-y-2.5 sm:space-y-3 flex-1 min-w-0">
-          {/* Name Field */}
-          <div className="space-y-1 min-w-0">
-            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
-              <span>Full Name <span className="text-red-500">*</span></span>
+        {/* Minimal Form Body (No Price, Minimal Content) */}
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1 min-w-0 bg-white">
+          
+          {/* Full Name Field */}
+          <div className="space-y-1.5 min-w-0">
+            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                <span>Full Name <span className="text-red-500">*</span></span>
+              </span>
+              {errors.name && <span className="text-[10px] text-red-600 font-semibold normal-case tracking-normal">{errors.name}</span>}
             </label>
             <input
               type="text"
@@ -275,20 +262,19 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.name) setErrors((prev) => ({ ...prev, name: '' }))
               }}
               placeholder="e.g. Vignesh Kumar"
-              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full min-w-0 px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border transition-all outline-none font-medium ${
                 errors.name
-                  ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
+                  ? 'border-red-300 ring-2 ring-red-100 bg-red-50/20 text-slate-900'
+                  : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 focus:bg-white focus:border-[#1748BB] focus:ring-2 focus:ring-[#1748BB]/15 text-slate-900 placeholder:text-slate-400'
               }`}
             />
-            {errors.name && <p className="text-[10px] text-red-600 font-semibold">{errors.name}</p>}
           </div>
 
-          {/* Row: Age & Phone */}
-          <div className="flex gap-2 sm:gap-3 items-start min-w-0">
-            {/* Age Field: compact 76px width on mobile */}
-            <div className="space-y-1 w-20 sm:w-24 shrink-0">
-              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1">
+          {/* Row: Age & WhatsApp Phone */}
+          <div className="flex gap-2.5 sm:gap-3 items-start min-w-0">
+            {/* Age Field */}
+            <div className="space-y-1.5 w-20 sm:w-24 shrink-0">
+              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
                 <span>Age <span className="text-red-500">*</span></span>
               </label>
@@ -302,44 +288,54 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                   if (errors.age) setErrors((prev) => ({ ...prev, age: '' }))
                 }}
                 placeholder="24"
-                className={`w-full min-w-0 px-2.5 sm:px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 text-center sm:text-left ${
+                className={`w-full min-w-0 px-2.5 sm:px-3 py-2.5 text-xs sm:text-sm text-center rounded-xl border transition-all outline-none font-medium ${
                   errors.age
-                    ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
+                    ? 'border-red-300 ring-2 ring-red-100 bg-red-50/20 text-slate-900'
+                    : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 focus:bg-white focus:border-[#1748BB] focus:ring-2 focus:ring-[#1748BB]/15 text-slate-900 placeholder:text-slate-400'
                 }`}
               />
               {errors.age && <p className="text-[10px] text-red-600 font-semibold">{errors.age}</p>}
             </div>
 
-            {/* Phone Number Field: takes all remaining width */}
-            <div className="space-y-1 flex-1 min-w-0">
-              <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5 truncate">
-                <Phone className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
-                <span className="truncate">WhatsApp / Phone <span className="text-red-500">*</span></span>
+            {/* WhatsApp / Phone Field */}
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+                <span className="flex items-center gap-1.5 truncate">
+                  <Phone className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                  <span className="truncate">WhatsApp / Mobile <span className="text-red-500">*</span></span>
+                </span>
+                {errors.phone && <span className="text-[10px] text-red-600 font-semibold normal-case tracking-normal">{errors.phone}</span>}
               </label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value)
-                  if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }))
-                }}
-                placeholder="9876543210"
-                className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
-                  errors.phone
-                    ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                    : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
-                }`}
-              />
-              {errors.phone && <p className="text-[10px] text-red-600 font-semibold">{errors.phone}</p>}
+              <div className={`relative flex rounded-xl border transition-all ${
+                errors.phone
+                  ? 'border-red-300 ring-2 ring-red-100 bg-red-50/20'
+                  : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 focus-within:bg-white focus-within:border-[#1748BB] focus-within:ring-2 focus-within:ring-[#1748BB]/15'
+              }`}>
+                <span className="inline-flex items-center px-2.5 text-xs font-bold text-slate-500 border-r border-slate-200 bg-slate-100/80 rounded-l-xl select-none">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                    if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }))
+                  }}
+                  placeholder="9876543210"
+                  className="w-full min-w-0 px-3 py-2.5 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 font-medium bg-transparent outline-none"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Email Field */}
-          <div className="space-y-1 min-w-0">
-            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
-              <span>Email Address <span className="text-red-500">*</span></span>
+          {/* Email Address Field */}
+          <div className="space-y-1.5 min-w-0">
+            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                <span>Email Address <span className="text-red-500">*</span></span>
+              </span>
+              {errors.email && <span className="text-[10px] text-red-600 font-semibold normal-case tracking-normal">{errors.email}</span>}
             </label>
             <input
               type="email"
@@ -349,66 +345,84 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 if (errors.email) setErrors((prev) => ({ ...prev, email: '' }))
               }}
               placeholder="e.g. yourname@gmail.com"
-              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all focus:outline-none focus:ring-2 ${
+              className={`w-full min-w-0 px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border transition-all outline-none font-medium ${
                 errors.email
-                  ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100 bg-gray-50/40 focus:bg-white'
+                  ? 'border-red-300 ring-2 ring-red-100 bg-red-50/20 text-slate-900'
+                  : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 focus:bg-white focus:border-[#1748BB] focus:ring-2 focus:ring-[#1748BB]/15 text-slate-900 placeholder:text-slate-400'
               }`}
             />
-            {errors.email && <p className="text-[10px] text-red-600 font-semibold">{errors.email}</p>}
           </div>
 
-          {/* Occupation Dropdown */}
-          <div className="space-y-1 min-w-0">
-            <label className="text-[11px] sm:text-xs font-bold text-gray-700 flex items-center gap-1.5">
-              <Briefcase className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
-              <span>Current Occupation <span className="text-red-500">*</span></span>
+          {/* Current Occupation Dropdown */}
+          <div className="space-y-1.5 min-w-0">
+            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Briefcase className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+                <span>Current Occupation <span className="text-red-500">*</span></span>
+              </span>
+              {errors.occupation && <span className="text-[10px] text-red-600 font-semibold normal-case tracking-normal">{errors.occupation}</span>}
             </label>
-            <select
-              value={occupation}
-              onChange={(e) => {
-                setOccupation(e.target.value)
-                if (errors.occupation) setErrors((prev) => ({ ...prev, occupation: '' }))
-              }}
-              className={`w-full min-w-0 px-3 py-2 text-xs sm:text-sm rounded-xl border transition-all bg-gray-50/40 focus:bg-white focus:outline-none focus:ring-2 ${
-                errors.occupation
-                  ? 'border-red-300 ring-1 ring-red-200 bg-red-50/20'
-                  : 'border-gray-200 focus:border-[#1748BB] focus:ring-blue-100'
-              }`}
-            >
-              <option value="">-- Select Your Occupation --</option>
-              {OCCUPATIONS.map((occ) => (
-                <option key={occ} value={occ}>
-                  {occ}
-                </option>
-              ))}
-            </select>
-            {errors.occupation && <p className="text-[10px] text-red-600 font-semibold">{errors.occupation}</p>}
+            <div className="relative">
+              <select
+                value={occupation}
+                onChange={(e) => {
+                  setOccupation(e.target.value)
+                  if (errors.occupation) setErrors((prev) => ({ ...prev, occupation: '' }))
+                }}
+                className={`w-full min-w-0 appearance-none px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border transition-all outline-none font-medium cursor-pointer pr-10 ${
+                  errors.occupation
+                    ? 'border-red-300 ring-2 ring-red-100 bg-red-50/20 text-slate-900'
+                    : 'border-slate-200 bg-slate-50/60 hover:bg-slate-50 focus:bg-white focus:border-[#1748BB] focus:ring-2 focus:ring-[#1748BB]/15 text-slate-800'
+                }`}
+              >
+                <option value="">-- Select Your Professional Background --</option>
+                {OCCUPATIONS.map((occ) => (
+                  <option key={occ} value={occ}>
+                    {occ}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                <ChevronDown className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="pt-1.5">
+          {/* Corporate CTA Button */}
+          <div className="pt-2">
             <button
               type="submit"
               disabled={isSubmitting}
-              style={{ color: '#ffffff' }}
-              className="w-full py-2.5 sm:py-3 px-4 rounded-xl bg-gradient-to-r from-[#1748BB] to-blue-600 hover:from-[#123999] hover:to-blue-700 !text-white text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-85"
+              className="w-full py-3 sm:py-3.5 px-4 rounded-xl bg-[#1748BB] hover:bg-[#123999] text-white font-bold text-xs sm:text-sm shadow-[0_8px_20px_rgba(23,72,187,0.28)] hover:shadow-[0_12px_26px_rgba(23,72,187,0.38)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-85 group active:scale-[0.99]"
             >
-              <span style={{ color: '#ffffff' }} className="!text-white">Proceed to Secure Payment</span>
-              <ArrowRight className="w-4 h-4 text-white" />
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin shrink-0" />
+                  <span className="text-white">Connecting to Razorpay Gateway...</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-4 h-4 text-blue-200 shrink-0" />
+                  <span className="text-white">Proceed to Secure Payment</span>
+                  <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform shrink-0" />
+                </>
+              )}
             </button>
           </div>
 
-          {/* Trust badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-gray-500 pt-0.5">
-            <div className="flex items-center gap-1 shrink-0">
-              <Lock className="w-3 h-3 text-emerald-600 shrink-0" />
-              <span>256-Bit SSL Secured</span>
+          {/* Minimal Corporate Trust Seals */}
+          <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between text-[10px] sm:text-[11px] text-slate-500 gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="font-semibold text-slate-600">256-Bit SSL Encrypted</span>
             </div>
-            <span className="w-1 h-1 rounded-full bg-gray-300 hidden sm:inline-block" />
-            <div className="flex items-center gap-1 shrink-0">
-              <CheckCircle2 className="w-3 h-3 text-blue-600 shrink-0" />
-              <span>Instant Course Access</span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#1748BB] shrink-0" />
+              <span className="font-semibold text-slate-600">Razorpay Verified</span>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="font-semibold text-slate-600">Instant Access</span>
             </div>
           </div>
         </form>

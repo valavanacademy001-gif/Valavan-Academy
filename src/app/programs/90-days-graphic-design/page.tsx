@@ -27,6 +27,7 @@ const GRAPHIC_DESIGN_TOOLS = [
   { name: "Adobe Illustrator", logo: "/assets/tools/illustrator.png" },
   { name: "Adobe Photoshop", logo: "/assets/tools/ps.png" },
   { name: "ChatGPT 4o", logo: "/assets/tools/chatgpt.png" },
+  { name: "Midjourney", logo: "/assets/tools/midjourney.png" },
   { name: "Google Gemini AI", logo: "/assets/tools/gemini-ai.png" },
   { name: "Canva Pro", logo: "/assets/tools/canva.png" },
   { name: "CorelDraw", logo: "/assets/tools/coreldraw.png" },
@@ -43,8 +44,7 @@ const CURRICULUM = [
   { week: "Week 13", topic: "Portfolio Building & Freelancing", desc: "Curating your top 10 portfolio projects, setting freelance pricing, and onboarding clients." },
 ];
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 import { HighlightItem } from "@/components/sections/ProgramHeroInteractive";
 import { getProgramBySlug, getGraphicDesignProgramData, getPublishedLearnerStories } from "@/lib/cms";
@@ -85,6 +85,9 @@ function resolveProgramTools(
       if (toolFile.includes("gemini")) {
         return { name: t, logo: "/assets/tools/gemini-ai.png" };
       }
+      if (toolFile.includes("midjourney")) {
+        return { name: t, logo: "/assets/tools/midjourney.png" };
+      }
       return { name: t, logo: `/assets/tools/${toolFile}.png` };
     }
     if (typeof t === "object" && t !== null && "name" in t) {
@@ -124,8 +127,8 @@ export default async function GraphicDesignProgramPage() {
   const imageSrc = heroMap.hero_image || cmsProgram?.banner_url || cmsProgram?.thumbnail_url || "/assets/images/hero/ai-powered-GD.webp";
   const enrollUrl = heroMap.enroll_url || cmsProgram?.cta_url || EXTERNAL_URLS.enroll90Days;
   const buttonText = heroMap.enroll_btn_text || "Enroll Now";
-  const secondaryButtonText = heroMap.secondary_btn_text || "View Curriculum";
-  const secondaryButtonUrl = heroMap.secondary_btn_url || "#roadmap";
+  const secondaryButtonText = "Download Brochure";
+  const secondaryButtonUrl = "/brochure/90-days-graphic-design-brochure.pdf";
 
   const highlights: HighlightItem[] = [
     { iconType: "students", value: heroMap.stat_students || "10,000+ Students" },
@@ -139,7 +142,7 @@ export default async function GraphicDesignProgramPage() {
   const titleHighlight = heroMap.title_highlight || "Mastery Program.";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white pb-16 sm:pb-24">
       <JsonLdSchema pageSEO={pageSEO} />
       {/* ── 01 Interactive Expanding Hero Section with Video Playback ── */}
       <ProgramHeroInteractive
@@ -150,10 +153,14 @@ export default async function GraphicDesignProgramPage() {
         highlights={highlights}
         imageSrc={imageSrc}
         altText={title}
+        programSlug="90-days-graphic-design"
+        programName={title}
         enrollUrl={enrollUrl}
         buttonText={buttonText}
+        buttonUrl={enrollUrl}
         secondaryButtonText={secondaryButtonText}
         secondaryButtonUrl={secondaryButtonUrl}
+        secondaryButtonDownload="90-Days-Graphic-Design-Mastery-Brochure.pdf"
         youtubeId={heroMap.youtube_video_id || heroMap.youtube_id || heroMap.video_id || "BYSgZWZMgMU"}
         videoUrl={heroMap.video_url || "https://www.youtube.com/embed/BYSgZWZMgMU?si=TeHULtawXhx5PWig&start=2"}
         show3DIcons={true}
@@ -220,8 +227,9 @@ export default async function GraphicDesignProgramPage() {
         description={supportMap.description || "If you're ready to build a valuable creative skill, create an impressive portfolio, and open new opportunities, this program is designed for you."}
         primaryBtnText={supportMap.primary_btn_text || "Enroll Now"}
         primaryBtnUrl={supportMap.enroll_url || supportMap.primary_btn_url || enrollUrl}
-        secondaryBtnText={supportMap.secondary_btn_text || "📖 View Curriculum"}
-        secondaryBtnUrl={supportMap.secondary_btn_url || "#roadmap"}
+        secondaryBtnText="Download Brochure"
+        secondaryBtnUrl="/brochure/90-days-graphic-design-brochure.pdf"
+        secondaryBtnDownload="90-Days-Graphic-Design-Mastery-Brochure.pdf"
         footerSubtext={supportMap.footer_subtext || "Join thousands of learners building their creative future with Valavan Academy."}
         supportMap={supportMap}
       />

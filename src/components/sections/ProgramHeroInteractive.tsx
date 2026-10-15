@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import Container from "@/components/ui/Container";
 import { ArrowLeft, ArrowRight, Download, Clock, Globe, BarChart, Layers, Sparkles, Play, Volume2, VolumeX, GraduationCap, FolderGit2, Video, UserCheck, BookOpen, Bot } from "lucide-react";
+import { useLeadModal } from "@/components/leads/LeadCaptureProvider";
 
 export interface HighlightItem {
   iconType: "clock" | "globe" | "level" | "work" | "students" | "projects" | "lessons" | "access" | "guidance" | "skills" | "book" | "ai" | "bot" | string;
@@ -23,11 +24,14 @@ interface ProgramHeroInteractiveProps {
   altText: string;
   enrollUrl: string;
   communityUrl?: string;
+  programSlug?: string;
+  programName?: string;
   buttonText?: string;
   buttonUrl?: string;
   buttonDownload?: boolean | string;
   secondaryButtonText?: string;
   secondaryButtonUrl?: string;
+  secondaryButtonDownload?: boolean | string;
   youtubeId?: string;
   videoUrl?: string;
   show3DIcons?: boolean;
@@ -83,17 +87,21 @@ export default function ProgramHeroInteractive({
   altText,
   enrollUrl,
   communityUrl,
-  buttonText = "Download Brochure",
+  programSlug = "90-days-graphic-design",
+  programName,
+  buttonText = "Enroll Now",
   buttonUrl,
   buttonDownload,
-  secondaryButtonText = "Join The Program",
+  secondaryButtonText,
   secondaryButtonUrl,
+  secondaryButtonDownload,
   youtubeId,
   videoUrl,
   show3DIcons = false,
   topRight3DIcon = "/assets/icons/illustrator-3d-sphere.png",
   bottomRight3DIcon = "/assets/icons/photoshop-3d-sphere.png",
 }: ProgramHeroInteractiveProps) {
+  const { openEnrollModal } = useLeadModal();
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -275,33 +283,60 @@ export default function ProgramHeroInteractive({
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row gap-4">
+                {/* Primary CTA: Enroll Now (Opens Lead Form Modal) */}
                 <a
-                  href={buttonUrl || "/brochure/full-stack-creator-brochure.pdf"}
-                  download={buttonDownload !== undefined ? (typeof buttonDownload === "string" ? buttonDownload : "Full-Stack-Creative-Master-Brochure.pdf") : "Full-Stack-Creative-Master-Brochure.pdf"}
-                  data-no-intercept="true"
+                  href={buttonUrl || enrollUrl}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openEnrollModal({
+                      programSlug,
+                      programName,
+                      defaultPaymentUrl: buttonUrl || enrollUrl,
+                    });
+                  }}
+                  data-enroll-btn="true"
+                  data-program-slug={programSlug}
                   style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
-                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.25)] cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2 bg-white hover:bg-[#F0F5FF] !text-[#1748BB] font-sans font-bold text-sm sm:text-base px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-[0_10px_30px_rgba(0,0,0,0.25)] cursor-pointer"
                 >
                   <span style={{ color: "#1748BB" }} className="!text-[#1748BB] font-bold">
-                    {buttonText}
+                    {buttonText || "Enroll Now"}
                   </span>
-                  <Download size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB]" />
+                  <ArrowRight size={17} style={{ color: "#1748BB" }} className="!text-[#1748BB] group-hover:translate-x-1 transition-transform" />
                 </a>
 
-                <a
-                  href={secondaryButtonUrl || enrollUrl}
-                  data-enroll-btn="true"
-                  data-program-slug="full-stack-creator"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
-                  className="inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
-                >
-                  <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">
-                    {secondaryButtonText}
-                  </span>
-                  <ArrowRight size={17} style={{ color: "#FFFFFF" }} className="!text-white" />
-                </a>
+                {/* Secondary CTA: Download Brochure */}
+                {secondaryButtonText && (
+                  <a
+                    href={
+                      secondaryButtonUrl ||
+                      (programSlug === "full-stack-creator"
+                        ? "/brochure/full-stack-creator-brochure.pdf"
+                        : "/brochure/90-days-graphic-design-brochure.pdf")
+                    }
+                    download={
+                      secondaryButtonDownload !== undefined
+                        ? (typeof secondaryButtonDownload === "string"
+                            ? secondaryButtonDownload
+                            : (programSlug === "full-stack-creator"
+                                ? "Full-Stack-Creative-Master-Brochure.pdf"
+                                : "90-Days-Graphic-Design-Mastery-Brochure.pdf"))
+                        : (programSlug === "full-stack-creator"
+                            ? "Full-Stack-Creative-Master-Brochure.pdf"
+                            : "90-Days-Graphic-Design-Mastery-Brochure.pdf")
+                    }
+                    data-no-intercept="true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#FFFFFF", borderColor: "#FFFFFF" }}
+                    className="group inline-flex items-center justify-center gap-2 border-2 border-white hover:border-white !text-white font-sans font-bold text-sm sm:text-base px-7 py-4 rounded-full hover:bg-white/10 transition-all duration-200 hover:scale-105 cursor-pointer"
+                  >
+                    <span style={{ color: "#FFFFFF" }} className="!text-white font-bold">
+                      {secondaryButtonText}
+                    </span>
+                    <Download size={17} style={{ color: "#FFFFFF" }} className="!text-white group-hover:translate-y-0.5 transition-transform" />
+                  </a>
+                )}
               </div>
             </motion.div>
 

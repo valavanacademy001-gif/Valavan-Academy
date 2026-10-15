@@ -353,10 +353,16 @@ export const DEFAULT_PAGE_SEO_MAP: Record<string, PageSEOConfig> = {
 /**
  * Fetch live SEO settings from Supabase field_values (falls back to DEFAULT_PAGE_SEO_MAP)
  */
+let cachedSEOSettings: { data: { global: GlobalSEOSettings; pages: Record<string, PageSEOConfig> }; expiry: number } | null = null;
+
 export async function fetchLiveSEOSettings(): Promise<{
   global: GlobalSEOSettings
   pages: Record<string, PageSEOConfig>
 }> {
+  if (cachedSEOSettings && cachedSEOSettings.expiry > Date.now()) {
+    return cachedSEOSettings.data;
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bjktqpmtlwfsmofaaajv.supabase.co'
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqa3RxcG10bHdmc21vZmFhYWp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMDkzNTEsImV4cCI6MjEwMjg4NTM1MX0.HUp094ulUH7sIw9F5oAzlE23kjRqow11yj_0jd5mvL4'
 
@@ -366,10 +372,18 @@ export async function fetchLiveSEOSettings(): Promise<{
   try {
     const supabase = createClient(supabaseUrl, supabaseKey)
     const { data: page } = await supabase.from('pages').select('id').eq('slug', 'global_settings').maybeSingle()
-    if (!page) return { global: globalSettings, pages: pageMap }
+    if (!page) {
+      const res = { global: globalSettings, pages: pageMap };
+      cachedSEOSettings = { data: res, expiry: Date.now() + 60_000 };
+      return res;
+    }
 
     const { data: sec } = await supabase.from('sections').select('id').eq('page_id', page.id).eq('slug', 'tracking_analytics').maybeSingle()
-    if (!sec) return { global: globalSettings, pages: pageMap }
+    if (!sec) {
+      const res = { global: globalSettings, pages: pageMap };
+      cachedSEOSettings = { data: res, expiry: Date.now() + 60_000 };
+      return res;
+    }
 
     const { data: fieldVals } = await supabase
       .from('field_values')
@@ -409,7 +423,9 @@ export async function fetchLiveSEOSettings(): Promise<{
     console.warn('[SEO Engine] Live fetch warning, using defaults:', err)
   }
 
-  return { global: globalSettings, pages: pageMap }
+  const res = { global: globalSettings, pages: pageMap }
+  cachedSEOSettings = { data: res, expiry: Date.now() + 60_000 }
+  return res
 }
 
 /**
