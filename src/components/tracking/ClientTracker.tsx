@@ -45,17 +45,20 @@ export default function ClientTracker() {
         }
       }
 
-      // Send telemetry to Valavan tracking backend
-      if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-        const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
-        navigator.sendBeacon('/api/track', blob)
-      } else {
-        fetch('/api/track', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          keepalive: true,
-        }).catch(() => {})
+      // Send telemetry to Valavan tracking backend only for high-intent conversions
+      const isHighIntent = /whatsapp|lead|form|phone|enroll/i.test(eventType)
+      if (isHighIntent) {
+        if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          navigator.sendBeacon('/api/track', blob)
+        } else {
+          fetch('/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            keepalive: true,
+          }).catch(() => {})
+        }
       }
     } catch {
       // Gracefully ignore tracking errors to protect user experience

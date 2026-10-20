@@ -556,26 +556,24 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         ...parsedPayload,
       }
 
-      if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-        const blob = new Blob([JSON.stringify(telemetryPayload)], { type: 'application/json' })
-        navigator.sendBeacon('/api/track', blob)
-      } else {
-        fetch('/api/track', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(telemetryPayload),
-          keepalive: true,
-        }).catch(() => {})
-      }
+      // Deduplicate page_view telemetry beacon per path per session to conserve serverless compute
+      const pvKey = `va_pv_${currentPath}`
+      const alreadyLogged = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(pvKey) : null
 
-      // Tag Microsoft Clarity session & visitor
-      if (typeof window !== 'undefined' && (window as any).clarity) {
-        try {
-          (window as any).clarity('set', 'visitor_id', vid)
-          (window as any).clarity('set', 'session_id', sid)
-          (window as any).clarity('identify', vid, sid)
-        } catch {
-          // Ignore
+      if (!alreadyLogged) {
+        if (typeof sessionStorage !== 'undefined') {
+          try { sessionStorage.setItem(pvKey, '1') } catch {}
+        }
+        if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(telemetryPayload)], { type: 'application/json' })
+          navigator.sendBeacon('/api/track', blob)
+        } else {
+          fetch('/api/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(telemetryPayload),
+            keepalive: true,
+          }).catch(() => {})
         }
       }
     } catch {
@@ -608,7 +606,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
 
   // 6. Global Click, CTA, and Form Submission Telemetry Listener
   useEffect(() => {
-    const trackCustomEvent = (eventType: string, eventData: Record<string, any> = {}) => {
+    const trackCustomEvent = (eventType: string, eventData: Record<string, any> = {}, sendToBackend = false) => {
       try {
         const vid = getOrCreateVisitorId()
         const sid = getOrCreateSessionId()
@@ -661,17 +659,20 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
           })
         }
 
-        // Send telemetry beacon
-        if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
-          navigator.sendBeacon('/api/track', blob)
-        } else {
-          fetch('/api/track', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            keepalive: true,
-          }).catch(() => {})
+        // Only send telemetry beacon to Vercel backend for genuine high-intent conversion actions
+        // (WhatsApp, Phone Call, Form, CTA) to keep Vercel Fluid Active CPU and Serverless Functions low
+        if (sendToBackend) {
+          if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+            const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
+            navigator.sendBeacon('/api/track', blob)
+          } else {
+            fetch('/api/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              keepalive: true,
+            }).catch(() => {})
+          }
         }
       } catch {
         // Silent error prevention
@@ -679,7 +680,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
     }
 
     if (typeof window !== 'undefined') {
-      window.vaTrackEvent = trackCustomEvent
+      window.vaTrackEvent = (type, data) => trackCustomEvent(type, data, true)
     }
 
     const handleClick = (e: MouseEvent) => {
@@ -692,12 +693,12 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       const label = text || ariaLabel || target.getAttribute('id') || 'Unknown Button'
 
       if (href.includes('wa.me') || href.includes('whatsapp.com') || href.includes('api.whatsapp.com')) {
-        trackCustomEvent('WhatsApp Click', { cta_label: label, cta_url: href })
+        trackCustomEvent('WhatsApp Click', { cta_label: label, cta_url: href }, true)
         return
       }
 
       if (href.startsWith('tel:')) {
-        trackCustomEvent('Phone Call Click', { cta_label: label, phone_number: href.replace('tel:', '') })
+        trackCustomEvent('Phone Call Click', { cta_label: label, phone_number: href.replace('tel:', '') }, true)
         return
       }
 
@@ -705,12 +706,13 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         /enroll|join|register|apply|curriculum|syllabus|download|start|checkout|buy/i.test(label) ||
         /enroll|workshop|checkout/i.test(href)
       ) {
-        trackCustomEvent('CTA Button Click', { cta_label: label, cta_url: href })
+        trackCustomEvent('CTA Button Click', { cta_label: label, cta_url: href }, true)
         return
       }
 
       if (target.tagName.toLowerCase() === 'button' || href.startsWith('#') || href.startsWith('/')) {
-        trackCustomEvent('Button Click', { button_text: label, target_url: href })
+        // Generic UI clicks are sent to GA4 and dataLayer, but NOT to Vercel backend
+        trackCustomEvent('Button Click', { button_text: label, target_url: href }, false)
       }
     }
 
@@ -718,7 +720,7 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
       const form = e.target as HTMLFormElement
       const formId = form?.id || form?.name || 'general_form'
       const formAction = form?.action || pathname
-      trackCustomEvent('Form Submission', { form_id: formId, form_action: formAction })
+      trackCustomEvent('Form Submission', { form_id: formId, form_action: formAction }, true)
     }
 
     let isTicking = false
@@ -737,10 +739,11 @@ export default function GlobalTrackingEngine({ settings, initialRules }: GlobalT
         milestones.forEach((milestone) => {
           if (scrollPercent >= milestone && !trackedScrollDepths.current.has(milestone)) {
             trackedScrollDepths.current.add(milestone)
+            // Scroll depth is tracked via GA4/Clarity, NOT sent to Vercel backend
             trackCustomEvent(`Scroll Depth ${milestone}%`, {
               depth_percentage: milestone,
               page: pathname,
-            })
+            }, false)
           }
         })
       })

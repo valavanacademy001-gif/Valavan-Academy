@@ -118,23 +118,6 @@ export default function TrackingScriptsInjector({ settings }: TrackingScriptsPro
         </>
       )}
 
-      {/* 4. Microsoft Clarity */}
-      {clarity_enabled === 'true' && clarity_project_id && (
-        <Script
-          id="clarity-init"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(c,l,a,r,i,t,y){
-                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "${clarity_project_id}");
-            `,
-          }}
-        />
-      )}
-
       {/* 5. TikTok Pixel */}
       {tiktok_enabled === 'true' && tiktok_pixel_id && (
         <Script

@@ -5,14 +5,17 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   allowedDevOrigins: ["192.168.1.102", "localhost", "127.0.0.1"],
 
-  // Image optimization configuration
+  // Image optimization configuration (Optimized for Vercel limits & CPU efficiency)
   images: {
-    // Supported formats for automatic optimization
-    formats: ["image/avif", "image/webp"],
+    // WebP only for fast encoding and lower serverless CPU compute
+    formats: ["image/webp"],
 
-    // Responsive image sizes
-    deviceSizes: [375, 640, 768, 1024, 1280, 1440, 1920],
-    imageSizes:  [16, 32, 48, 64, 96, 128, 256, 384],
+    // Streamlined responsive image sizes to prevent exhausting the 5,000 monthly quota
+    deviceSizes: [640, 1080, 1920],
+    imageSizes:  [32, 64, 128, 256],
+
+    // Cache optimized images on edge CDN for 30 days so they are never re-transformed repeatedly
+    minimumCacheTTL: 2592000,
 
     // Allow local images from public/ and YouTube thumbnail CDN
     remotePatterns: [
