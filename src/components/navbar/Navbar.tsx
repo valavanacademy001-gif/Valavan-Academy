@@ -20,6 +20,7 @@ import Logo from "@/components/ui/Logo";
 import MobileMenu from "./MobileMenu";
 import { NAV_LINKS, EXTERNAL_URLS } from "@/data/site.config";
 import { cn } from "@/lib/utils";
+import { useLeadModal } from "@/components/leads/LeadCaptureProvider";
 
 interface MegaMenuConfig {
   col1Title: string;
@@ -160,6 +161,28 @@ export default function Navbar() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { openEnrollModal } = useLeadModal();
+
+  const isFullStack = pathname?.includes("/programs/full-stack-creator") || pathname?.includes("full-stack");
+  const isWorkshop = pathname?.includes("/programs/3-hours-live-workshop") || pathname?.includes("workshop");
+
+  const currentProgramSlug = isFullStack
+    ? "full-stack-creator"
+    : isWorkshop
+    ? "3-hours-live-workshop"
+    : "90-days-graphic-design";
+
+  const currentProgramName = isFullStack
+    ? "Full Stack Digital Creator Masterclass"
+    : isWorkshop
+    ? "3 Hours Live Graphic Design Workshop"
+    : "90 Days Graphic Design Mastery Program";
+
+  const currentEnrollUrl = isFullStack
+    ? EXTERNAL_URLS.enrollFullStack
+    : isWorkshop
+    ? EXTERNAL_URLS.enroll3Hours
+    : EXTERNAL_URLS.signup;
 
   // Pages with dark hero background at the top
   const isDarkHeroPage =
@@ -504,11 +527,21 @@ export default function Navbar() {
               </a>
 
               <a
-                href={EXTERNAL_URLS.signup}
+                href={currentEnrollUrl}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openEnrollModal({
+                    programSlug: currentProgramSlug,
+                    programName: currentProgramName,
+                    defaultPaymentUrl: currentEnrollUrl,
+                  });
+                }}
+                data-enroll-btn="true"
+                data-program-slug={currentProgramSlug}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#FFFFFF" }}
-                className="bg-[#1748BB] hover:bg-[#0A3CA8] text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-[0_4px_15px_rgba(23,72,187,0.35)] hover:scale-105 transition-all inline-flex items-center justify-center"
+                className="bg-[#1748BB] hover:bg-[#0A3CA8] text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-[0_4px_15px_rgba(23,72,187,0.35)] hover:scale-105 transition-all inline-flex items-center justify-center cursor-pointer"
                 aria-label="Enroll now"
               >
                 Join Now

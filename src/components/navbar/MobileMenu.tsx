@@ -14,6 +14,7 @@ import { X, ExternalLink, ChevronRight, ChevronDown, Sparkles, BookOpen, Users, 
 import Logo from "@/components/ui/Logo";
 import { NAV_LINKS, EXTERNAL_URLS, SOCIAL_LINKS } from "@/data/site.config";
 import { cn } from "@/lib/utils";
+import { useLeadModal } from "@/components/leads/LeadCaptureProvider";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -35,7 +36,29 @@ const PROGRAM_ITEMS: ProgramMenuItem[] = [
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const { openEnrollModal } = useLeadModal();
   const [programsOpen, setProgramsOpen] = useState(true);
+
+  const isFullStack = pathname?.includes("/programs/full-stack-creator") || pathname?.includes("full-stack");
+  const isWorkshop = pathname?.includes("/programs/3-hours-live-workshop") || pathname?.includes("workshop");
+
+  const currentProgramSlug = isFullStack
+    ? "full-stack-creator"
+    : isWorkshop
+    ? "3-hours-live-workshop"
+    : "90-days-graphic-design";
+
+  const currentProgramName = isFullStack
+    ? "Full Stack Digital Creator Masterclass"
+    : isWorkshop
+    ? "3 Hours Live Graphic Design Workshop"
+    : "90 Days Graphic Design Mastery Program";
+
+  const currentEnrollUrl = isFullStack
+    ? EXTERNAL_URLS.enrollFullStack
+    : isWorkshop
+    ? EXTERNAL_URLS.enroll3Hours
+    : EXTERNAL_URLS.signup;
 
   // Close on Escape key
   useEffect(() => {
@@ -273,10 +296,21 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 </a>
 
                 <a
-                  href={EXTERNAL_URLS.signup}
+                  href={currentEnrollUrl}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onClose();
+                    openEnrollModal({
+                      programSlug: currentProgramSlug,
+                      programName: currentProgramName,
+                      defaultPaymentUrl: currentEnrollUrl,
+                    });
+                  }}
+                  data-enroll-btn="true"
+                  data-program-slug={currentProgramSlug}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#1748BB] hover:bg-[#0E3594] text-white font-bold text-xs shadow-md shadow-blue-600/25 transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#1748BB] hover:bg-[#0E3594] text-white font-bold text-xs shadow-md shadow-blue-600/25 transition-all cursor-pointer"
                 >
                   <span>Enroll Now →</span>
                 </a>

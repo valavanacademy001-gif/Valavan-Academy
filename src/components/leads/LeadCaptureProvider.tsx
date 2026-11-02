@@ -74,22 +74,22 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
       slug = '90-days-graphic-design'
     }
 
-    if (!name) {
-      if (slug === '3-hours-live-workshop') name = '3 Hours Live Graphic Design Workshop'
-      else if (slug === 'full-stack-creator') name = 'Full Stack Digital Creator Masterclass'
-      else name = '90 Days Graphic Design Mastery Program'
-    }
-
-    if (!paymentUrl) {
-      if (slug === '3-hours-live-workshop') paymentUrl = 'https://rzp.io/rzp/e9OpaQTo'
-      else if (slug === 'full-stack-creator') paymentUrl = 'https://rzp.io/rzp/v8ykjCk'
-      else paymentUrl = 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
-    }
-
-    if (!price) {
-      if (slug === '3-hours-live-workshop') price = 199
-      else if (slug === 'full-stack-creator') price = 14999
-      else price = 4999
+    // Crucial: ensure payment URL, name, and price match the determined slug
+    if (slug === 'full-stack-creator') {
+      name = name || 'Full Stack Digital Creator Masterclass'
+      paymentUrl = 'https://rzp.io/rzp/v8ykjCk'
+      price = price || 14999
+    } else if (slug === '3-hours-live-workshop') {
+      name = name || '3 Hours Live Graphic Design Workshop'
+      paymentUrl = 'https://rzp.io/rzp/e9OpaQTo'
+      price = price || 199
+    } else {
+      slug = '90-days-graphic-design'
+      name = name || '90 Days Graphic Design Mastery Program'
+      paymentUrl = (paymentUrl && (paymentUrl.includes('4ydecO7') || paymentUrl.includes('pl_SuHNtUTy7rhIe0')))
+        ? paymentUrl
+        : 'https://pages.razorpay.com/pl_SuHNtUTy7rhIe0/view'
+      price = price || 4999
     }
 
     setModalConfig({
@@ -146,30 +146,38 @@ export default function LeadCaptureProvider({ children }: { children: ReactNode 
         e.preventDefault()
         e.stopPropagation()
 
-        // Extract program slug if passed in attributes or detect from href/pathname
+        // Extract program slug if passed in attributes or detect from pathname/href
         let programSlug = target.getAttribute('data-program-slug') || ''
+        const currentPath = typeof window !== 'undefined' ? window.location.pathname : ''
+
         if (!programSlug) {
           if (href.includes('full-stack') || href.includes('v8ykjCk')) {
             programSlug = 'full-stack-creator'
           } else if (href.includes('workshop') || href.includes('e9OpaQTo')) {
             programSlug = '3-hours-live-workshop'
+          } else if (currentPath.includes('full-stack') || currentPath.includes('creator')) {
+            programSlug = 'full-stack-creator'
+          } else if (currentPath.includes('3-hours') || currentPath.includes('workshop')) {
+            programSlug = '3-hours-live-workshop'
           } else if (href.includes('90-days') || href.includes('4ydecO7') || href.includes('pl_SuHNtUTy7rhIe0')) {
             programSlug = '90-days-graphic-design'
-          } else if (typeof window !== 'undefined') {
-            const path = window.location.pathname
-            if (path.includes('full-stack') || path.includes('creator')) {
-              programSlug = 'full-stack-creator'
-            } else if (path.includes('3-hours') || path.includes('workshop')) {
-              programSlug = '3-hours-live-workshop'
-            } else if (path.includes('90-days') || path.includes('graphic-design')) {
-              programSlug = '90-days-graphic-design'
-            }
+          } else if (currentPath.includes('90-days') || currentPath.includes('graphic-design')) {
+            programSlug = '90-days-graphic-design'
+          } else {
+            programSlug = '90-days-graphic-design'
           }
+        }
+
+        let defaultPaymentUrl = isRazorpayLink ? href : undefined
+        if (programSlug === 'full-stack-creator') {
+          defaultPaymentUrl = 'https://rzp.io/rzp/v8ykjCk'
+        } else if (programSlug === '3-hours-live-workshop') {
+          defaultPaymentUrl = 'https://rzp.io/rzp/e9OpaQTo'
         }
 
         openEnrollModal({
           programSlug: programSlug || undefined,
-          defaultPaymentUrl: isRazorpayLink ? href : undefined,
+          defaultPaymentUrl,
         })
       }
     }
