@@ -217,6 +217,67 @@ export default function ProgramFAQSection({
             })}
           </div>
         </div>
+
+        {/* ── Extra Row: Reach Us (Reference matching Image 3) ── */}
+        <FadeUp delay={0.15}>
+          <div className="mt-12 sm:mt-16 pt-10 sm:pt-12 border-t border-neutral-200">
+            <div className="bg-[#0D0F14] text-white rounded-2xl p-6 sm:p-10 shadow-lg border border-white/10 relative overflow-hidden">
+              <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(#1748BB 1.2px, transparent 1.2px)",
+                  backgroundSize: "24px 24px",
+                }}
+                aria-hidden
+              />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+                <div className="max-w-md space-y-2">
+                  <span className="font-sans text-xs font-bold uppercase tracking-widest text-[#1748BB] bg-[#1748BB]/10 border border-[#1748BB]/20 px-3 py-1 rounded-full inline-block">
+                    Still Have Questions?
+                  </span>
+                  <h3 className="font-display font-bold text-2xl sm:text-3xl text-white">
+                    Reach Out Directly
+                  </h3>
+                  <p className="font-sans text-neutral-400 text-sm leading-relaxed">
+                    Have questions about the syllabus, upcoming batches, fees, or course doubts? We are here to help you get started with confidence.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="font-sans font-semibold text-white text-sm uppercase tracking-wider">
+                    Reach Us
+                  </p>
+                  <div className="space-y-3 font-sans text-sm text-neutral-300 font-normal leading-relaxed">
+                    <div>
+                      <a
+                        href="tel:+919342896977"
+                        className="hover:text-[#1748BB] transition-colors block text-white font-medium text-base"
+                      >
+                        +91 93428 96977
+                      </a>
+                    </div>
+                    <div>
+                      <a
+                        href="mailto:valavanacademy@gmail.com"
+                        className="hover:text-[#1748BB] transition-colors block text-neutral-300"
+                      >
+                        valavanacademy@gmail.com
+                      </a>
+                    </div>
+                    <div className="text-neutral-400 text-xs sm:text-sm leading-relaxed">
+                      <p>SF No 157/3, Mandabam Street,</p>
+                      <p>Salaipettai, Pernambut Taluk,</p>
+                      <p>Vellore Dist - 635810</p>
+                    </div>
+                    <p className="text-neutral-500 text-xs pt-1">
+                      Mon–Sat · 9am–7pm IST
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </FadeUp>
       </Container>
     </section>
   );

@@ -177,7 +177,10 @@ export default async function ContactPage() {
                     Ready to Enroll in a Program?
                   </h3>
 
-                  <p className="font-sans text-sm sm:text-base text-white/80 leading-relaxed">
+                  <p
+                    className="font-sans text-sm sm:text-base leading-relaxed font-normal"
+                    style={{ color: "#EBF2FE" }}
+                  >
                     Start your creative career journey today. Join thousands of Tamil learners transforming their skills with Valavan Academy.
                   </p>
 
@@ -186,10 +189,17 @@ export default async function ContactPage() {
                       href={EXTERNAL_URLS.signup}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-white text-[#1748BB] font-sans font-bold text-base px-8 py-4 rounded-full hover:bg-neutral-100 hover:scale-105 transition-all duration-200 shadow-lg w-full justify-center"
+                      className="inline-flex items-center gap-2 font-sans font-bold text-base px-8 py-4 rounded-full hover:bg-neutral-100 hover:scale-[1.02] transition-all duration-200 shadow-lg w-full justify-center group"
+                      style={{ backgroundColor: "#FFFFFF", color: "#1748BB" }}
                     >
-                      <span>Enroll Now</span>
-                      <ArrowUpRight size={18} />
+                      <span className="font-bold" style={{ color: "#1748BB" }}>
+                        Enroll Now
+                      </span>
+                      <ArrowUpRight
+                        size={18}
+                        className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                        style={{ color: "#1748BB" }}
+                      />
                     </a>
                   </div>
                 </div>

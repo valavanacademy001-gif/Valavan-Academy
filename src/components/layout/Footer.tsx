@@ -116,10 +116,28 @@ export default function Footer({ settings }: FooterProps = {}) {
     },
   ];
 
+  const navigateLinks = settings?.navigate_links && settings.navigate_links.length > 0 ? settings.navigate_links : [
+    { label: "Home", href: "/" },
+    { label: "Programs", href: "/programs" },
+    { label: "About", href: "/about" },
+    { label: "Community", href: "/community" },
+    { label: "Contact", href: "/contact" },
+    { label: "Terms & Conditions", href: "/terms-conditions" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+  ];
+
+  const programsLinks = settings?.programs_links && settings.programs_links.length > 0 ? settings.programs_links : FOOTER_LINKS.programs;
+
+  const accountLinks = settings?.account_links && settings.account_links.length > 0 ? settings.account_links : [
+    { label: "Log In", href: EXTERNAL_URLS.login },
+    { label: "Get Started", href: EXTERNAL_URLS.signup },
+    { label: "TNCC Community", href: EXTERNAL_URLS.community },
+  ];
+
   return (
     <footer className="bg-[#0D0F14] text-white relative z-20" aria-label="Site footer">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-10">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-12 mb-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 lg:gap-8 mb-12">
 
           {/* Brand column */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-2 space-y-5">
@@ -165,23 +183,31 @@ export default function Footer({ settings }: FooterProps = {}) {
               Navigate
             </p>
             <ul className="space-y-2.5">
-              {[
-                { label: "Home", href: "/" },
-                { label: "Programs", href: "/programs" },
-                { label: "About", href: "/about" },
-                { label: "Community", href: "/community" },
-                { label: "Contact", href: "/contact" },
-              ].map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={handleNavClick(link.href)}
-                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors cursor-pointer"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {navigateLinks.map((link) => {
+                const isExternal = link.href.startsWith("http");
+                return (
+                  <li key={link.href}>
+                    {isExternal ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={handleNavClick(link.href)}
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors cursor-pointer"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -191,17 +217,31 @@ export default function Footer({ settings }: FooterProps = {}) {
               Programs
             </p>
             <ul className="space-y-2.5">
-              {FOOTER_LINKS.programs.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={handleNavClick(link.href)}
-                    className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors leading-snug cursor-pointer"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {programsLinks.map((link) => {
+                const isExternal = link.href.startsWith("http");
+                return (
+                  <li key={link.href}>
+                    {isExternal ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors leading-snug"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={handleNavClick(link.href)}
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors leading-snug cursor-pointer"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -211,37 +251,71 @@ export default function Footer({ settings }: FooterProps = {}) {
               Account
             </p>
             <ul className="space-y-2.5">
-              <li>
-                <a
-                  href={EXTERNAL_URLS.login}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
-                >
-                  Log In
-                </a>
-              </li>
-              <li>
-                <a
-                  href={EXTERNAL_URLS.signup}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
-                >
-                  Get Started
-                </a>
-              </li>
-              <li>
-                <a
-                  href={EXTERNAL_URLS.community}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
-                >
-                  TNCC Community
-                </a>
-              </li>
+              {accountLinks.map((link) => {
+                const isExternal = link.href.startsWith("http");
+                return (
+                  <li key={link.label}>
+                    {isExternal ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={handleNavClick(link.href)}
+                        className="font-sans text-neutral-400 hover:text-white text-sm font-normal transition-colors cursor-pointer"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
+          </div>
+
+          {/* Reach Us */}
+          <div className="space-y-4 col-span-2 sm:col-span-1 lg:col-span-1">
+            <p className="font-sans font-semibold text-white text-sm uppercase tracking-wider">
+              Reach Us
+            </p>
+            <div className="space-y-3 font-sans text-sm text-neutral-400 font-normal leading-relaxed">
+              <div>
+                <a
+                  href={`tel:${(settings?.phone || "+91 93428 96977").replace(/\s+/g, "")}`}
+                  className="hover:text-white transition-colors block text-white/90 font-medium"
+                >
+                  {settings?.phone || "+91 93428 96977"}
+                </a>
+              </div>
+              <div>
+                <a
+                  href={`mailto:${settings?.email || "valavanacademy@gmail.com"}`}
+                  className="hover:text-white transition-colors block break-all"
+                >
+                  {settings?.email || "valavanacademy@gmail.com"}
+                </a>
+              </div>
+              <div className="text-neutral-400 text-xs sm:text-sm leading-relaxed">
+                {settings?.address ? (
+                  <p>{settings.address}</p>
+                ) : (
+                  <>
+                    <p>SF No 157/3, Mandabam Street,</p>
+                    <p>Salaipettai, Pernambut Taluk,</p>
+                    <p>Vellore Dist - 635810</p>
+                  </>
+                )}
+              </div>
+              <p className="text-neutral-500 text-xs pt-1">
+                {settings?.hours || "Mon–Sat · 9am–7pm IST"}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -251,10 +325,10 @@ export default function Footer({ settings }: FooterProps = {}) {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-neutral-600 text-xs font-normal text-center sm:text-left">
-            © {currentYear} {SITE_CONFIG.name}. All rights reserved.
+            {settings?.copyright_text || `© ${currentYear} ${SITE_CONFIG.name}. All rights reserved.`}
           </p>
           <p className="font-sans text-neutral-600 text-xs font-normal">
-            Tamil-first Creative Learning Academy
+            {settings?.tagline || "Tamil-first Creative Learning Academy"}
           </p>
         </div>
       </div>

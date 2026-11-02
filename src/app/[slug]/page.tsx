@@ -71,16 +71,29 @@ export default async function DynamicCMSPage({ params }: Props) {
       }
     }
 
+    const hasSections = (sections || []).length > 0;
+
     return (
       <main className="min-h-screen bg-white">
         <JsonLdSchema pageSEO={seo} />
-        {(sections || []).map((section) => (
-          <DynamicSectionRenderer
-            key={section.id}
-            section={section}
-            fields={fieldsBySection[section.id] || {}}
-          />
-        ))}
+        {hasSections ? (
+          (sections || []).map((section) => (
+            <DynamicSectionRenderer
+              key={section.id}
+              section={section}
+              fields={fieldsBySection[section.id] || {}}
+            />
+          ))
+        ) : page.description ? (
+          <div className="pt-32 sm:pt-40 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
+            <h1 className="text-3xl sm:text-5xl font-bold font-display text-[#1E2026] mb-8">
+              {page.title}
+            </h1>
+            <div className="prose prose-neutral max-w-none whitespace-pre-line text-neutral-700 leading-relaxed font-sans text-base">
+              {page.description}
+            </div>
+          </div>
+        ) : null}
       </main>
     )
   } catch (e) {

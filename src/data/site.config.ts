@@ -172,9 +172,11 @@ export const FOOTER_LINKS = {
     { label: "Full Stack Creator",    href: "/programs/full-stack-creator" },
   ],
   company: [
-    { label: "About Us",  href: "/about" },
-    { label: "Community", href: "/community" },
-    { label: "Contact",   href: "/contact" },
+    { label: "About Us",           href: "/about" },
+    { label: "Community",          href: "/community" },
+    { label: "Contact",            href: "/contact" },
+    { label: "Terms & Conditions", href: "/terms-conditions" },
+    { label: "Privacy Policy",     href: "/privacy-policy" },
   ],
   account: [
     { label: "Login",    href: EXTERNAL_URLS.login,  external: true },

@@ -84,6 +84,11 @@ export interface CMSSiteSettings {
   community_url: string;
   login_url: string;
   signup_url: string;
+  hours?: string;
+  copyright_text?: string;
+  navigate_links?: Array<{ label: string; href: string }>;
+  programs_links?: Array<{ label: string; href: string }>;
+  account_links?: Array<{ label: string; href: string }>;
 }
 
 export interface CMSHeroData {
@@ -117,9 +122,9 @@ export const DEFAULT_SITE_SETTINGS: CMSSiteSettings = {
   academy_name: SITE_CONFIG.name,
   tagline: SITE_CONFIG.tagline,
   description: SITE_CONFIG.description,
-  email: "valavanacademy001@gmail.com",
-  phone: "+91 93452 79541",
-  address: "Valavan Academy, Tirupattur / Vellore District, Tamil Nadu, India",
+  email: "valavanacademy@gmail.com",
+  phone: "+91 93428 96977",
+  address: "SF No 157/3, Mandabam Street, Salaipettai, Pernambut Taluk, Vellore Dist - 635810",
   facebook_url: SOCIAL_LINKS.find((s) => s.id === "facebook")?.url || "https://www.facebook.com/ValavanAcademy",
   instagram_url: SOCIAL_LINKS.find((s) => s.id === "instagram")?.url || "https://www.instagram.com/valavanacademy",
   youtube_url: SOCIAL_LINKS.find((s) => s.id === "youtube")?.url || "https://www.youtube.com/@ValavanAcademyofficial",
@@ -954,21 +959,39 @@ export async function getPublishedCertifications(): Promise<CMSCertification[]> 
  */
 export async function getSiteSettings(): Promise<CMSSiteSettings> {
   try {
-    const contactMap = await getSectionFieldMap("contact", "contact_info");
+    const [contactMap, footerMap] = await Promise.all([
+      getSectionFieldMap("contact", "contact_info"),
+      getSectionFieldMap("home", "footer"),
+    ]);
+
+    const parseLinks = (raw: string | undefined) => {
+      if (!raw) return undefined;
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {}
+      return undefined;
+    };
+
     return {
       academy_name: DEFAULT_SITE_SETTINGS.academy_name,
-      tagline: DEFAULT_SITE_SETTINGS.tagline,
-      description: DEFAULT_SITE_SETTINGS.description,
-      email: contactMap.email || DEFAULT_SITE_SETTINGS.email,
-      phone: contactMap.phone || DEFAULT_SITE_SETTINGS.phone,
-      address: contactMap.address || DEFAULT_SITE_SETTINGS.address,
-      facebook_url: DEFAULT_SITE_SETTINGS.facebook_url,
-      instagram_url: DEFAULT_SITE_SETTINGS.instagram_url,
-      youtube_url: DEFAULT_SITE_SETTINGS.youtube_url,
-      linkedin_url: DEFAULT_SITE_SETTINGS.linkedin_url,
+      tagline: footerMap.bottom_tagline || DEFAULT_SITE_SETTINGS.tagline,
+      description: footerMap.brand_description || DEFAULT_SITE_SETTINGS.description,
+      email: footerMap.reach_email || contactMap.email || DEFAULT_SITE_SETTINGS.email,
+      phone: footerMap.reach_phone || contactMap.phone || DEFAULT_SITE_SETTINGS.phone,
+      address: footerMap.reach_address || contactMap.address || DEFAULT_SITE_SETTINGS.address,
+      facebook_url: footerMap.facebook_url || DEFAULT_SITE_SETTINGS.facebook_url,
+      instagram_url: footerMap.instagram_url || DEFAULT_SITE_SETTINGS.instagram_url,
+      youtube_url: footerMap.youtube_url || DEFAULT_SITE_SETTINGS.youtube_url,
+      linkedin_url: footerMap.linkedin_url || DEFAULT_SITE_SETTINGS.linkedin_url,
       community_url: DEFAULT_SITE_SETTINGS.community_url,
       login_url: DEFAULT_SITE_SETTINGS.login_url,
       signup_url: DEFAULT_SITE_SETTINGS.signup_url,
+      hours: footerMap.reach_hours || "Mon–Sat · 9am–7pm IST",
+      copyright_text: footerMap.copyright_text || "© 2026 Valavan Academy. All rights reserved.",
+      navigate_links: parseLinks(footerMap.navigate_links),
+      programs_links: parseLinks(footerMap.programs_links),
+      account_links: parseLinks(footerMap.account_links),
     };
   } catch {
     return DEFAULT_SITE_SETTINGS;
