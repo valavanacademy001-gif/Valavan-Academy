@@ -49,6 +49,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [occupation, setOccupation] = useState('')
+  const [whatsappConsent, setWhatsappConsent] = useState(true)
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -134,6 +135,7 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
         phone: phone.trim(),
         email: email.trim().toLowerCase(),
         occupation: occupation,
+        whatsapp_consent: whatsappConsent,
         program_name: displayProgramName,
         program_slug: progKey,
         fallback_payment_url: targetPaymentUrl,
@@ -386,6 +388,21 @@ export default function LeadCaptureModal({ config, onClose }: LeadCaptureModalPr
                 <ChevronDown className="w-4 h-4" />
               </div>
             </div>
+          </div>
+
+          {/* WhatsApp Updates Opt-in Checkbox (Optional) */}
+          <div className="pt-0.5">
+            <label className="flex items-start gap-2.5 cursor-pointer group select-none">
+              <input
+                type="checkbox"
+                checked={whatsappConsent}
+                onChange={(e) => setWhatsappConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded border-slate-300 text-[#1748BB] focus:ring-[#1748BB]/20 focus:ring-offset-0 cursor-pointer accent-[#1748BB] shrink-0"
+              />
+              <span className="text-[11px] leading-relaxed text-slate-600 group-hover:text-slate-800 transition-colors">
+                Valavan Academy-யிடமிருந்து course விவரங்கள், brochure, workshop நினைவூட்டல்கள், offers ஆகியவற்றை WhatsApp-ல் (+91 93448 54990) பெற ஒப்புக்கொள்கிறேன். எப்போது வேண்டுமானாலும் STOP அனுப்பி நிறுத்தலாம்.
+              </span>
+            </label>
           </div>
 
           {/* Corporate CTA Button */}
