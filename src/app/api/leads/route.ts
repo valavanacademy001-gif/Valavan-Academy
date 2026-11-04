@@ -26,6 +26,78 @@ const DEFAULT_PROGRAM_CONVERSIONS: Record<string, { payment_url: string; name: s
   },
 }
 
+async function forwardLead(
+  leadRecord: {
+    id: string
+    created_at: string
+    name: string
+    phone: string
+    email: string
+    occupation: string
+    whatsapp_consent: boolean
+    program_slug: string
+    landing_page?: string
+    referrer: string
+    utm_source: string
+    utm_medium: string
+    utm_campaign: string
+    device: string
+  },
+  page_url?: string
+): Promise<void> {
+  const ingestSecret = process.env.VALAVAN_INGEST_SECRET
+  if (!ingestSecret) {
+    console.log('lead forward skipped: secret not set')
+    return
+  }
+
+  try {
+    const forwardUrl =
+      process.env.VALAVAN_INGEST_URL ||
+      'https://tlsiteoftauhxswrmrmj.supabase.co/functions/v1/ingest/website?forceFunctionRegion=ap-south-1'
+
+    const forwardPayload = {
+      type: 'INSERT',
+      record: {
+        id: leadRecord.id,
+        created_at: leadRecord.created_at,
+        name: leadRecord.name,
+        phone: leadRecord.phone,
+        email: leadRecord.email,
+        occupation: leadRecord.occupation,
+        whatsapp_consent: leadRecord.whatsapp_consent,
+        program_slug: leadRecord.program_slug,
+        page_url: page_url || leadRecord.landing_page || '',
+        referrer: leadRecord.referrer,
+        utm_source: leadRecord.utm_source,
+        utm_medium: leadRecord.utm_medium,
+        utm_campaign: leadRecord.utm_campaign,
+        device: leadRecord.device,
+      },
+    }
+
+    const forwardRes = await fetch(forwardUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-ingest-secret': ingestSecret,
+      },
+      body: JSON.stringify(forwardPayload),
+      signal: AbortSignal.timeout(3000),
+    })
+
+    if (!forwardRes.ok) {
+      console.error(`lead forward failed: status ${forwardRes.status}`)
+    }
+  } catch (forwardErr: any) {
+    if (forwardErr?.name === 'TimeoutError' || forwardErr?.name === 'AbortError') {
+      console.error('lead forward failed: status 408 (timeout)')
+    } else {
+      console.error(`lead forward failed: status ${forwardErr?.status || 500}`)
+    }
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
@@ -123,6 +195,7 @@ export async function POST(req: Request) {
     console.log(`[Lead Form Captured] ${leadRecord.name} (${leadRecord.phone}) for ${leadRecord.program_interested}`)
 
     // 2. Persist Lead in Supabase field_values (leads_data) and Event in events_log_data
+    let leadSaved = false
     try {
       const { data: page } = await supabase.from('pages').select('id').eq('slug', 'global_settings').maybeSingle()
       if (page) {
@@ -156,15 +229,17 @@ export async function POST(req: Request) {
             const updatedLeads = [leadRecord, ...(Array.isArray(currentLeads) ? currentLeads : [])].slice(0, 1000)
             const jsonStr = JSON.stringify(updatedLeads)
 
+            let saveError = null
             if (fv) {
-              await supabase.from('field_values').update({
+              const res = await supabase.from('field_values').update({
                 value_text: jsonStr,
                 published_value_text: jsonStr,
                 is_draft: false,
                 updated_at: new Date().toISOString(),
               }).eq('id', fv.id)
+              saveError = res.error
             } else {
-              await supabase.from('field_values').insert({
+              const res = await supabase.from('field_values').insert({
                 page_id: page.id,
                 section_id: sec.id,
                 field_id: leadField.id,
@@ -172,8 +247,15 @@ export async function POST(req: Request) {
                 published_value_text: jsonStr,
                 is_draft: false,
               })
+              saveError = res.error
             }
-            console.log(`[Lead Saved To DB] ${leadRecord.id} successfully saved to leads_data!`)
+
+            if (!saveError) {
+              leadSaved = true
+              console.log(`[Lead Saved To DB] ${leadRecord.id} successfully saved to leads_data!`)
+            } else {
+              console.error('Failed to save lead to leads_data:', saveError)
+            }
           }
 
           // --- B. Save Telemetry Event ---
@@ -236,6 +318,11 @@ export async function POST(req: Request) {
       }
     } catch (dbErr) {
       console.error('Failed saving lead in Supabase:', dbErr)
+    }
+
+    // 3. Forward new lead to external ingest endpoint if saved successfully
+    if (leadSaved) {
+      await forwardLead(leadRecord, page_url)
     }
 
     return NextResponse.json({

@@ -81,7 +81,7 @@ export default function ProgramEnrollmentSupportSection({
 
                   <ul className="space-y-3.5">
                     {[
-                      "Lifetime Access",
+                      "2 Years Access",
                       "Weekly Live Mentorship",
                       "Community Support",
                       "Portfolio Reviews",

@@ -106,7 +106,7 @@ export default function FullStackFinalCTASection({
               </span>
               <span className="flex items-center gap-2">
                 <CheckCircle2 size={16} className="text-emerald-600" />
-                Lifetime Course Access
+                2 Years Course Access
               </span>
               <span className="flex items-center gap-2">
                 <ShieldCheck size={16} className="text-[#1748BB]" />

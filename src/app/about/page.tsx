@@ -100,7 +100,7 @@ const WHY_CHOOSE = [
   {
     icon: Zap,
     title: "Comprehensive Live Mentorship",
-    desc: "Weekly live doubt clearing, step-by-step software walkthroughs, and lifetime access to updated curriculum recordings.",
+    desc: "Weekly live doubt clearing, step-by-step software walkthroughs, and 2 years of access to updated curriculum recordings.",
   },
   {
     icon: Briefcase,
@@ -114,7 +114,7 @@ const WHY_CHOOSE = [
   },
   {
     icon: Users,
-    title: "Lifetime TNCC Community Access",
+    title: "1 Year TNCC Community Access",
     desc: "Join an active network of 40,000+ peers for daily design critiques, collaboration opportunities, and freelance referrals.",
   },
 ];

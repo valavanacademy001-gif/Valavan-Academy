@@ -177,6 +177,8 @@ export const FOOTER_LINKS = {
     { label: "Contact",            href: "/contact" },
     { label: "Terms & Conditions", href: "/terms-conditions" },
     { label: "Privacy Policy",     href: "/privacy-policy" },
+    { label: "Refund Policy",      href: "/refund-policy" },
+    { label: "Data Deletion",      href: "/data-deletion" },
   ],
   account: [
     { label: "Login",    href: EXTERNAL_URLS.login,  external: true },

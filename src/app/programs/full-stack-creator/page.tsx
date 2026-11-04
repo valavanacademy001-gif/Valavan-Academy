@@ -95,7 +95,7 @@ const FULL_STACK_FAQS = [
   {
     question: "How Long Is The Program?",
     answer:
-      "The curriculum is structured across 6 months of comprehensive learning, plus you receive lifetime access to all lessons, course updates, and resources.",
+      "Lessons are planned over 120 days from the day you pay. You can use live sessions and WhatsApp support for the first year, and the recordings in the second year. Access ends 2 years from the day you pay.",
   },
   {
     question: "Will I Build A Portfolio?",
@@ -130,7 +130,7 @@ const FULL_STACK_FAQS = [
   {
     question: "What Happens After Completing The Program?",
     answer:
-      "You will receive an Industry-Recognized Certification, have a complete multi-disciplinary portfolio, and have lifetime access to the community, job opportunities, and freelancing roadmaps.",
+      "You will receive an Industry-Recognized Certification and have a complete multi-disciplinary portfolio.",
   },
 ];
 

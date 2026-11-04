@@ -116,7 +116,7 @@ export default function Footer({ settings }: FooterProps = {}) {
     },
   ];
 
-  const navigateLinks = settings?.navigate_links && settings.navigate_links.length > 0 ? settings.navigate_links : [
+  let navigateLinks = settings?.navigate_links && settings.navigate_links.length > 0 ? [...settings.navigate_links] : [
     { label: "Home", href: "/" },
     { label: "Programs", href: "/programs" },
     { label: "About", href: "/about" },
@@ -124,7 +124,26 @@ export default function Footer({ settings }: FooterProps = {}) {
     { label: "Contact", href: "/contact" },
     { label: "Terms & Conditions", href: "/terms-conditions" },
     { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Refund Policy", href: "/refund-policy" },
+    { label: "Data Deletion", href: "/data-deletion" },
   ];
+
+  if (!navigateLinks.some((l) => l.href === "/refund-policy")) {
+    const privIdx = navigateLinks.findIndex((l) => l.href === "/privacy-policy");
+    if (privIdx !== -1) {
+      navigateLinks.splice(privIdx + 1, 0, { label: "Refund Policy", href: "/refund-policy" });
+    } else {
+      navigateLinks.push({ label: "Refund Policy", href: "/refund-policy" });
+    }
+  }
+  if (!navigateLinks.some((l) => l.href === "/data-deletion")) {
+    const refIdx = navigateLinks.findIndex((l) => l.href === "/refund-policy");
+    if (refIdx !== -1) {
+      navigateLinks.splice(refIdx + 1, 0, { label: "Data Deletion", href: "/data-deletion" });
+    } else {
+      navigateLinks.push({ label: "Data Deletion", href: "/data-deletion" });
+    }
+  }
 
   const programsLinks = settings?.programs_links && settings.programs_links.length > 0 ? settings.programs_links : FOOTER_LINKS.programs;
 
